@@ -105,7 +105,7 @@ $page_timestamp = getmicrotime();
  * Use a combination of dirname(__FILE__) and subsequent calls to itself until you reach to the home of your '/index.php'. Then, attach this variable (that contains the path) to your included files. 
  * After this, if you copy paste your codes to another servers, it will still run, without requiring any further re-configurations.
  */
-define('__ROOT__', dirname(dirname(__FILE__)));
+define('__BACKYARDROOT__', dirname(__FILE__));
 
 
 $libErrorLogMessageType = 3; //default log zapisuje do adresáře log; po spuštění functions.php je možné nastavit např. na 0 a směrovat tak do default logu        
