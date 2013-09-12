@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>    
+  <head>        
+    <title>
+    </title>        
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>        
+    
+    
+<style type='text/css'>
+    .colourSaveHighlight {color:red;} /* for form validation */
+</style>
+    
+<script src='//code.jquery.com/jquery-1.10.2.min.js' type='text/javascript'></script> <!-- it can be linked in from a local repository -->      
+
+<!-- following scripts should be linked in that order -->
+<script src='../deploy/backyard/js/debug.js' type='text/javascript'></script>        
+<script src='../deploy/backyard/js/basic.js' type='text/javascript'></script>        
+<script src='../deploy/backyard/js/coloursave.js' type='text/javascript'></script>    
+
+<script type='text/javascript'>alert('welcome');</script>
+
+  </head>    
+  <body>        
+    <h1>Example of coloursave.js plugin usage</h1>
+
+    A1: <textarea name='a1' class='coloursave' data-coloursave-api='http://free.t-mobile.cz/check13stage/api/v1/findstore/'></textarea>
+
+    <br/> 
+    <div>
+    <label for='owner_signature'>B1 My signature:
+    </label>        
+    <textarea name='b1' class='coloursave required'></textarea>
+    </div>
+    
+    <br/>                 
+
+    D1<input name='d1' type='text' class='coloursave' data-coloursave-context='{&quot;testing_page&quot;:&quot;yes&quot;}' />
+
+    <span>
+      <label for='owner_name'>My name:
+      </label>              
+      <input class='coloursave required' type='text' name='owner_name' value='' data-coloursave-context='{\"project_id\":3,\"person_id\":15,\"relation_id\":15}' />          
+    </span>
+    
+    C1: <div id='c1_parent'>        
+      <input name='c1' type='radio' class='coloursave' data-parent='c1_parent'/>
+      <input name='c1' type='radio' class='coloursave' data-parent='c1_parent'/>        
+      <input name='c1' type='radio' class='coloursave' data-parent='c1_parent'/>        
+    </div>          
+    
+    owner: <div id='owner_language_parent'>
+    <fieldset data-role='controlgroup'>            
+      <label for='owner_language' class='select'>Language:             
+      </label>              
+      <select class='coloursave' data-parent='owner_language_parent' name='owner_language' id='owner_language'>              
+        <option value='en' selected='selected'>English               
+        </option>              
+        <option value='cs'>Česky               
+        </option>            
+      </select>          
+    </fieldset> 
+    </div>
+
+    other: <div id='other_language_parent'>
+    <fieldset data-role='controlgroup'>            
+      <label for='other_language' class='select'>Language:             
+      </label>              
+      <select class='coloursave' data-parent='other_language_parent' name='other_language' id='other_language'>              
+        <option value='en' selected='selected'>English               
+        </option>              
+        <option value='cs'>Česky               
+        </option>            
+      </select>          
+    </fieldset> 
+    </div>
+    
+    F1: <input name='f1' type='date' class='coloursave' />                 
+    G1: <input name='g1' type='email' class='coloursave' data-coloursave-context='{"testing_page":"alfa"}'/>                        
+    H1: <input name='h1' type='tel' class='coloursave' />
+    
+<!--   @TODO 
+    <a href='#' data-role='button' id='send_me_mm_button' class='coloursave'>Send me meeting minutes &beta;</a>
+    
+    <button type='button' id='send_me_mm_button2' name='send_me_mm_button2' class='coloursave'>Click Me!</button>
+    -->
+    
+  </body>
+</html>
