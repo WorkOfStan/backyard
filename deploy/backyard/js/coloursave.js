@@ -1,14 +1,15 @@
 /*!
- * coloursave v2 (130912)
+ * coloursave v3 (130919)
  */
 /**
  * Posílátko pro libovolný element, který umožňuje držet uživatelem zadávaný obsah.
  * Pošle při defocus/změně jeho obsah s´případně s kontextem na definované API URL.
  * S tím, že automaticky mění barvu podle stavu odesílání.
  * 
- * All class="coloursave" must have name defined.
+ * All class="coloursave" must have `name' defined.
  * class="required" is possible and if empty the colour of its parent is defined by .colourSaveHighlight
  * Therefore it is recommended to contain the element and its neighborhood into a <span/> or <div/> container to prevent other text being highlighted.
+ * Only `a' and `button' elements must have `id' defined. And its value is passed in data-coloursave-arg. data-parent may be used for these two elements, as well.
  * 
  * URL of the API may either be defined globally by `var apiUrlColoursave' 
  * or may be modified on element level in data attribute coloursave-api
@@ -22,19 +23,8 @@ eid:92             //if not set in data attribute eid, it is equal to zero
  * If parent element should be disabled instead of the changed element, put parent's id into data attribute parent
  * 
  * If the API response contain "error":"Anything to alert to the user." , then the string is alert()ed.
- */ 
-/** 
- * @TODO - dodělat i pro button
- *     $('#send_me_mm_button').bind('vclick', function(){//(e){
-        //console.log(e.type);//debug
-        submitStakanForm(
-          {action: 'send_project_mm_json', eid: 91, project_id: projectId},
-          null,
-          '#send_me_mm_button'
-        );
-        //není voláno z form//return false;//The return false is blocking the default form submit action.
-    });
-
+ */
+/**
  * @TODO 1 - přepsat tak, aby funkce nebyly v konfliktu s původním kódem a refaktorovat ve Stakan1  
  * 
  */
@@ -93,7 +83,59 @@ $(document).ready(function() {
         {});    
     }
     */
-    
+
+    $('a.coloursave, button.coloursave').bind('click', function(e){//(e){
+        //console.log(e.type);//debug        
+        if($(this).attr('id') === undefined){
+            my_error_log('Error: pls add id to this element.',3);
+            alert('Error: pls add id to this element.');
+            return false;
+        }
+        tempSelector=$(this).attr('id');        
+
+        if($('#' + tempSelector).data('coloursave-arg')){
+            tempArg = $('#' + tempSelector).data('coloursave-arg');
+        } else {
+            my_error_log(tempSelector + ' has no argument',2);
+            return false;
+        }
+        console.log(tempArg);        
+
+        tempSelectParent = '#' + tempSelector;
+        if($('#' + tempSelector).data('parent')){
+            tempSelectParent = '#' + $('#' + tempSelector).data('parent');
+            //console.log('slide ' + tempSelectParent + ' parent of ' + tempSelector + ' disabled');
+        }
+
+        if($('#' + tempSelector).data('coloursave-context')){
+            temp2 = JSON.stringify($('#' + tempSelector).data('coloursave-context'));
+            //console.log(temp2);
+            if(IsJsonString(temp2)){
+                tempContext=temp2;
+            } else {
+                my_error_log(tempSelector + ' has invalid context. JSON expected. Received:' + temp2,3);
+            }
+        }
+       
+        //for eventId analytics
+        tempEid=0;
+        if($(this).data('eid'))tempEid=$(this).data('eid');
+
+        tempApiUrl = apiUrlColoursave;
+        if($('[name=' + tempSelector + ']').data('coloursave-api')){
+            tempApiUrl=$('[name=' + tempSelector + ']').data('coloursave-api');
+        }
+
+        colourSubmitForm(
+            {action: 'api_update', api_arg: tempArg, api_context: tempContext, eid: tempEid},   //parameters,
+            tempApiUrl, //apiUrl,
+            null, //urlDone,
+            tempSelectParent, //currentTarget,
+            null  //callback
+        );
+        //není voláno z form//return false;//The return false is blocking the default form submit action.
+    });
+
     $('select.coloursave, input[type="radio"].coloursave').change(function(){
         tempSelector=$(this).attr('name');
         //console.log("TS:" + tempSelector);
