@@ -122,8 +122,8 @@ $(document).ready(function() {
         if($(this).data('eid'))tempEid=$(this).data('eid');
 
         tempApiUrl = apiUrlColoursave;
-        if($('[name=' + tempSelector + ']').data('coloursave-api')){
-            tempApiUrl=$('[name=' + tempSelector + ']').data('coloursave-api');
+        if($('#' + tempSelector).data('coloursave-api')){
+            tempApiUrl=$('#' + tempSelector).data('coloursave-api');
         }
 
         colourSubmitForm(
