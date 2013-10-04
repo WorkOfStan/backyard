@@ -166,9 +166,10 @@ function thisserver() { //returns string identifying the current server [cz-rozh
 
 
 if (!isset($ERROR_HACK)) $ERROR_HACK=0; //120918, aby bylo možné nastavit ERROR_HACK jako proměnnou ve stránce před zavoláním functions.php
-require_once (__ROOT__."/lib/conf.php");
+require_once (__BACKYARDROOT__."/conf/conf.php"); //@TODO a proč je pak ještě na řádce 215?
+if($backyardDatabase){
 //130124, obsoleted by conf.php//require_once ("connectDB.php");
-include (__ROOT__."/lib/openDB.php");
+    include (__BACKYARDROOT__."/openDB.php");
 //##### SYSTEM VARIABLE initialization
 //$timestamp_null - konstanta pro nenastavené datum v položce v databázi
 //$language - použitý jazyk
@@ -176,29 +177,30 @@ include (__ROOT__."/lib/openDB.php");
 //$logging_file - soubor, do kterého má my_error_log() zapisovat
 //$logging_level_page_speed - úroveň logování, do které má být zapisována rychlost vygenerování stránky
 //$timestamp_null = "NULL";//Není použitelné protože `= "NULL"' je něco jiného než `IS NULL'
-$timestamp_null = "1990-01-01 22:40:16"; //rozhled.cz: Verze MySQL: 4.0.24_Debian-10sarge2-log asi nepodporuje TIMESTAMP(14) aby mohlo být NULL
+    $timestamp_null = "1990-01-01 22:40:16"; //rozhled.cz: Verze MySQL: 4.0.24_Debian-10sarge2-log asi nepodporuje TIMESTAMP(14) aby mohlo být NULL
 //@TODO - comments výše vztáhnout k realizaci níže
-$language = 'cs'; //default_language zatím načítat nebudu
-$mysql_query_string = "SELECT `variable`, `value` FROM `$dbname`.`system` WHERE `language`='$language'";
-$mysql_query_result = make_mysql_query($mysql_query_string, false) or die_graciously(552,$lang_string['lib_to_be_set']);
-while ($dadasys = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
-    //print_r ($dadasys);//debug
-    switch ($dadasys['variable']) {
-        case "logging_level":
-            $logging_level = $dadasys['value']; //logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed 
-            break;
-        case "logging_file":
-            $logging_file = $dadasys['value'];
-            break;
-        case "logging_level_page_speed":
-            $logging_level_page_speed = $dadasys['value'];
-            break;
-        case "timestamp_null":
-            $timestamp_null = $dadasys['value'];
-            break;
+    $language = 'cs'; //default_language zatím načítat nebudu
+    $mysql_query_string = "SELECT `variable`, `value` FROM `$dbname`.`system` WHERE `language`='$language'";
+    $mysql_query_result = make_mysql_query($mysql_query_string, false) or die_graciously(552,$lang_string['lib_to_be_set']);
+    while ($dadasys = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
+        //print_r ($dadasys);//debug
+        switch ($dadasys['variable']) {
+            case "logging_level":
+                $logging_level = $dadasys['value']; //logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed 
+                break;
+            case "logging_file":
+                $logging_file = $dadasys['value'];
+                break;
+            case "logging_level_page_speed":
+                $logging_level_page_speed = $dadasys['value'];
+                break;
+            case "timestamp_null":
+                $timestamp_null = $dadasys['value'];
+                break;
+        }
     }
+include (__BACKYARDROOT__."/closeDB.php");
 }
-include (__ROOT__."/lib/closeDB.php");
 if ($ERROR_HACK < $logging_level) $ERROR_HACK = $logging_level; //120918
     
 //my_error_log("Host is ".thisserver(),5,12);//takže se neznámý server zapíše do logu při každém dotazu, známý server se zapíše jen při debug level
@@ -210,7 +212,7 @@ $level_name = array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'd
 //print_r($level_name);exit;//debug
 //##### /SYSTEM VARIABLE initialization
 // Load Language
-require_once (__ROOT__."/lib/conf.php");//@TODO 4 - require_once (__ROOT__ . "/languages/universal/strings.php"); //Až zavednu více jazyků, tak namísto `universal' bude jméno jazyka
+require_once (__BACKYARDROOT__."/conf/conf.php");//@TODO 4 - require_once (__ROOT__ . "/languages/universal/strings.php"); //Až zavednu více jazyků, tak namísto `universal' bude jméno jazyka
 
 
 $username = "anonymous"; //Až zavedu uživatele, tak se tam budou zapisovat. (do my_error_log)
