@@ -38,6 +38,7 @@
  * 2013-01-04, v.0.7, manifest="offline.manifest"
  * 2013-05-02, v.0.8.1, jQM 1.3.1
  * 2013-05-04, v.0.8.2, text/html; charset=UTF-8 moved to HTTP headers following the GooglePageSpeed recommendation; endPage vyplivne všechno
+ * 2013-10-06, v.0.9, method currentBodyOutput added
  *
  *  
  * @TODO - sladit
@@ -187,6 +188,13 @@ class HTMLPage
       $this->headerWasOutputed = true;
     }
 
+    public function outputCurrentBody(){//Vypise dosavadní tělo
+        echo ($this->body);
+        @ob_flush();//'@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
+        flush();// http://php.vrana.cz/vysypani-vystupu.php      
+        $this->body = '';
+    }        
+    
     public function endPage(){//Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
         echo ($this->body.$this->footer);
         @ob_flush();//'@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.

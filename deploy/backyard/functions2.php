@@ -74,7 +74,7 @@ function GetHTTPstatusCode ($URL_STRING){
         
     } else {
         $socketLastError = socket_last_error($socket);
-        $socketLastErrorString = iconv(mb_detect_encoding(socket_strerror($socketLastError), mb_detect_order(), true), "UTF-8", socket_strerror($socketLastError));//http://stackoverflow.com/questions/7979567/php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
+        $socketLastErrorString = trim(iconv(mb_detect_encoding(socket_strerror($socketLastError), mb_detect_order(), true), "UTF-8", socket_strerror($socketLastError)));//http://stackoverflow.com/questions/7979567/php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
         //my_error_log("socket_connect to $host $path failed with {$socketLastError}",3,13);//debug        
         error_log("socket_connect to $host $path failed with {$socketLastError}: {$socketLastErrorString}");//debug        
     }
