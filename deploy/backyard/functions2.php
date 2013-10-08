@@ -6,6 +6,8 @@
  ** 
  * Purpose: 
  * využíváno jen K:\Work\alfa.gods.cz\www\tools\check-pages.php
+ * 
+ * php_sockets required for socket_create
  *
  **
  * History 
@@ -40,11 +42,12 @@ function GetHTTPstatusCode ($URL_STRING){
     my_error_log("IPv4 is ".$address = gethostbyname($host),5,16);//set & log
   if($address != "81.31.47.101"){//gethostbyname returns this IP address on www.alfa.gods.cz if domain name does not exist
     $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-    if (socket_connect($socket, $address, $port)) {
+    $socketResult = @socket_connect($socket, $address, $port);
+    if ($socketResult) {
 
         socket_write($socket, $request, strlen($request));
-
-        $response = explode(' ', socket_read($socket, 1024));
+        $socketRead = socket_read($socket, 1024);
+        $response = explode(' ', $socketRead);
         my_error_log("HEAD HTTP response: ".print_r($response,TRUE),4,16);//debug
         
         //120427, if the result is not number, maybe the server doesn't understand HEAD, let's try GET
@@ -57,17 +60,30 @@ function GetHTTPstatusCode ($URL_STRING){
           socket_write($socket, $request, strlen($request));
           $response = explode(' ', socket_read($socket, 1024));
           my_error_log("GET HTTP response: ".print_r($response,TRUE),4,16);//debug
-          if (!is_numeric($response[1]))my_error_log("REQUEST = $request RETURNED RESPONSE = {$response[1]} INSTEAD OF HTTP status",3);
-        }        
+          if (!is_numeric($response[1])){
+              my_error_log("REQUEST = $request RETURNED RESPONSE = {$response[1]} INSTEAD OF HTTP status",3);
+          } 
+        } elseif($response[1]>300 && $response[1]<400) {
+            //var_dump($socketRead);
+              $tempPosition = strpos($socketRead,"Location:");
+              $tempLocation = substr($socketRead,$tempPosition+strlen("Location:"));
+              $tempResponse = explode(PHP_EOL,$tempLocation);
+              //die (var_dump(trim($tempResponse[0])));
+              $response[1] .= " follow to ".trim($tempResponse[0]);
+        }     
         
     } else {
-        my_error_log("socket_connect to $host $path failed",3,13);//debug        
+        $socketLastError = socket_last_error($socket);
+        $socketLastErrorString = trim(iconv(mb_detect_encoding(socket_strerror($socketLastError), mb_detect_order(), true), "UTF-8", socket_strerror($socketLastError)));//http://stackoverflow.com/questions/7979567/php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
+        //my_error_log("socket_connect to $host $path failed with {$socketLastError}",3,13);//debug        
+        error_log("socket_connect to $host $path failed with {$socketLastError}: {$socketLastErrorString}");//debug        
     }
 
     //print "<p>Response: ". $response[1] ."</p>\r\n";
 
     socket_close($socket);
-    my_error_log("result=".$result = (isset($response[1])?($response[1]):'socket_error'),5,16);//set & log 
+    //my_error_log("result=".$result = (isset($response[1])?($response[1]):'socket_error'),5,16);//set & log 
+    my_error_log("result=".$result = (isset($response[1])?($response[1]):($socketLastErrorString)),5,16);//set & log 
     return $result;
     }//if($address != "81.31.47.101")
     else {
