@@ -1,2 +1,3 @@
-/deploy/backyard/conf/conf.php
 /nbproject/private/
+/nbproject/
+/deploy/backyard/conf/conf_private.php
