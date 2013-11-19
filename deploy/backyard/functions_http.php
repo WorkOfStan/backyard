@@ -154,3 +154,27 @@ $url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$_SERVE
 return $url;
 }
  */
+
+/**
+ * gets data from a URL through cURL
+ * @param string $url
+ * @param string $useragent
+ * @return string or false
+ */
+function get_data($url,$useragent = 'PHP/cURL')
+{
+  error_log("get_data({$url},{$useragent});");
+  $ch = curl_init();
+  $timeout = 5;
+  curl_setopt($ch,CURLOPT_URL,$url);
+  curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+  curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  $data = curl_exec($ch);  
+  if(!$data){
+      error_log ("Curl error: ".curl_error($ch)." on {$url}");
+  }
+  curl_close($ch);  
+  return $data;
+}
