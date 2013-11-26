@@ -158,14 +158,15 @@ return $url;
 /**
  * gets data from a URL through cURL
  * @param string $url
- * @param string $useragent
+ * @param string $useragent default = 'PHP/cURL'
+ * @param int $timeout [seconds] default =5
  * @return string or false
  */
-function get_data($url,$useragent = 'PHP/cURL')
+function get_data($url,$useragent = 'PHP/cURL',$timeout = 5)
 {
-  error_log("get_data({$url},{$useragent});");
+  error_log("get_data({$url},{$useragent},{$timeout});");
   $ch = curl_init();
-  $timeout = 5;
+  //$timeout = 5;
   curl_setopt($ch,CURLOPT_URL,$url);
   curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
