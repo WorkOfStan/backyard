@@ -1,4 +1,7 @@
 <?php
+if (!function_exists('my_error_log')) {
+    include_once 'functions_my_error_log_dummy.php';
+}
 
 /******************************************************************************
  * HTTP FUNCTIONS
@@ -139,6 +142,40 @@ if (!function_exists('curPageURL')) {
         return $pageURL;
     }
 } else {
-    my_error_log("curPageURL defined outside fucntions.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
+    my_error_log("curPageURL defined outside functions.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
 }
+/* @TODO - obohatit o 443 jako default https port
+function curPageURL()
+{
+$isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+$port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
+$port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
+$url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$_SERVER["REQUEST_URI"];
+return $url;
+}
+ */
 
+/**
+ * gets data from a URL through cURL
+ * @param string $url
+ * @param string $useragent default = 'PHP/cURL'
+ * @param int $timeout [seconds] default =5
+ * @return string or false
+ */
+function get_data($url,$useragent = 'PHP/cURL',$timeout = 5)
+{
+  error_log("get_data({$url},{$useragent},{$timeout});");
+  $ch = curl_init();
+  //$timeout = 5;
+  curl_setopt($ch,CURLOPT_URL,$url);
+  curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+  curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  $data = curl_exec($ch);  
+  if(!$data){
+      error_log ("Curl error: ".curl_error($ch)." on {$url}");
+  }
+  curl_close($ch);  
+  return $data;
+}
