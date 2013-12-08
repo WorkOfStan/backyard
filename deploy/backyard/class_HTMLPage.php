@@ -95,7 +95,7 @@ class HTMLPage
             //if($LOAD_JQUERYMOBILE == 1 || $LOAD_JQUERYMOBILE == '1.2.0'){            
             if($LOAD_JQUERYMOBILE){            
                 $this->header .= '<meta name="viewport" content="width=device-width, initial-scale=1">';
-                if($LOAD_JQUERYMOBILE == '1.3.1'){
+                if($LOAD_JQUERYMOBILE == '1.3.1' || $LOAD_JQUERYMOBILE == '1.3.1-local'){
                     $this->header .= '<link rel="stylesheet" href="css/themes-1.3.1/custom.min.css" />  ';
                 }else{
                     $this->header .= '<link rel="stylesheet" href="css/themes/custom.min.css" />  ';
@@ -107,6 +107,8 @@ class HTMLPage
                     $this->header .= '<link rel="stylesheet" href="//code.jquery.com/mobile/1.2.0/jquery.mobile.structure-1.2.0.min.css" />';//when using theme
                 } elseif($LOAD_JQUERYMOBILE == '1.3.1'){
                     $this->header .= '<link rel="stylesheet" href="//code.jquery.com/mobile/1.3.1/jquery.mobile.structure-1.3.1.min.css" />';//when using theme
+                } elseif($LOAD_JQUERYMOBILE == '1.3.1-local'){
+                    $this->header .= '<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.min.css" />';//when using theme                    
                 }
                 else{my_error_log("LOAD_JQUERYMOBILE={$LOAD_JQUERYMOBILE} - undefined",2);}
             }
@@ -137,6 +139,9 @@ class HTMLPage
             } elseif($LOAD_JQUERYMOBILE == '1.3.1'){
                 $this->header .= '<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>';
                 $this->header .= '<script src="//code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>';                
+            } elseif($LOAD_JQUERYMOBILE == '1.3.1-local'){
+                $this->header .= '<script src="js/jquery-1.9.1.min.js"></script>';
+                $this->header .= '<script src="js/jquery.mobile-1.3.1.min.js"></script>';                
             }
             //$this->header .= '</head><body>';
             $this->footer = "</body></html>";        
