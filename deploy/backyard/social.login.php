@@ -58,6 +58,7 @@ kde zatím je nastaveno:
  * 2013-04-09, v.0.0.4, záznam i timezone při založení nebo last_access
  * 2013-05-03, v.0.1, my_error_log compression
  * 2013-05-10, v.0.2, setcookie
+ * 2013-12-08, v.0.3, from stakan1 put into backyard
  *
  ** 
  * TODO  
@@ -68,15 +69,18 @@ kde zatím je nastaveno:
  * 
  */
 
-require_once ("../lib/functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");//@TODO - jinak, aby univerzálně
-require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
+if(!defined('__BACKYARDROOT__')) die('backyard must be initialized beforehand');
+//require_once ("../lib/functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");//@TODO - jinak, aby univerzálně
+
+if(!isset($apiCredentials)) die('apiCredentials must be preinitialized');
+//require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
 
 
 /*******************************************************************************
  *  Social login  //@TODO 3 - standardize this into LIB
  */
-if(!isset($_REQUEST['fbloginproceed']))require_once (__ROOT__."/lib/login_google.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
-if(!isset($_GET['code']) || isset($_GET['state']))require_once (__ROOT__."/lib/login_facebook.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
+if(!isset($_REQUEST['fbloginproceed']))require_once (__BACKYARDROOT__."/login_google.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
+if(!isset($_GET['code']) || isset($_GET['state']))require_once (__BACKYARDROOT__."/login_facebook.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
         if($apiCredentials['facebook']['auth'])my_error_log("$facebookUserProfile: ".DumpArrayAsOneLine($facebookUserProfile),5,16);//debug
         if($apiCredentials['google']['auth'])my_error_log("$googleUserProfile: ".DumpArrayAsOneLine($googleUserProfile),5,16);    //debug
 /**

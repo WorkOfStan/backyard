@@ -87,7 +87,8 @@ if(!isset($apiCredentials['facebook'])
 } else {
     //zahajeno constructorem new Facebook//if(session_id()=='')session_start ();my_error_log('Session_id='.session_id(),5,16);        
     $apiCredentials['facebook']['auth']=false;    
-    require '../facebook-src/facebook.php';    my_error_log('Facebook auth successfully initiated: sessionId='.session_id().' Passed the line '.__LINE__,5,6);
+    // facebook-src is expected to be in lib folder and all scripts should run from the "root" folder
+    require './lib/facebook-src/facebook.php';    my_error_log('Facebook auth successfully initiated: sessionId='.session_id().' Passed the line '.__LINE__,5,6);
     $facebook = new Facebook(array(// Create our Application instance
         'appId'  => $apiCredentials['facebook']['appId'],
         'secret' => $apiCredentials['facebook']['secret']//,

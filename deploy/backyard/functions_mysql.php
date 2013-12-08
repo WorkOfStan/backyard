@@ -9,9 +9,10 @@ if (!function_exists('my_error_log')) {
 
 /**
  * mysql_query() with error message management
- * @param type $mysql_query_string
- * @param type $ERROR_LOG_OUTPUT
- * @return type
+ * @param string $mysql_query_string
+ * @param boolean $ERROR_LOG_OUTPUT
+ * @return a resource on success, or <b>FALSE</b> on error
+ * OBSOLETED by backyard_mysql_query()
  */
 function make_mysql_query($mysql_query_string, $ERROR_LOG_OUTPUT = true) {
     //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false);
@@ -29,17 +30,44 @@ function make_mysql_query($mysql_query_string, $ERROR_LOG_OUTPUT = true) {
     return ($mysql_query_result);
 }
 
+/**
+ * mysql_query() with error message management and link identifier
+ * @param string $mysql_query_string
+ * @param resource $link_identifier [optional]
+ * @param boolean $ERROR_LOG_OUTPUT [optional]
+ * @return a resource on success, or <b>FALSE</b> on error
+ */
+function backyard_mysql_query($mysql_query_string, $link_identifier = NULL, $ERROR_LOG_OUTPUT = true) {
+    //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false);
+    //071106 - no occurence within fucntion make_mysql_query so probably superfluous//    global $page_timestamp;
+    if ($ERROR_LOG_OUTPUT) my_error_log("Start of query", 6, 11);
+    if ((isset($mysql_query_string)) && ($mysql_query_string != "")) {
+        $mysql_query_result = mysql_query(
+                $mysql_query_string,
+                $link_identifier
+                );
+        if ($ERROR_LOG_OUTPUT) my_error_log("$mysql_query_string", 5, 11); //debug
+        if (!$mysql_query_result) my_error_log(mysql_errno() . ": " . mysql_error() . " /with query: $mysql_query_string", 1, 11);
+    } else {
+        $mysql_query_result = false;
+        if ($ERROR_LOG_OUTPUT) my_error_log("No mysql_query_string set", 1, 11); //debug
+    }
+    if ($ERROR_LOG_OUTPUT) my_error_log("End of query", 6, 11);
+    return ($mysql_query_result);
+}
+
 
 if (!function_exists('customMySQLQuery')) {
     /**
      * 
      * @param type $query
-     * @param type $justOneRow
+     * @param type $justOneRow [optional]
+     * @param resource $link_identifier [optional]
      * @return array one or two dimensional or false
      */
-    function customMySQLQuery($query, $justOneRow = false) {
+    function customMySQLQuery($query, $justOneRow = false, $link_identifier = NULL) {
         $result = false;
-        $mysql_query_result = make_mysql_query($query) or die_graciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
+        $mysql_query_result = backyard_mysql_query($query, $link_identifier) or die_graciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
         //transforming the query result into an array            
         if (mysql_num_rows($mysql_query_result) > 0) {
             $result = array();

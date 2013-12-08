@@ -35,7 +35,7 @@ $lang_string['dada_general_error'] = 'An error has occured. Please, contact <a h
 $lang_string['dada_general_error_page'] = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>General error</title></head><body>'.$lang_string['dada_general_error'].'<hr/><a href="/">Homepage</a></body></html>';
 //$lang_string['dada_general_error_page'] = $lang_string['godsapps_general_error_page'] = $lang_string['dada_general_error_page'];
 $lang_string['page_generated_in'] = 'Stránka generována %s sekund';
-$lang_string['lib_to_be_set'] = 'LIBrary In Backyard to be set. Check all sections in lib/conf.php';
+$lang_string['lib_to_be_set'] = 'LIBrary In Backyard to be set. Check all sections in backyard/conf/conf.php';
 
 /** 
  * Set timezone
@@ -63,10 +63,17 @@ $libThisServerArray = array(
     array('domain_preg_match' => '^localhost$|^127.0.0.1$', 'short_name' => 'localhost')
 );
 
-//set connect strings to database for all the short_named servers      
-    $dbhost = 'localhost';
-    $dbuser = 'user';
-    $dbpass = '';
-    $dbname = 'default';
+//set connect strings to database for all the short_named servers
+//@todo - use it only as an array backyardDatabase from the four credentials below in order not to confuse it with system credentials of the application that is using backyard    
+    $dbhost = 'localhost';  //OBSOLETE, keep for backward compatibility
+    $dbuser = 'user';       //OBSOLETE, keep for backward compatibility
+    $dbpass = '';           //OBSOLETE, keep for backward compatibility
+    $dbname = 'default';    //OBSOLETE, keep for backward compatibility    
+$backyardDatabase = array(
+    'dbhost' => 'localhost',
+    'dbuser' => 'user',
+    'dbpass' => '',
+    'dbname' => 'default',
+);
 
-if(file_exists(__ROOT__."/lib/conf_private.php")) include_once (__ROOT__."/lib/conf_private.php");//conf_private.php should be in .gitignore so that each developer may redefine its development environment
+if(file_exists(__BACKYARDROOT__."/conf/conf_private.php")) include_once (__BACKYARDROOT__."/conf/conf_private.php");//conf_private.php should be in .gitignore so that each developer may redefine its development environment

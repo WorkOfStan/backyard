@@ -164,10 +164,11 @@ function thisserver() { //returns string identifying the current server [cz-rozh
     return $result;
 }
 
+require_once 'functions_mysql.php';
 
 if (!isset($ERROR_HACK)) $ERROR_HACK=0; //120918, aby bylo možné nastavit ERROR_HACK jako proměnnou ve stránce před zavoláním functions.php
 require_once (__BACKYARDROOT__."/conf/conf.php"); //@TODO a proč je pak ještě na řádce 215?
-if($backyardDatabase){
+if(isset($backyardDatabase)){
 //130124, obsoleted by conf.php//require_once ("connectDB.php");
     include (__BACKYARDROOT__."/openDB.php");
 //##### SYSTEM VARIABLE initialization
@@ -180,8 +181,8 @@ if($backyardDatabase){
     $timestamp_null = "1990-01-01 22:40:16"; //rozhled.cz: Verze MySQL: 4.0.24_Debian-10sarge2-log asi nepodporuje TIMESTAMP(14) aby mohlo být NULL
 //@TODO - comments výše vztáhnout k realizaci níže
     $language = 'cs'; //default_language zatím načítat nebudu
-    $mysql_query_string = "SELECT `variable`, `value` FROM `$dbname`.`system` WHERE `language`='$language'";
-    $mysql_query_result = make_mysql_query($mysql_query_string, false) or die_graciously(552,$lang_string['lib_to_be_set']);
+    $mysql_query_string = "SELECT `variable`, `value` FROM `{$backyardDatabase['dbname']}`.`system` WHERE `language`='$language'";
+    $mysql_query_result = backyard_mysql_query($mysql_query_string, $backyardConnection, false) or die_graciously(552,$lang_string['lib_to_be_set']);
     while ($dadasys = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
         //print_r ($dadasys);//debug
         switch ($dadasys['variable']) {
@@ -385,7 +386,7 @@ function page_generated_in() {
     return ( $str );
 }
 
-require_once 'functions_mysql.php';
+//require_once 'functions_mysql.php';
 
 
 /******************************************************************************

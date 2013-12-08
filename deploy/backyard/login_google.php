@@ -75,9 +75,10 @@ if(!isset($apiCredentials['google'])){
 my_error_log("Google API starts", 6, 6);
 //$Google_authUrl=true;
 // https://code.google.com/p/google-api-php-client/source/browse/trunk/examples/plus/index.php
-require_once '../google-api-php-client/src/apiClient.php';
-require_once '../google-api-php-client/src/contrib/apiPlusService.php';
-require_once '../google-api-php-client/src/contrib/apiOauth2Service.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
+// google-api-php-client is expected to be in lib folder and all scripts should run from the "root" folder
+require_once './lib/google-api-php-client/src/apiClient.php';
+require_once './lib/google-api-php-client/src/contrib/apiPlusService.php';
+require_once './lib/google-api-php-client/src/contrib/apiOauth2Service.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
 my_error_log("Google API libraries required", 6, 6); //@TODO 3 - před tímto my_error se změní vypisovaný čas z GMT+2 na GMT
 
 if (session_id()=='')session_start(); //@TODO - odladit konflikt více session: As of PHP 4.3.3, calling session_start() after the session was previously started will result in an error of level E_NOTICE. Also, the second session start will simply be ignored.
