@@ -153,7 +153,10 @@ function socialLoginPseudoConstructor($internalId, $userLanguage){
  */
 function getInternalUserLanguage($ownerLanguage, $ownerId){
     global $availableLanguages,$availableLanguageFallback,$facebookUserProfile;//@TODO 2 - nehodí to chybu pokud $fb nebo $gl nebude definován??
-    global $dbname,$tableNameOwners;
+    global 
+        //$dbname,
+            $tableNameOwners;
+    global $backyardDatabase;
 
 $userLanguage = false;
 if($ownerLanguage){
@@ -163,7 +166,7 @@ if($ownerLanguage){
 }
 my_error_log("After ownerLanguage: userLanguage = {$userLanguage}",5,16);
 if(!$userLanguage && $ownerId){//use owner preference ; Note: $ownerId is always set - either false or number
-    $query = "SELECT `owner_language` FROM `$dbname`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
+    $query = "SELECT `owner_language` FROM `{$backyardDatabase['dbname']}`.`{$tableNameOwners}` WHERE `owner_id` = {$ownerId}";
     $mysqlQueryResultArray = customMySQLQuery($query,true);
     if($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language']!=''){
         $userLanguage=$mysqlQueryResultArray['owner_language'];
@@ -217,7 +220,10 @@ function getInternalUserId(){
     if($authId){
         //return( externalLogin($authType, $authId, $authName, $authMail) );
         
-    global $availableLanguages, $userLanguage, $dbname, $tableNameOwners, $ownerId;
+    global $availableLanguages, $userLanguage, 
+            //$dbname, 
+            $tableNameOwners, $ownerId;
+    global $backyardDatabase;
     //@TODO 2 - bacha na to, že při změně jména či mailu ve fb se nezaloguje --- změnit na na pozadí a přes fb_id
     global $timezone; $timezone = mysql_real_escape_string($timezone);
     $authVector = array('auth_type' => $authType, 
@@ -226,7 +232,7 @@ function getInternalUserId(){
     $authString = serialize ($authVector);
     //TADY DAT SOFISTIKOVANEJSI LOGIKU
     if(!isset($ownerId))$ownerId=false;//@TODO 2 - aby nespoléhalo na $ownerId global
-    $query = "SELECT * FROM `$dbname`.`$tableNameOwners` WHERE (`owner_login` LIKE '%{$authType}%' AND `owner_login` LIKE '%{$authId}%') OR `owner_login` LIKE '%{$authMail}%'";//výběr na hrubo
+    $query = "SELECT * FROM `{$backyardDatabase['dbname']}`.`$tableNameOwners` WHERE (`owner_login` LIKE '%{$authType}%' AND `owner_login` LIKE '%{$authId}%') OR `owner_login` LIKE '%{$authMail}%'";//výběr na hrubo
     $mysqlQueryResultArrayMoreLines = customMySQLQuery($query);
     //@TODO - skonci pokud prazdny
    if($mysqlQueryResultArrayMoreLines){//zjistovat jen pokud neprazdny vysledek
@@ -288,7 +294,7 @@ function getInternalUserId(){
         //if(strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']) <= strtotime("-15 minutes")){
         if(strtotime('now') - strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']) > 15*60){//@TODO 2 - ověřit, zda počítá správně více jak 15 minut
             my_error_log("ownerId={$ownerId} revisited", 5);            
-            $query = "UPDATE `$dbname`.`$tableNameOwners` SET `last_access` = CURRENT_TIMESTAMP, `olson_timezone` = '{$timezone}' WHERE `$tableNameOwners`.`owner_id` = {$ownerId};";
+            $query = "UPDATE `{$backyardDatabase['dbname']}`.`$tableNameOwners` SET `last_access` = CURRENT_TIMESTAMP, `olson_timezone` = '{$timezone}' WHERE `$tableNameOwners`.`owner_id` = {$ownerId};";
             $tempUpdateQueryResult = make_mysql_query($query) or die_graciously('E137',"{$query}"); // End script with a specific error message if mysql query fails                     
         } else {//debug
             my_error_log("ownerId={$ownerId} sessioning from ".date("Y-m-d H:i:s",strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']))." till ".date("Y-m-d H:i:s",strtotime('now')), 5);
@@ -296,7 +302,7 @@ function getInternalUserId(){
     } else {
         //create
         $ownerId = findFirstAvailableIdInRelevantTable($tableNameOwners, $ownerId, 'owner_id');
-        $query = "INSERT INTO `$dbname`.`$tableNameOwners` "
+        $query = "INSERT INTO `{$backyardDatabase['dbname']}`.`$tableNameOwners` "
             ."(`owner_id`, `owner_name`, `owner_email`, `owner_signature`, `owner_login`, `owner_notification`, `created`, `type_id`, `olson_timezone`) " //@TODO 4 - owner_language nastavit dle prvního přístupu, ať se uživateli nemění dle použitého browseru - ale $userLanguage ještě není nastaven, tak by se muselo promísit zalogování a nastavení jazyka
             ."VALUES ({$ownerId}, '{$authName}', '{$authMail}', '{$authName}', '{$authString}' , '3', CURRENT_TIMESTAMP, 2, '{$timezone}');"; 
             ////@TODO 3 - default je zapnout notifikace - k udělání jejich rozšířenou denní verzi//130409 - default notifikací je denní summary=3
@@ -306,7 +312,7 @@ function getInternalUserId(){
         my_error_log("{$authType} create {$authVector['name']} {$authVector['mail']}", 4, 10);
     }
     //renegotiate the userLanguage //@TODO 4 - zoptimalizovat dotaz, protože (a) login už query provedl a (b) create owner_language nenastavuje, resp. víme jak
-    $query = "SELECT `owner_language` FROM `$dbname`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
+    $query = "SELECT `owner_language` FROM `{$backyardDatabase['dbname']}`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
     $mysqlQueryResultArray = customMySQLQuery($query,true);
     if($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language']!=''){
         if (($userLanguage!=$mysqlQueryResultArray['owner_language']) && (in_array($mysqlQueryResultArray['owner_language'], $availableLanguages))) {
@@ -430,9 +436,12 @@ class Language{
 if(!function_exists('findFirstAvailableIdInRelevantTable')){
     my_error_log('defining findFirstAvailableIdInRelevantTable conditionally', 3);//@TODO 2 - anebo move jako obecnou funkci do functions??
 function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric){
-    global $dbname;
+    global 
+        //$dbname
+        $backyardDatabase
+        ;
     $result = 1;//default value
-        $query="SELECT `{$relevantMetric}` FROM  `{$dbname}`.`{$table}` "
+        $query="SELECT `{$relevantMetric}` FROM  `{$backyardDatabase['dbname']}`.`{$table}` "
             .(($relevantMetric == 'owner_id')?(""):("WHERE  `owner_id` ={$ownerId} "))
             ." ORDER BY `{$relevantMetric}` DESC LIMIT 0 , 1;";                
         $mysql_query_result=make_mysql_query($query) or die_graciously('E106',"$query"); // End script with a specific error message if mysql query fails
