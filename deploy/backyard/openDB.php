@@ -19,9 +19,10 @@
  * 
  */
  //Open Database
+/* OBSOLETE
 	$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql'); //OBSOLETE, keep for backward compatibility    
 	mysql_select_db($dbname, $conn); //OBSOLETE, keep for backward compatibility    
-
+*/
 if(isset($backyardDatabase)){
     $backyardConnection = mysql_connect($backyardDatabase['dbhost'], $backyardDatabase['dbuser'], $backyardDatabase['dbpass']) 
             or die ('Error connecting to mysql');

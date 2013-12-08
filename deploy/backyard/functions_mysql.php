@@ -42,10 +42,16 @@ function backyard_mysql_query($mysql_query_string, $link_identifier = NULL, $ERR
     //071106 - no occurence within fucntion make_mysql_query so probably superfluous//    global $page_timestamp;
     if ($ERROR_LOG_OUTPUT) my_error_log("Start of query", 6, 11);
     if ((isset($mysql_query_string)) && ($mysql_query_string != "")) {
-        $mysql_query_result = mysql_query(
+        if($link_identifier == NULL){
+            $mysql_query_result = mysql_query(
+                $mysql_query_string
+                );                        
+        } else {
+            $mysql_query_result = mysql_query(
                 $mysql_query_string,
                 $link_identifier
-                );
+                );            
+        }
         if ($ERROR_LOG_OUTPUT) my_error_log("$mysql_query_string", 5, 11); //debug
         if (!$mysql_query_result) my_error_log(mysql_errno() . ": " . mysql_error() . " /with query: $mysql_query_string", 1, 11);
     } else {

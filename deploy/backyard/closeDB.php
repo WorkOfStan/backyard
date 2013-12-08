@@ -17,9 +17,11 @@
  * 
  * 
  */
+/* OBSOLETE
 if(isset($conn)){//OBSOLETE, keep for backward compatibility    
 	mysql_close($conn);
 }
+ */
 if(isset($backyardConnection)){
     mysql_close($backyardConnection);    
 }

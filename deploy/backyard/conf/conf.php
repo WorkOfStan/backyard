@@ -65,15 +65,22 @@ $libThisServerArray = array(
 
 //set connect strings to database for all the short_named servers
 //@todo - use it only as an array backyardDatabase from the four credentials below in order not to confuse it with system credentials of the application that is using backyard    
+/*
     $dbhost = 'localhost';  //OBSOLETE, keep for backward compatibility
     $dbuser = 'user';       //OBSOLETE, keep for backward compatibility
     $dbpass = '';           //OBSOLETE, keep for backward compatibility
     $dbname = 'default';    //OBSOLETE, keep for backward compatibility    
+   */ 
+//$tempDbConnIsOk dokud nebude všude narolováno ok
+if(!isset($tempDbConnIsOk))error_log('Check whether $dbhost, $dbuser, $dbpass and $dbname are not missing!');
+
+/* this array must be created by the application before invoking backyard     
 $backyardDatabase = array(
     'dbhost' => 'localhost',
     'dbuser' => 'user',
     'dbpass' => '',
     'dbname' => 'default',
 );
-
+*/
+    
 if(file_exists(__BACKYARDROOT__."/conf/conf_private.php")) include_once (__BACKYARDROOT__."/conf/conf_private.php");//conf_private.php should be in .gitignore so that each developer may redefine its development environment
