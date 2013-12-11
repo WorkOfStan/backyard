@@ -62,6 +62,7 @@ function DumpArrayAsOneLine($myArray) {
 }
 
 /**
+ * Returns first row with exact match //@TODO 4 - přidat parametr na vrácení všech rows s exact match
  * 
  * @param string $searchedValue
  * @param array $searchedArray
@@ -69,7 +70,6 @@ function DumpArrayAsOneLine($myArray) {
  * @return mixed
  */
 function ArrayVlookup($searchedValue, $searchedArray, $columnName) {
-    //returns first row with exact match  //@TODO 4 - přidat parametr na vrácení všech rows s exact match
     //debug//echo "searching $searchedValue in the column $columnName in the array ".print_r($searchedArray,true);exit;
     if (!is_array($searchedArray)) {
         my_error_log("ArrayVlookup: array parameter is not an array", 2);
