@@ -159,7 +159,7 @@ function thisserver() { //returns string identifying the current server [cz-rozh
         }        
     }
     if (!$result) {
-        my_error_log("Host {$_SERVER['SERVER_NAME']} not set in libThisServerArray", 1, 12);
+        //@TODO - před čím to má varovat???//my_error_log("Host {$_SERVER['SERVER_NAME']} not set in libThisServerArray", 1, 12);
     } //a zaroven by mohlo mi poslat e-mail
     return $result;
 }
