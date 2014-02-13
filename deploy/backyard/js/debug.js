@@ -50,6 +50,7 @@ function dump(arr,level) {
 return dumped_text;
 }
 
+var my_error_log_event_session_counter = 0;
 
 /**
  * Requires jQuery
@@ -62,7 +63,7 @@ function my_error_log(message,level,apiUrl){
      var jqxhr = $.ajax( {
         url: apiUrl,
         type: 'POST',
-        data: {my_error_log_message: nameOfThisApp + ' ' + message, my_error_log_level: level},
+        data: {my_error_log_message: nameOfThisApp + ' ' + message + ' (' + (++my_error_log_event_session_counter) + ')', my_error_log_level: level},
         dataType: 'json'
     } ); //@TODO 2 - přidat info o error auth.
     if(debugging) console.log(message);
