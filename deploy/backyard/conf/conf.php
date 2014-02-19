@@ -84,3 +84,7 @@ $backyardDatabase = array(
 */
     
 if(file_exists(__BACKYARDROOT__."/conf/conf_private.php")) include_once (__BACKYARDROOT__."/conf/conf_private.php");//conf_private.php should be in .gitignore so that each developer may redefine its development environment
+
+if(!isset($backyardDatabase['system_table_name'])){
+    $backyardDatabase['system_table_name'] = 'system';
+}
