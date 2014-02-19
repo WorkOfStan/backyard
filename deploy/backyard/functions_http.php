@@ -142,7 +142,7 @@ if (!function_exists('curPageURL')) {
         return $pageURL;
     }
 } else {
-    my_error_log("curPageURL defined outside functions.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
+    my_error_log("curPageURL defined outside functions_http.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
 }
 /* @TODO - obohatit o 443 jako default https port
 function curPageURL()
@@ -164,7 +164,7 @@ return $url;
  */
 function get_data($url,$useragent = 'PHP/cURL',$timeout = 5)
 {
-  error_log("get_data({$url},{$useragent},{$timeout});");
+  my_error_log("get_data({$url},{$useragent},{$timeout});",4);
   $ch = curl_init();
   //$timeout = 5;
   curl_setopt($ch,CURLOPT_URL,$url);
