@@ -107,5 +107,5 @@ if (!function_exists('customMySQLQuery')) {
         return $result; //returns two dimensional array
     }
 } else {
-    my_error_log("customMySQLQuery defined outside functions.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
+    my_error_log("customMySQLQuery defined outside functions_mysql.php - track it and get rid of it", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
 }

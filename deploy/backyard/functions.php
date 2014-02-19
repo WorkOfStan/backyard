@@ -181,7 +181,7 @@ if(isset($backyardDatabase)){
     $timestamp_null = "1990-01-01 22:40:16"; //rozhled.cz: Verze MySQL: 4.0.24_Debian-10sarge2-log asi nepodporuje TIMESTAMP(14) aby mohlo být NULL
 //@TODO - comments výše vztáhnout k realizaci níže
     $language = 'cs'; //default_language zatím načítat nebudu
-    $mysql_query_string = "SELECT `variable`, `value` FROM `{$backyardDatabase['dbname']}`.`system` WHERE `language`='$language'";
+    $mysql_query_string = "SELECT `variable`, `value` FROM `{$backyardDatabase['dbname']}`.`{$backyardDatabase['system_table_name']}` WHERE `language` LIKE '$language'";
     $mysql_query_result = backyard_mysql_query($mysql_query_string, $backyardConnection, false) or die_graciously(552,$lang_string['lib_to_be_set']);
     while ($dadasys = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
         //print_r ($dadasys);//debug
