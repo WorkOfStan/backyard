@@ -72,7 +72,7 @@ $libThisServerArray = array(
     $dbname = 'default';    //OBSOLETE, keep for backward compatibility    
    */ 
 //$tempDbConnIsOk dokud nebude všude narolováno ok
-if(!isset($tempDbConnIsOk))error_log('Check whether $dbhost, $dbuser, $dbpass and $dbname are not missing!');
+if(!isset($tempDbConnIsOk))error_log('Check in '.__BACKYARDROOT__.' whether $dbhost, $dbuser, $dbpass and $dbname are not missing!');
 
 /* this array must be created by the application before invoking backyard     
 $backyardDatabase = array(
