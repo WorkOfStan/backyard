@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('my_error_log')) {
-    include_once 'functions_my_error_log_dummy.php';
+    include_once './functions_my_error_log_dummy.php';
 }
 
 /******************************************************************************
@@ -35,10 +35,11 @@ if (!function_exists('apache_request_headers')) {
  * void movePage($num,$url)
  * 
  * @staticvar array $http
- * @param type $num
- * @param type $url
+ * @param int $num
+ * @param string $url
+ * @param bool $stopCodeExecution default true
  */
-function movePage($num, $url) {
+function backyard_movePage($num, $url, $stopCodeExecution = true) {
     static $http = array(
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
@@ -82,78 +83,49 @@ function movePage($num, $url) {
     );
     header($http[$num]);
     header("Location: $url");
-    //die_graciously("100","Redirect to {$url} with {$num} status failed.");//aby se predeslo nepresmerovani pri predchozim vypisu hlavicek
     my_error_log("Redirect to {$url} with {$num} status", 5);
-    //if($ERROR_HACK==5)
-    //   echo "Redirect to {$url} with {$num} status";
-    exit; //po redirektu jiz neni zadouci vykonavat kod
+    if ($stopCodeExecution) exit; //default behaviour expects that no code should be interpreted after redirection
 }
 
-if (!function_exists('RetrieveFromPostThenGet')) {
-    /**
-     * 
-     * @param string $nameOfTheParameter
-     * @return string or false
-     */
-    function RetrieveFromPostThenGet($nameOfTheParameter) {
-        $result = false; //default value
-        if (isset($_POST[$nameOfTheParameter])) {
-            $result = $_POST[$nameOfTheParameter];
-        } else {
-            if (isset($_GET[$nameOfTheParameter])) {
-                $result = $_GET[$nameOfTheParameter];
-            }
-        }
-        my_error_log("Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true), (($result) ? (5) : (6)), 16);
-        return $result;
-    }
-} else {
-    my_error_log("RetrieveFromPostThenGet defined outside functions.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
-}
-
-
-
-if (!function_exists('curPageURL')) {
-    /**
-     * Source: http://www.webcheatsheet.com/PHP/get_current_page_url.php
-     * Usage: echo curPageURL();
-     * Added into dada/fb/lib.php: 2010-11-03
-     * 
-     * @param type $includeTheQueryPart
-     * @return string
-     */
-    function curPageURL($includeTheQueryPart = true) {
-        if ($includeTheQueryPart) {//added 120819
-            $endGame = $_SERVER["REQUEST_URI"];
-        } else {
-            $endGame = $_SERVER["SCRIPT_NAME"]; //without the query part
-        }
-        $pageURL = 'http';
-        if (isset($_SERVER["HTTPS"]))
-            if ($_SERVER["HTTPS"] == "on") {
-                $pageURL .= "s";
-            }
-        $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $endGame;
-        } else {
-            $pageURL .= $_SERVER["SERVER_NAME"] . $endGame;
-        }
-        return $pageURL;
-    }
-} else {
-    my_error_log("curPageURL defined outside functions_http.php", 3, 0);//@TODO 3 - až už žádné nebudou, tak dát mimo !function_exists container
-}
-/* @TODO - obohatit o 443 jako default https port
-function curPageURL()
-{
-$isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
-$port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
-$port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
-$url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$_SERVER["REQUEST_URI"];
-return $url;
-}
+/**
+ * 
+ * @param string $nameOfTheParameter
+ * @return string or false
  */
+function backyard_RetrieveFromPostThenGet($nameOfTheParameter) {
+    $result = false; //default value
+    if (isset($_POST[$nameOfTheParameter])) {
+        $result = $_POST[$nameOfTheParameter];
+    } else {
+        if (isset($_GET[$nameOfTheParameter])) {
+            $result = $_GET[$nameOfTheParameter];
+        }
+    }
+    my_error_log("Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true), (($result) ? (5) : (6)), 16);
+    return $result;
+}
+
+
+/**
+ * Source: http://www.webcheatsheet.com/PHP/get_current_page_url.php
+ * Usage: echo curPageURL();
+ * Added into dada/fb/lib.php: 2010-11-03
+ * 
+ * @param type $includeTheQueryPart
+ * @return string
+ */
+function backyard_getCurPageURL($includeTheQueryPart = true) {
+    if ($includeTheQueryPart) {//added 120819
+        $endGame = $_SERVER["REQUEST_URI"];
+    } else {
+        $endGame = $_SERVER["SCRIPT_NAME"]; //without the query part
+    }
+    $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+    $port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
+    $port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
+    $pageURL = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$endGame;
+    return $pageURL;
+}
 
 /**
  * gets data from a URL through cURL
@@ -162,11 +134,10 @@ return $url;
  * @param int $timeout [seconds] default =5
  * @return string or false
  */
-function get_data($url,$useragent = 'PHP/cURL',$timeout = 5)
+function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5)
 {
-  my_error_log("get_data({$url},{$useragent},{$timeout});",4);
+  my_error_log("backyard_getData({$url},{$useragent},{$timeout});",4);
   $ch = curl_init();
-  //$timeout = 5;
   curl_setopt($ch,CURLOPT_URL,$url);
   curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
@@ -174,7 +145,7 @@ function get_data($url,$useragent = 'PHP/cURL',$timeout = 5)
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
   $data = curl_exec($ch);  
   if(!$data){
-      error_log ("Curl error: ".curl_error($ch)." on {$url}");
+      my_error_log ("Curl error: ".curl_error($ch)." on {$url}",2);
   }
   curl_close($ch);  
   return $data;
