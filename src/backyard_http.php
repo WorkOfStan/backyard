@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('my_error_log')) {
-    include_once './functions_my_error_log_dummy.php';
+   require_once 'functions_my_error_log_dummy.php';
 }
 
 /******************************************************************************

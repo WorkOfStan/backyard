@@ -23,7 +23,7 @@
     'RETURN-ORIGINAL' => false //Standard behaviour is to absolutize relative links; if ==true, then returns the unchanged mark-up
  *     );   
  * include ('./lib/backyard/src/emulator.php');
- * $payload = getEmulatedPayload($URLinfo)
+ * $payload = getEmulatedPayload($URLinfo);
  * echo $payload['message_output'];//while $payload['CONTENT-TYPE'] contains the content_type and $payload['message_body'] the original message
  * 
  ** 
@@ -44,7 +44,7 @@
 /**
  * Load Scripts & init
  */
-require_once ("./backyard_http.php");
+require_once ("backyard_http.php");
 
 if (!isset($URLinfo)){//if it is direct call or include without setting parameters
     $URLinfo = array (); //init
