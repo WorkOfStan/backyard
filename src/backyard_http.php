@@ -132,21 +132,35 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
  * @param string $url
  * @param string $useragent default = 'PHP/cURL'
  * @param int $timeout [seconds] default =5
- * @return string or false
+ * @return array or false
  */
-function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5)
+function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeaders = false)
 {
-  my_error_log("backyard_getData({$url},{$useragent},{$timeout});",4);
+  my_error_log("backyard_getData({$url},{$useragent},{$timeout});",5,16);
   $ch = curl_init();
   curl_setopt($ch,CURLOPT_URL,$url);
   curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+  if ($customHeaders) {
+      $customArray = explode('|',$customHeaders);//$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
+      $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
+      if(!$tempOptSer){
+          my_error_log('Custom headers $customHeaders FAILED to be set',2,16);
+      }
+  }  
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
   curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-  $data = curl_exec($ch);  
-  if(!$data){
+  $data = array();
+  $data['message_body']=curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
+  /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
+  header("Content-type: text/plain");//debug
+  print_r(str_replace("i", "E", $data['MARKUP']));//debug
+  exit;
+  /* */ 
+  if(!$data['message_body']){
       my_error_log ("Curl error: ".curl_error($ch)." on {$url}",2);
   }
+  $data['CONTENT-TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);  
   curl_close($ch);  
   return $data;
 }
