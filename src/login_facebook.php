@@ -23,7 +23,7 @@
 //$myErrorLogMessageType=0;
 //$ERROR_HACK=5;
 if (!function_exists('removeqsvar')) {
-//http://stackoverflow.com/questions/1251582/beautiful-way-to-remove-get-variables-with-php
+//In http://stackoverflow.com/questions/1251582/beautiful-way-to-remove-get-variables-with-php see http://stackoverflow.com/a/1251650
 function removeqsvar($url, $varname) {
 //    return preg_replace('/([?&])'.$varname.'=[^&]+(&|$)/','$1',$url);
     //$result = preg_replace('/([?&])'.$varname.'=[^&]+(&|$)/','$1',$url);

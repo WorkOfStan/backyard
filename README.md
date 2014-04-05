@@ -1,6 +1,9 @@
+Library In Backyard
+===================
 Collection of useful functions
+==============================
 
-Usage:
+backyard 1 usage:
 This array must be created by the application before invoking backyard     
 $backyardDatabase = array(
     'dbhost' => 'localhost',
@@ -8,3 +11,10 @@ $backyardDatabase = array(
     'dbpass' => '',
     'dbname' => 'default',
 );
+
+
+backyard 2 usage:
+
+All backyard functins are named as backyard_camelCase 
+
+

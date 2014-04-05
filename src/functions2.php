@@ -1,4 +1,6 @@
 <?php
+error_log('where is functions2.php used?');
+die('Contact administrator, please, concerning error f2.');
 /**
  * Name: Functions library 2
  * Project: LIB/Part of Library In Backyard

@@ -1,7 +1,7 @@
 <?php
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
-    include_once 'functions_my_error_log_dummy.php';
+    include_once 'backyard_my_error_log_dummy.php';
 }
 
 /******************************************************************************
@@ -74,21 +74,29 @@ function backyard_dumpArrayAsOneLine($myArray) {
  * @param string $searchedValue
  * @param array $searchedArray
  * @param string $columnName
- * @return mixed
+ * @param bool $allExactMatches - default false; if true function returns array with all exact matches
+ * @return mixed (string if found, false otherwise)
  */
-function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName) {
-    //debug//echo "searching $searchedValue in the column $columnName in the array ".print_r($searchedArray,true);exit;
+function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false) {
     if (!is_array($searchedArray)) {
         my_error_log("ArrayVlookup: array parameter is not an array", 2);
         return false;
     }
     
+    $allMatchingRows = array();//used only if $allExactMatches === true
+    
     foreach ($searchedArray as $key => $row) {
         if (isset($row[$columnName])) {
-            if ($row[$columnName] == $searchedValue)
-                return $row;
+            if ($row[$columnName] == $searchedValue){
+                if($allExactMatches){
+                    $allMatchingRows[$key] = $row;
+                } else {
+                    return $row;
+                }
+            }
         } else {
             my_error_log("ArrayVlookup: $columnName not in " . print_r($row, true), 3);
         }
     }
+    return $allExactMatches ? $allMatchingRows : false;
 }

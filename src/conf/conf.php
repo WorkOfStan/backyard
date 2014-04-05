@@ -1,5 +1,12 @@
 <?php
 /**
+ * Default configuration for backyard 2
+ * May be changed by override in conf_private.php.
+ * 
+ * DO NOT CHANGE THE DEFAULT VALUES HERE
+ */
+
+/**
  * Name: lib/conf.php
  * Project: LIB/Part of Library In Backyard
  * 
