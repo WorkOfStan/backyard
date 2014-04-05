@@ -6,6 +6,7 @@
  * Store "time" for benchmarking.
  * Inspired by sb_functions.php in sphpblog
  * 
+ * @return float
  */
 function getmicrotime() {
     if (version_compare(phpversion(), '5.0.0') == -1) {

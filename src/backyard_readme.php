@@ -4,6 +4,16 @@
  * Library of useful functions
  * //řšč
  * 
+ * Globální proměnné:
+ * $backyardConf          ... načtení z tohoto, alternativně z db na next line
+ * $backyardDatabase
+ * $RUNNING_TIME
+ * $ERROR_HACK
+ * $backyardPage_timestamp
+ * 
+ * Constant:
+ * __BACKYARDROOT__
+ * 
  ** 
  * TODO
  * @TODO - oddělit functions init a functions functions
