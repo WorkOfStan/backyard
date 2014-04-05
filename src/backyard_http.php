@@ -1,7 +1,7 @@
 <?php
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
-    include_once './functions_my_error_log_dummy.php';
+    include_once 'functions_my_error_log_dummy.php';
 }
 
 /******************************************************************************
@@ -93,7 +93,7 @@ function backyard_movePage($num, $url, $stopCodeExecution = true) {
  * @param string $nameOfTheParameter
  * @return string or false
  */
-function backyard_RetrieveFromPostThenGet($nameOfTheParameter) {
+function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
     $result = false; //default value
     if (isset($_POST[$nameOfTheParameter])) {
         $result = $_POST[$nameOfTheParameter];

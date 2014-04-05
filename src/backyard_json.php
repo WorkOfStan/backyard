@@ -1,4 +1,5 @@
 <?php
+//backyard 2 compliant
 if (!function_exists('my_error_log')) {
     include_once 'functions_my_error_log_dummy.php';
 }
@@ -13,7 +14,7 @@ if (!function_exists('my_error_log')) {
  * @param type $logLevel - optional - default is not to be verbose
  * @return string
  */
-function MinifyJSON($jsonInput, $logLevel = 5) {
+function backyard_minifyJSON($jsonInput, $logLevel = 5) {
     $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
     if ($jsonOutput == 'null') {
         my_error_log("ERROR IN JSON: {$jsonInput}", 1, 16);
@@ -32,11 +33,12 @@ function MinifyJSON($jsonInput, $logLevel = 5) {
  * @param bool $exitAfterOutput  - optional - default is to let the script continue
  * @param int $logLevel - optional - default is not to be verbose
  */
-function OutputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
+function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
     header("Content-type: application/json");
-    echo(MinifyJSON($jsonString, $logLevel)); //jako json
-    if ($exitAfterOutput)
+    echo(backyard_MinifyJSON($jsonString, $logLevel)); //jako json
+    if ($exitAfterOutput) {
         exit;
+    }
 }
 
 /** 
@@ -50,7 +52,7 @@ function OutputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
  * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
  * @return  string 
  */
-function json_clean_decode($json, $assoc = false, $depth = 512, $options = 0) {
+function backyard_jsonCleanDecode($json, $assoc = false, $depth = 512, $options = 0) {
     // search and remove comments like /* */ and //
     $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json);
     
@@ -74,7 +76,7 @@ function json_clean_decode($json, $assoc = false, $depth = 512, $options = 0) {
  * @param string $url
  * @return array|bool array if cURL($url) returns JSON else false
  */
-function getJsonAsArray($url){
+function backyard_getJsonAsArray($url){
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL,$url);
     curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
@@ -86,7 +88,7 @@ function getJsonAsArray($url){
         return false;
     }
     curl_close($ch);
-    $jsonArray = json_clean_decode($json, true);
+    $jsonArray = backyard_jsonCleanDecode($json, true);
     if(!$jsonArray){
         //error_log("Trouble with decoding JSON from {$url}");
         return false;
