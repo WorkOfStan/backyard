@@ -61,7 +61,7 @@ function my_error_log($message, $level = 0, $error_number = 0) {
         || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
     ) {
         $RUNNING_TIME_PREVIOUS = $RUNNING_TIME;
-        if ((( ($RUNNING_TIME = round(getmicrotime() - $backyardPage_timestamp, 4)) - $RUNNING_TIME_PREVIOUS) > $backyardConf['log_profiling_step'] ) && $backyardConf['log_profiling_step']) {
+        if ((( ($RUNNING_TIME = round(backyard_getmicrotime() - $backyardPage_timestamp, 4)) - $RUNNING_TIME_PREVIOUS) > $backyardConf['log_profiling_step'] ) && $backyardConf['log_profiling_step']) {
             $message = "SLOWSTEP " . $message; //110812, PROFILING
         }
 
@@ -109,5 +109,3 @@ function my_error_log($message, $level = 0, $error_number = 0) {
   4         00000100  Warnings and Trace
   7         00000111  Warnings, Debug, Information and Trace
  */
-
-my_error_log($message, $level, $error_number);

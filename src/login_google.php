@@ -76,21 +76,25 @@ my_error_log("Google API starts", 6, 6);
 //$Google_authUrl=true;
 // https://code.google.com/p/google-api-php-client/source/browse/trunk/examples/plus/index.php
 // google-api-php-client is expected to be in lib folder and all scripts should run from the "root" folder
-require_once __BACKYARDROOT__.'../../../../../lib/google-api-php-client/src/apiClient.php';
-require_once __BACKYARDROOT__.'../../../../../lib/google-api-php-client/src/contrib/apiPlusService.php';
-require_once __BACKYARDROOT__.'../../../../../lib/google-api-php-client/src/contrib/apiOauth2Service.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
+// available now from https://github.com/google/google-api-php-client.git
+set_include_path( get_include_path() . PATH_SEPARATOR . __BACKYARDROOT__.'/../../google-api-php-client/src' );//otherwise I get Fatal error: require_once() [function.require]: Failed opening required 'Google/Auth/AssertionCredentials.php' (include_path='.;C:\php\pear') in K:\Work\godsdev\repo1\myreport\src\lib\google-api-php-client\src\Google\Client.php on line 18
+require_once __BACKYARDROOT__.'/../../google-api-php-client/src/Google/Client.php';
+//140504 implemented in a different way, grr//require_once __BACKYARDROOT__.'/../../google-api-php-client/src/contrib/apiPlusService.php';
+//140504 implemented in a different way, grr//require_once __BACKYARDROOT__.'/../../google-api-php-client/src/contrib/apiOauth2Service.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
 my_error_log("Google API libraries required", 6, 6); //@TODO 3 - před tímto my_error se změní vypisovaný čas z GMT+2 na GMT
 
-if (session_id()=='')session_start(); //@TODO - odladit konflikt více session: As of PHP 4.3.3, calling session_start() after the session was previously started will result in an error of level E_NOTICE. Also, the second session start will simply be ignored.
+if (session_id()=='') {
+    session_start(); //@TODO - odladit konflikt více session: As of PHP 4.3.3, calling session_start() after the session was previously started will result in an error of level E_NOTICE. Also, the second session start will simply be ignored.
+}
 //if(isset($_REQUEST['glloginproceed']))movePage(302, removeqsvar(removeqsvar(curPageURL(true), 'code'),'glloginproceed'));
 //my_error_log('Session_id='.session_id(),5,16);
 //my_error_log("apiCredentials: ".(print_r($apiCredentials,true)),5);  
 $apiCredentials['google']['redirectUri']=removeqsvar($apiCredentials['google']['redirectUri'],'code');// http://www.violato.net/blog/php/125-fatal-error-uncaught-exception-apiauthexception-with-message-error-fetching-oauth2-access-token-message-invalidrequest
 //        $apiCredentials['google']['redirectUri'] = addqsvar($apiCredentials['google']['redirectUri'], 'glloginproceed','1');//value 1 je jedno
-    my_error_log("apiCredentials: ".DumpArrayAsOneLine($apiCredentials),5,24);  
+    my_error_log("apiCredentials: " .  backyard_dumpArrayAsOneLine($apiCredentials),5,24);  
     
-//$client = new Google_Client();
-$client = new apiClient();
+$client = new Google_Client();
+//$client = new apiClient();
 $client->setApplicationName($apiCredentials['google']['applicationName']); //@TODO 3 - kde se to vyskytuje? Mělo by být language dependant //http://javadoc.google-api-java-client.googlecode.com/hg/1.0.10-alpha/com/google/api/client/googleapis/GoogleHeaders.html  :  Sets the "User-Agent" header for the given application name of the form "[company-id]-[app-name]-[app-version]" into the given HTTP headers.
 // Visit https://code.google.com/apis/console to generate your
 // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
@@ -132,7 +136,7 @@ if (isset($_GET['code'])) {
   my_error_log('Dojde k header: '.'Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],5);
   //header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
   //die("<a href='".parse_url(curPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."'>finish login</a>");
-  header('Location: '.parse_url(curPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
+  header('Location: '.parse_url(backyard_getCurPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
 }
 
 if (isset($_SESSION['access_token'])) {
@@ -167,7 +171,9 @@ if ($client->getAccessToken()) {
     $googleUserProfile['img'] = false;
     $googleUserProfile['name']= $googleUserProfile['email'];
   }
-  if($googleUserProfile['name'] == '' || $googleUserProfile['email'] == '') my_error_log("Google credentials may have failed: gurl={$googleUserProfile['url']} gname={$googleUserProfile['name']} gemail={$googleUserProfile['email']}",3);
+  if($googleUserProfile['name'] == '' || $googleUserProfile['email'] == '') {
+      my_error_log("Google credentials may have failed: gurl={$googleUserProfile['url']} gname={$googleUserProfile['name']} gemail={$googleUserProfile['email']}",3);
+  }
   my_error_log("gurl={$googleUserProfile['url']} gimg={$googleUserProfile['img']} gname={$googleUserProfile['name']} gemail={$googleUserProfile['email']} ",5,16);
   //$Google_personMarkup = "<a rel='me' href='$Google_url'>$Google_name</a><div><img src='$Google_img'>Email: $Google_email</div>";
   /*

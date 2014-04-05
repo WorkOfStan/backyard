@@ -14,7 +14,7 @@
  * Initialization
  */
 require_once 'backyard_time.php';
-$backyardPage_timestamp = getmicrotime(); //Initiation of $page_timestamp must be the first thing a page will do.
+$backyardPage_timestamp = backyard_getmicrotime(); //Initiation of $page_timestamp must be the first thing a page will do.
 
 /**
  * http://www.php.net/manual/en/function.require-once.php#104265   
@@ -36,7 +36,8 @@ function make_seed() {
 mt_srand(make_seed());
  */
 
-require_once 'functions_mysql.php';
+require_once 'backyard_error_log.php';
+require_once 'backyard_mysql.php';
 
 if (!isset($ERROR_HACK)) {//120918, aby bylo možné nastavit ERROR_HACK jako proměnnou ve stránce před zavoláním functions.php
     $ERROR_HACK=0;
@@ -45,7 +46,6 @@ require_once (__BACKYARDROOT__."/conf/conf.php");
 
 $RUNNING_TIME = 0; //110812, k profilování rychlosti
 
-require_once 'backyard_error_log.php';
 include_once 'backyard_crypt.php';
 require_once 'backyard_my_error_log_dummy.php';//required AFTER my_error_log is defined; contains backyard_dieGraciously()
 include_once 'functions_encoding.php';
