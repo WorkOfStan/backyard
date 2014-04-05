@@ -1,4 +1,5 @@
-  var geocoder;
+//backyard 1
+var geocoder;
   
 //  geoInitialize();//mela by byt az po body onload
 //Get the latitude and the longitude;

@@ -1,4 +1,5 @@
 <?php
+//backyard 2 compliant
 /**
  * Default configuration for backyard_geo.php.
  * May be changed by override in conf_private.php.
