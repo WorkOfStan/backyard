@@ -1,4 +1,5 @@
 <?php
+//backyard 2 compliant
 
 if (!defined('__BACKYARDROOT__')) {
     define('__BACKYARDROOT__', dirname(__FILE__));
