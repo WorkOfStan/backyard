@@ -23,7 +23,7 @@ function backyard_getmicrotime() {
  */
 function backyard_getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
     global $backyardPage_timestamp;
-    return round(backyard_getmicrotime() - $page_timestamp, 4);
+    return round(backyard_getmicrotime() - $backyardPage_timestamp, 4);
 }
 
 /**

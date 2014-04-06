@@ -88,13 +88,14 @@ if(!isset($apiCredentials['facebook'])
     //zahajeno constructorem new Facebook//if(session_id()=='')session_start ();my_error_log('Session_id='.session_id(),5,16);        
     $apiCredentials['facebook']['auth']=false;    
     // facebook-src is expected to be in lib folder and all scripts should run from the "root" folder
-    require __BACKYARDROOT__.'../../../../../lib/facebook-src/facebook.php';    my_error_log('Facebook auth successfully initiated: sessionId='.session_id().' Passed the line '.__LINE__,5,6);
+    //https://github.com/facebook/facebook-php-sdk
+    require_once __BACKYARDROOT__.'/../../facebook-php-sdk/src/facebook.php';    my_error_log('Facebook auth successfully initiated: sessionId='.session_id().' Passed the line '.__LINE__,5,6);
     $facebook = new Facebook(array(// Create our Application instance
         'appId'  => $apiCredentials['facebook']['appId'],
         'secret' => $apiCredentials['facebook']['secret']//,
         //'sharedSession' => true //if your app shares the domain with other apps
     ));             my_error_log('sessionId='.session_id().' Passed the line '.__LINE__,5,6);
-    my_error_log('facebook='.  DumpArrayAsOneLine($facebook).' Passed the line '.__LINE__,5,6);
+    my_error_log('facebook='.  backyard_dumpArrayAsOneLine($facebook).' Passed the line '.__LINE__,5,6);
     if(isset($_GET['fblogout'])){       my_error_log('Passed the line '.__LINE__,5,6);
         $_SESSION = array();    // Unset all of the session variables.        
         if (ini_get("session.use_cookies")) {// If it's desired to kill the session, also delete the session cookie. Note: This will destroy the session, and not just the session data!
@@ -107,20 +108,20 @@ if(!isset($apiCredentials['facebook'])
         session_destroy();   my_error_log('Passed the line '.__LINE__,5,6);
         //my info: sessions after session_destroy stále zůstává - je potřeba redirect. Možná stačí méně.
         //redirect w/o fblogout
-        $redirectTo= str_replace("fblogout","",curPageURL());  my_error_log('Passed the line '.__LINE__,5,6);
-        movePage(302,$redirectTo);//@TODO - proběhne opravdu nebo kvůli nějakým headers neproběhne?        
+        $redirectTo= str_replace("fblogout","",backyard_getCurPageURL());  my_error_log('Passed the line '.__LINE__,5,6);
+        backyard_movePage(302,$redirectTo);//@TODO - proběhne opravdu nebo kvůli nějakým headers neproběhne?        
         my_error_log('Passed the line '.__LINE__,5,6);
     }    my_error_log('Passed the line '.__LINE__,5,6);
     $facebookUser = $facebook->getUser();// Get User ID
-    my_error_log('facebookUser: '. DumpArrayAsOneLine($facebookUser).' Passed the line '.__LINE__,5,6);
+    my_error_log('facebookUser: '. backyard_dumpArrayAsOneLine($facebookUser).' Passed the line '.__LINE__,5,6);
     if(isset($_REQUEST['fbloginproceed']) && $facebookUser == 0)my_error_log ("Facebook server cannot be reached from backend", 2);
     //if(isset($_REQUEST['fbloginproceed'])){print_r(parse_url(curPageURL (true)));echo str_replace('https://','http://',curPageURL(true)); exit;}
     //if(isset($_REQUEST['fbloginproceed']) && parse_url(curPageURL(true),PHP_URL_SCHEME) == 'https')movePage(302, str_replace(':443','',str_replace('https://','http://',curPageURL(true))));//@TODO - asi to není nejbezpečnější, ale https se fb nezaloguje - snad kvůli cookies?
-    if(isset($_REQUEST['fbloginproceed']) && parse_url(curPageURL(true),PHP_URL_SCHEME) == 'https'){        
+    if(isset($_REQUEST['fbloginproceed']) && parse_url(backyard_getCurPageURL(true),PHP_URL_SCHEME) == 'https'){        
         my_error_log('fbloginproceed and ssl', 5, 16);
         $parsedUrl = parse_url(
                 addqsvar(  //magic-security vynucuje HTTPS, ale lze vynutit HTTP
-                addqsvar(curPageURL(true),'fbloginproceedssl',1)//1 aby fungovalo removeqsvar
+                addqsvar(backyard_getCurPageURL(true),'fbloginproceedssl',1)//1 aby fungovalo removeqsvar
                  ,'fh', md5($_SERVER['REMOTE_ADDR'].date('W').'3PoOiaVCrj')  ) //magic-security vynucuje HTTPS, ale lze vynutit HTTP
                 );
         $parsedUrl['scheme']='http'; $parsedUrl['port']=80;
@@ -136,17 +137,17 @@ if(!isset($apiCredentials['facebook'])
 //            echo "<br/>GET: ".nl2br(print_r($_GET,true));  
 //    echo "Session id: ".session_id();echo "<br/>Session: ".nl2br(print_r($_SESSION,true));  
 //                echo ($facebookUser);echo "<a href='".removeqsvar(removeqsvar(removeqsvar(curPageURL(true),'code'),'state'),'fbloginproceed')."'>Go on fbloginproceed over http</a>";
-        movePage(302, removeqsvar(removeqsvar(removeqsvar(curPageURL(true),'code'),'state'),'fbloginproceed'));
+        backyard_movePage(302, removeqsvar(removeqsvar(removeqsvar(backyard_getCurPageURL(true),'code'),'state'),'fbloginproceed'));
 //        exit;
     }
     if(isset($_REQUEST['fbloginproceedssl']) //&& !isset($_REQUEST['fbloginproceed'])
              && !isset($_REQUEST['fbloginstart'])
             ){
         my_error_log('fbloginproceedssl over http', 5, 16);
-        echo curPageURL(true)."<br/>";//@TODO - vážně tu je echo??
+        echo backyard_getCurPageURL(true)."<br/>";//@TODO - vážně tu je echo??
         $parsedUrl = parse_url(
                 removeqsvar( //konec vyjimky pro magic-security
-                removeqsvar(curPageURL(true),'fbloginproceedssl')
+                removeqsvar(backyard_getCurPageURL(true),'fbloginproceedssl')
                   , 'fh')      //konec vyjimky pro magic-security
                 );
         $parsedUrl['scheme']='https'; $parsedUrl['port']=443;
@@ -156,7 +157,7 @@ if(!isset($apiCredentials['facebook'])
         //echo "<a href='".addqsvar(unparse_url($parsedUrl),'shouldbeok','1')."'>Go on fbloginproceedssl over http</a>";
 //        echo "<a href='".unparse_url($parsedUrl)."'>Go on fbloginproceedssl over http</a>";
         //movePage(302, addqsvar(unparse_url($parsedUrl),'shouldbeok','1'));        
-        movePage(302, unparse_url($parsedUrl));        
+        backyard_movePage(302, unparse_url($parsedUrl));        
         //echo unparse_url($parsedUrl);
 //        exit;
     } /**/           
@@ -168,18 +169,18 @@ if(!isset($apiCredentials['facebook'])
     // token is invalid if the user logged out of Facebook.
     if ($facebookUser) {
         try {// Proceed knowing you have a logged in user who's authenticated.
-            $facebookUserProfile = $facebook->api('/me'); my_error_log('fbUserProfile: '.DumpArrayAsOneLine($facebookUserProfile).' Passed the line '.__LINE__,5,6);
+            $facebookUserProfile = $facebook->api('/me'); my_error_log('fbUserProfile: '.backyard_dumpArrayAsOneLine($facebookUserProfile).' Passed the line '.__LINE__,5,6);
             $facebookUserProfile['img'] = "http://graph.facebook.com/{$facebookUserProfile['id']}/picture";
 
             if($facebookUserProfile){   my_error_log('Passed the line '.__LINE__,5,6);
             
                if(isset($_REQUEST['proceedfblogout'])){ //calling $facebook->getLogoutUrl only in case of actual logout prevents error: CSRF state token does not match one provided.
-                $params = array( 'next' => curPageURL(false).'?fblogout' );
+                $params = array( 'next' => backyard_getCurPageURL(false).'?fblogout' );
                 $apiCredentials['facebook']['logoutUrl'] = $facebook->getLogoutUrl($params); my_error_log('Passed the line '.__LINE__,5,6);
-                movePage(302,$apiCredentials['facebook']['logoutUrl']);
+                backyard_movePage(302,$apiCredentials['facebook']['logoutUrl']);
                 exit;
                }
-                $apiCredentials['facebook']['logoutUrl']=curPageURL(false).'?proceedfblogout';
+                $apiCredentials['facebook']['logoutUrl']=backyard_getCurPageURL(false).'?proceedfblogout';
                 $apiCredentials['facebook']['auth']=true;      
             }  my_error_log('Passed the line '.__LINE__,5,6);
             
@@ -188,7 +189,7 @@ if(!isset($apiCredentials['facebook'])
             $facebookUser = null;
         }  my_error_log('Passed the line '.__LINE__,5,6);
         if(isset($facebookUserProfile)){
-            my_error_log("facebookUserProfile=".  DumpArrayAsOneLine($facebookUserProfile), 5, 16);
+            my_error_log("facebookUserProfile=".  backyard_dumpArrayAsOneLine($facebookUserProfile), 5, 16);
         } else {
             my_error_log("facebookUserProfile is not set", 5, 16);
         }
@@ -208,7 +209,7 @@ if(!isset($apiCredentials['facebook'])
         }  my_error_log('Passed the line '.__LINE__,5,6); */
     } else {  my_error_log('Passed the line '.__LINE__,5,6);
         //$apiCredentials['facebook']['redirectUri'] = str_replace('&state=','?xstate=',str_replace('&code=','&xcode=',str_replace('?state=','?xstate=',$apiCredentials['facebook']['redirectUri'])));
-       if(isset($_REQUEST['fbloginstart']) || parse_url(curPageURL(true),PHP_URL_SCHEME) == 'http'){
+       if(isset($_REQUEST['fbloginstart']) || parse_url(backyard_getCurPageURL(true),PHP_URL_SCHEME) == 'http'){
         $apiCredentials['facebook']['redirectUri'] = removeqsvar(removeqsvar(removeqsvar($apiCredentials['facebook']['redirectUri'], 'state'),'code'),'fbloginstart');
         $apiCredentials['facebook']['redirectUri'] = addqsvar($apiCredentials['facebook']['redirectUri'], 'fbloginproceed','1');//value 1 je jedno
         $params = array(
@@ -218,12 +219,12 @@ if(!isset($apiCredentials['facebook'])
         $apiCredentials['facebook']['loginUrl'] = $facebook->getLoginUrl($params);  my_error_log('Passed the line '.__LINE__,5,6);
         if(isset($_REQUEST['fbloginstart'])){
             //die("<a href='{$apiCredentials['facebook']['loginUrl']}'>go login</a>");
-            movePage(302, $apiCredentials['facebook']['loginUrl']);
+            backyard_movePage(302, $apiCredentials['facebook']['loginUrl']);
         }
        } else {
             $parsedUrl = parse_url(
                             addqsvar(  //magic-security vynucuje HTTPS, ale lze vynutit HTTP                    
-                    addqsvar(addqsvar(curPageURL(true), 'fbloginstart', '1'),'fbloginproceedssl','2')
+                    addqsvar(addqsvar(backyard_getCurPageURL(true), 'fbloginstart', '1'),'fbloginproceedssl','2')
                  ,'fh', md5($_SERVER['REMOTE_ADDR'].date('W').'3PoOiaVCrj')  ) //magic-security vynucuje HTTPS, ale lze vynutit HTTP
                                     );
             

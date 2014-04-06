@@ -79,8 +79,8 @@ my_error_log("Google API starts", 6, 6);
 // available now from https://github.com/google/google-api-php-client.git
 set_include_path( get_include_path() . PATH_SEPARATOR . __BACKYARDROOT__.'/../../google-api-php-client/src' );//otherwise I get Fatal error: require_once() [function.require]: Failed opening required 'Google/Auth/AssertionCredentials.php' (include_path='.;C:\php\pear') in K:\Work\godsdev\repo1\myreport\src\lib\google-api-php-client\src\Google\Client.php on line 18
 require_once __BACKYARDROOT__.'/../../google-api-php-client/src/Google/Client.php';
-//140504 implemented in a different way, grr//require_once __BACKYARDROOT__.'/../../google-api-php-client/src/contrib/apiPlusService.php';
-//140504 implemented in a different way, grr//require_once __BACKYARDROOT__.'/../../google-api-php-client/src/contrib/apiOauth2Service.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
+require_once __BACKYARDROOT__.'/../../google-api-php-client/src/Google/Service/Plus.php';
+require_once __BACKYARDROOT__.'/../../google-api-php-client/src/Google/Service/Oauth2.php';//http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
 my_error_log("Google API libraries required", 6, 6); //@TODO 3 - před tímto my_error se změní vypisovaný čas z GMT+2 na GMT
 
 if (session_id()=='') {
@@ -103,15 +103,17 @@ $client->setApplicationName($apiCredentials['google']['applicationName']); //@TO
  $client->setRedirectUri($apiCredentials['google']['redirectUri']);//Chyba:redirect_uri_mismatch: The redirect URI in the request: http://dadastrip.cz/test did not match a registered redirect URI ... pokud není ve vyjmenovaných
 //$client->setRedirectUri(removeqsvar($apiCredentials['google']['redirectUri'],'code'));// http://www.violato.net/blog/php/125-fatal-error-uncaught-exception-apiauthexception-with-message-error-fetching-oauth2-access-token-message-invalidrequest //Chyba:redirect_uri_mismatch: The redirect URI in the request: http://dadastrip.cz/test did not match a registered redirect URI ... pokud není ve vyjmenovaných 
 $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me'));      // Important! //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
+//@TODO -140406 - při volání z localhost:8080 si app vyžádala Offline access - což je špatně!
 // $client->setScopes(array('userinfo.email', 'plus.me'));
 
 // $client->setDeveloperKey('insert_your_developer_key');
 my_error_log("Google client set", 6, 6);
 //$plus = new Google_PlusService($client);
-$plus = new apiPlusService($client);
+$plus = new Google_Service_Plus($client);
 my_error_log('$plus = new',6,6);
-$oauth2 = new apiOauth2Service($client); //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email  
-  //$client->authenticate();//// Authenticate the user, $_GET['code'] is used internally:
+//$oauth2 = new apiOauth2Service($client); //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email  
+$oauth2 = new Google_Service_Oauth2($client);
+  //$client->authenticate($_GET['code']);//// Authenticate the user, $_GET['code'] is used internally:
 my_error_log('$oauth2 = new',6,6);
 
 if (isset($_REQUEST['gllogout'])) {
@@ -119,16 +121,16 @@ if (isset($_REQUEST['gllogout'])) {
   unset($_SESSION['access_token']);
   my_error_log("SESSION['access_token'] unset",5,6);
       session_destroy();//120918
-    $redirectTo= str_replace("gllogout","",curPageURL());//120918
-    movePage(302,$redirectTo);//120918
+    $redirectTo= str_replace("gllogout","",backyard_getCurPageURL());//120918
+    backyard_movePage(302,$redirectTo);//120918
       
 }
 
     my_error_log("Let us check _GET[code]",6,6);
 if (isset($_GET['code'])) {
     my_error_log("to be authenticated _GET[code]={$_GET['code']}",6,6);
-       //$client->authenticate($_GET['code']);
-    $client->authenticate();
+       $client->authenticate($_GET['code']);
+    //$client->authenticate();
     //PHP Fatal error:  Uncaught exception 'apiAuthException' with message 'Error fetching OAuth2 access token, message: 'redirect_uri_mismatch'' in /var/www/www.alfa.gods.cz/google-api-php-client/src/auth/apiOAuth2.php:105\nStack trace:\n#0 /var/www/www.alfa.gods.cz/google-api-php-client/src/apiClient.php(138): apiOAuth2->authenticate(Array)\n#1 /var/www/www.alfa.gods.cz/myreport/login_google.php(108): apiClient->authenticate('4/q9qkNo-_oaYxh...')\n#2 /var/www/www.alfa.gods.cz/myreport/magic-report.php(172): require_once('/var/www/www.al...')\n#3 {main}\n  thrown in /var/www/www.alfa.gods.cz/google-api-php-client/src/auth/apiOAuth2.php on line 105, referer: https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/plus.me&response_type=code&access_type=offline&redirect_uri=https://www.alfa.gods.cz:443/myreport/magic-report.php&approval_prompt=force&client_id=844783748503.apps.googleusercontent.com&hl=cs&from_login=1&as=-3f2a8ec6fa31c2c0&authuser=0&pli=1
     //.. znamená, že cílová URL sice v Redirect URIs je, ale je jiná nyní než byla iniciovaná na začátku
       my_error_log("authenticated _GET[code]",6,6);
@@ -136,10 +138,10 @@ if (isset($_GET['code'])) {
   my_error_log('Dojde k header: '.'Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],5);
   //header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
   //die("<a href='".parse_url(curPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."'>finish login</a>");
-  header('Location: '.parse_url(backyard_getCurPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
+  header('Location: ' . filter_var(parse_url(backyard_getCurPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'], FILTER_SANITIZE_URL));  
 }
 
-if (isset($_SESSION['access_token'])) {
+if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {    
   $client->setAccessToken($_SESSION['access_token']);
   my_error_log("accessToken set", 6, 6);
 }
@@ -164,7 +166,7 @@ if ($client->getAccessToken()) {
   if(isset($googleUserProfile['me'])){
     $googleUserProfile['url'] = filter_var($googleUserProfile['me']['url'], FILTER_VALIDATE_URL);
     $googleUserProfile['img'] = filter_var($googleUserProfile['me']['image']['url'], FILTER_VALIDATE_URL);
-    $googleUserProfile['name']= filter_var($googleUserProfile['me']['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $googleUserProfile['name']= filter_var($googleUserProfile['me']['displayName'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);//140406, beware it may be empty string!
   } else {
     //$googleUserProfile['me'] = false;
     $googleUserProfile['url'] = false;
@@ -194,8 +196,8 @@ if ($client->getAccessToken()) {
   $_SESSION['access_token'] = $client->getAccessToken();
   my_error_log('g access token nastaven',5);
     $apiCredentials['google']['auth']=true;
-    $apiCredentials['google']['logoutUrl'] = curPageURL(true).(($_SERVER["REQUEST_URI"] == $_SERVER["SCRIPT_NAME"])?'?gllogout':'&gllogout');    
-} else {
+    $apiCredentials['google']['logoutUrl'] = backyard_getCurPageURL(true).(($_SERVER["REQUEST_URI"] == $_SERVER["SCRIPT_NAME"])?'?gllogout':'&gllogout');    
+} else { //140406, it seems that Google has upgraded all accounts to G+
     my_error_log("G+ nezalogovan, tak definuji login URL",6,6);
   $apiCredentials['google']['loginUrl'] = $client->createAuthUrl();
 }
