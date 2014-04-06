@@ -72,12 +72,14 @@ class HTMLPage
     public $contentType = 'text/html', $header = '', $footer = '', $body = '';
     protected $title, $headerWasOutputed, $style;
     /**
-     *
-     * @param type $TITLE
-     * @param type $CONTENT_TYPE 
      * 
-     * If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
-     * 
+     * @param type $TITLE [optional]
+     * @param type $CONTENT_TYPE [optional] If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+     * @param type $LOAD_JQ [optional]
+     * @param type $LOAD_STYLE [optional]
+     * @param type $LOAD_JQUERYMOBILE [optional]
+     * @param type $beforeViewport [optional]
+     * @param type $manifestCache [optional]
      */
     public function __construct($TITLE='GODS rules',$CONTENT_TYPE='text/html',$LOAD_JQ=1,$LOAD_STYLE=1,$LOAD_JQUERYMOBILE=0,$beforeViewport='',$manifestCache=''){
         $this->contentType = $CONTENT_TYPE;
