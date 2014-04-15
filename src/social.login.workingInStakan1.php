@@ -60,6 +60,7 @@ kde zatím je nastaveno:
  * 2013-05-03, v.0.1, my_error_log compression
  * 2013-05-10, v.0.2, setcookie
  * 2013-12-08, v.0.3, from stakan1 put into backyard
+ * 2014-04-15, v.1.S.0, social.login Stakan přibližujeme k MyReport
  *
  ** 
  * TODO  
@@ -76,13 +77,11 @@ if(!defined('__BACKYARDROOT__')) die('backyard must be initialized beforehand');
 if(!isset($apiCredentials)) die('apiCredentials must be preinitialized');
 //require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
 
-//print_r($apiCredentials);
 /*******************************************************************************
  *  Social login  //@TODO 3 - standardize this into LIB
  */
 if(!isset($_REQUEST['fbloginproceed']))require_once (__BACKYARDROOT__."/login_google.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
 if(!isset($_GET['code']) || isset($_GET['state']))require_once (__BACKYARDROOT__."/login_facebook.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
-//print_r($apiCredentials);exit;
         if($apiCredentials['facebook']['auth'])my_error_log("$facebookUserProfile: ".backyard_dumpArrayAsOneLine($facebookUserProfile),5,16);//debug
         if($apiCredentials['google']['auth'])my_error_log("$googleUserProfile: ".backyard_dumpArrayAsOneLine($googleUserProfile),5,16);    //debug
 /**
@@ -93,51 +92,14 @@ if(!isset($_GET['code']) || isset($_GET['state']))require_once (__BACKYARDROOT__
  */
 
         
-        
-        
-        
-/*******************************************************************************
- *  Internal setting of $ownerId
- */
-        /*
-    //@TODO -- co se stane když se $authX přepíše??
-    //$ownerId=false;//since it is disabled in Parameter input area
-    $authId=false;
-    if($apiCredentials['facebook']['auth']){
-        //rozhodnutí, zda rovnou přesměrovat: //@TODO 2 - takový filtr i u všech ostatních stránek //@TODO 2 - také fb_login provést vnitro-PHP výpočtem
-        $authType='fb';
-        $authName=$facebookUserProfile['name'];
-        $authMail=$facebookUserProfile['email'];
-        $authId=$facebookUserProfile['id'];
-        //@TODO 2 - vylepšit security 
-    } elseif ($apiCredentials['google']['auth']){
-        $authType='gl';
-        $authName=$googleUserProfile['name'];//['me']['displayName'];
-        $authMail=$googleUserProfile['email'];//['user']['email'];
-        //$authId=$googleUserProfile['me']['id'];
-        $authId=$googleUserProfile['user']['id'];// $googleUserProfile['me']['id']; je aplikovatelné jen když je definované G+
-    } //@TODO 2 - nějak zde předat fb a gl id - které je tím správným identifikátorem!
-    my_error_log("authId: ".print_r($authId,true),5);
-    if($authId){
-        $tempResult = externalLogin($authType, $authId, $authName, $authMail);
-        if(!$ownerId)$ownerId=$tempResult['owner_id'];//pokud nebylo správně hack_owner_id, tak $ownerId z databáze dle social login
-        if(!$ownerLanguage)$ownerLanguage=$tempResult['user_language'];//_REQUEST['owner_language'] overrides what is set in the database
-        my_error_log("tempResult: ".print_r($tempResult,true),5);
-    }
-/*******************************************************************************
- *  /Internal setting of $ownerId
- * Output:
- * $ownerId = {false; number}
- * $ownerLanguage = {false; string}
- */
 
 /*        
-//@TODO 2 - tato část možná bude ve volacím skriptu po require_once .. aby $ownerId a $ownerLanguage mohly být arbitrárně pojmenované
-if(!($ownerId && $ownerLanguage)){
-        $tempResult = getInternalUserId();
-        if(!$ownerId)$ownerId=$tempResult['user_id'];//pokud nebylo správně hack_owner_id, tak $ownerId z databáze dle social login
-        if(!$ownerLanguage)$ownerLanguage=$tempResult['user_language'];//_REQUEST['owner_language'] overrides what is set in the database    
-} //else keep $ownerId && $ownerLanguage previously defined
+ 
+ 
+ 
+  
+ 
+ 
 */
 
 function socialLoginPseudoConstructor($internalId, $userLanguage){
@@ -277,15 +239,15 @@ function getInternalUserId(){
    }
 
 /*    
-    //PUVODNI
-    $query = "SELECT * FROM `$dbname`.`$tableNameOwners` WHERE `owner_login` LIKE '{$authString}'";
-    $mysqlQueryResultArray = customMySQLQuery($query,true);
-    if ($mysqlQueryResultArray){
-        //login
-        $ownerId = $mysqlQueryResultArray['owner_id'];
-        my_error_log("{$authType} login for ownerId={$ownerId}", 5, 10);
+ 
+ 
+ 
+  
+ 
+ 
+ 
         
-        if(strtotime($mysqlQueryResultArray['last_access']) <= strtotime("-15 minutes")){
+  
  * 
  */
     if ($ownerId){

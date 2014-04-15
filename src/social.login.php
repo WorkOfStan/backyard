@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `stakan_owners` (
 
 kde zatím je nastaveno:
     //@TODO 3 - default je zapnout notifikace - k udělání jejich rozšířenou denní verzi
-    //@TODO 2 - zatím natvrdo nastaveno type_id=2 .. později inteligentě rozhazovat dle zdrojů
+    //@TODO 2 - zatím natvrdo nastaveno type_id=2 .. později inteligentě rozhazovat dle zdrojů .. jak udělat univerzálně pro backyard??
 
 
  * 
@@ -60,7 +60,8 @@ kde zatím je nastaveno:
  * 2013-03-26, v.0.0.3, robustní vůči změně e-mailu v bázickém authVector + možnost zalogování s jiným social účtem na tu samou e-mail adresu
  * 2013-03-27, v.0.0.4, procedurální mysql volání předěláno na objektové
  * 2013-03-28, v.0.0.5, když není google nebo fb auth set, tak nastavím false, ať dál podmínky jsou jednodušší
- * 2014-04-06: v.0.1,   from root of MyReport
+ * 2014-04-06, v.0.1,   from root of MyReport
+ * 2014-04-15, v.1.M.0, social.login from MyReport přibližujeme ke Stakan
  *
  ** 
  * TODO  
@@ -94,12 +95,12 @@ if (!isset($apiCredentials['facebook']['auth'])) $apiCredentials['facebook']['au
 
 
 /*        
-//@TODO 2 - tato část možná bude ve volacím skriptu po require_once .. aby $ownerId a $ownerLanguage mohly být arbitrárně pojmenované
-if(!($ownerId && $ownerLanguage)){
-        $tempResult = getInternalUserId();
-        if(!$ownerId)$ownerId=$tempResult['user_id'];//pokud nebylo správně hack_owner_id, tak $ownerId z databáze dle social login
-        if(!$ownerLanguage)$ownerLanguage=$tempResult['user_language'];//_REQUEST['owner_language'] overrides what is set in the database    
-} //else keep $ownerId && $ownerLanguage previously defined
+ 
+ 
+ 
+ 
+ 
+ 
 */
 
 function socialLoginPseudoConstructor($internalId, $userLanguage){
@@ -236,15 +237,15 @@ function getInternalUserId(){
    }
 
 /*    
-    //PUVODNI
-    $query = "SELECT * FROM `$dbname`.`$tableNameOwners` WHERE `owner_login` LIKE '{$authString}'";
-    $mysqlQueryResultArray = customMySQLQuery($query,true);
-    if ($mysqlQueryResultArray){
-        //login
-        $ownerId = $mysqlQueryResultArray['owner_id'];
-        my_error_log("{$authType} login for ownerId={$ownerId}", 5, 10);
+ 
+  
+ 
+ 
+  
+ 
+ 
         
-        if(strtotime($mysqlQueryResultArray['last_access']) <= strtotime("-15 minutes")){
+  
  * 
  */
     if ($ownerId){
@@ -404,7 +405,7 @@ function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric){
             .(($relevantMetric == 'owner_id')?(""):("WHERE  `owner_id` ={$ownerId} "))
             ." ORDER BY `{$relevantMetric}` DESC LIMIT 0 , 1;";                
         //$mysql_query_result=make_mysql_query($query) or die_graciously('E106',"$query"); // End script with a specific error message if mysql query fails
-        $mysql_query_result = $mainDBConnection->query($query,true) or die_graciously('E106',"$query");// End script with a specific error message if mysql query fails
+        $mysql_query_result = $mainDBConnection->query($query,true) or backyard_dieGraciously('E106',"$query");// End script with a specific error message if mysql query fails
         //transforming the query result into an array            
         //if(mysql_num_rows($mysql_query_result) > 0) {
         if($mysql_query_result->num_rows > 0) {
