@@ -147,7 +147,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token'] && (strlen($_S
   my_error_log("accessToken set", 6, 6);
 }
 $googleUserProfile = false;
-if ($client->getAccessToken() && (strlen($client->getAccessToken())>2)) {
+if (!$client->isAccessTokenExpired() && $client->getAccessToken() && (strlen($client->getAccessToken())>2)) {
     $googleUserProfile = array();
     my_error_log('G+ je zalogovan, nyni ziskat info o zalogovanem',5,6);
     try{ //http://stackoverflow.com/questions/9054656/uncaught-exception-apiserviceexception-with-message-error-calling-get
