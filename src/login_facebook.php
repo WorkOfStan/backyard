@@ -14,6 +14,7 @@
  * 2013-03-10, if(!isset($facebookUserProfile)) die_graciously ('403', 'Server lost connection to Facebook during an on-going session');if(session_id() && !$facebookUserProfile['id'])my_error_log ("session_id() is not empty while facebookUserProfile['id'] is empty - it seems than facebook library cannot communicate with Facebook",1);
  * 2013-03-12, correctly set to report as my_error_log(ERROR) unreachability of Facebook backend from the server
  * 2013-05-03, compression of debugging
+ * 2014-04-06, updated to work with backyard 2 and https://github.com/facebook/facebook-php-sdk
  *
  ** TODO  
  * 

@@ -1,5 +1,5 @@
 <?php
-//@TODO  compare with root social.login.php !!!
+//@TODO  compare with social.login.php working with MyReport
 /**
  * Name: social.login.php
  * Project: LIB/Part of Library In Backyard
@@ -76,12 +76,13 @@ if(!defined('__BACKYARDROOT__')) die('backyard must be initialized beforehand');
 if(!isset($apiCredentials)) die('apiCredentials must be preinitialized');
 //require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
 
-
+//print_r($apiCredentials);
 /*******************************************************************************
  *  Social login  //@TODO 3 - standardize this into LIB
  */
 if(!isset($_REQUEST['fbloginproceed']))require_once (__BACKYARDROOT__."/login_google.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
 if(!isset($_GET['code']) || isset($_GET['state']))require_once (__BACKYARDROOT__."/login_facebook.php");//@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
+//print_r($apiCredentials);exit;
         if($apiCredentials['facebook']['auth'])my_error_log("$facebookUserProfile: ".backyard_dumpArrayAsOneLine($facebookUserProfile),5,16);//debug
         if($apiCredentials['google']['auth'])my_error_log("$googleUserProfile: ".backyard_dumpArrayAsOneLine($googleUserProfile),5,16);    //debug
 /**
@@ -168,7 +169,7 @@ if($ownerLanguage){
 my_error_log("After ownerLanguage: userLanguage = {$userLanguage}",5,16);
 if(!$userLanguage && $ownerId){//use owner preference ; Note: $ownerId is always set - either false or number
     $query = "SELECT `owner_language` FROM `{$backyardDatabase['dbname']}`.`{$tableNameOwners}` WHERE `owner_id` = {$ownerId}";
-    $mysqlQueryResultArray = customMySQLQuery($query,true);
+    $mysqlQueryResultArray = backyard_mysqlQueryArray($query,true);
     if($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language']!=''){
         $userLanguage=$mysqlQueryResultArray['owner_language'];
         if (!in_array($userLanguage, $availableLanguages)) {
@@ -234,24 +235,24 @@ function getInternalUserId(){
     //TADY DAT SOFISTIKOVANEJSI LOGIKU
     if(!isset($ownerId))$ownerId=false;//@TODO 2 - aby nespoléhalo na $ownerId global
     $query = "SELECT * FROM `{$backyardDatabase['dbname']}`.`$tableNameOwners` WHERE (`owner_login` LIKE '%{$authType}%' AND `owner_login` LIKE '%{$authId}%') OR `owner_login` LIKE '%{$authMail}%'";//výběr na hrubo
-    $mysqlQueryResultArrayMoreLines = customMySQLQuery($query);
+    $mysqlQueryResultArrayMoreLines = backyard_mysqlQueryArray($query);
     //@TODO - skonci pokud prazdny
    if($mysqlQueryResultArrayMoreLines){//zjistovat jen pokud neprazdny vysledek
-    my_error_log("mysqlQueryResultArrayMoreLines=".  DumpArrayAsOneLine($mysqlQueryResultArrayMoreLines),5,16);
-    $mysqlQueryResultArrayOwnerLogins=GetOneColumnFromArray($mysqlQueryResultArrayMoreLines, 'owner_login');
-    my_error_log("mysqlQueryResultArrayOwnerLogins=".  DumpArrayAsOneLine($mysqlQueryResultArrayOwnerLogins),5,16);
+    my_error_log("mysqlQueryResultArrayMoreLines=".  backyard_dumpArrayAsOneLine($mysqlQueryResultArrayMoreLines),5,16);
+    $mysqlQueryResultArrayOwnerLogins=backyard_getOneColumnFromArray($mysqlQueryResultArrayMoreLines, 'owner_login');
+    my_error_log("mysqlQueryResultArrayOwnerLogins=".  backyard_dumpArrayAsOneLine($mysqlQueryResultArrayOwnerLogins),5,16);
     foreach ($mysqlQueryResultArrayOwnerLogins as $keyLogin => $valueLogin) {
         $valueLoginArray = unserialize($valueLogin);
-        my_error_log("valueLoginArray=".  DumpArrayAsOneLine($valueLoginArray),5,16);
+        my_error_log("valueLoginArray=".  backyard_dumpArrayAsOneLine($valueLoginArray),5,16);
         if(isset($valueLoginArray['auth_type'])){//it is an array with just one authVector
             //emulate two level array
             $tempArray=$valueLoginArray;
             $valueLoginArray=array();
             $valueLoginArray[0]=$tempArray;
         }
-        my_error_log("valueLoginArray=".  DumpArrayAsOneLine($valueLoginArray),5,16);        
+        my_error_log("valueLoginArray=".  backyard_dumpArrayAsOneLine($valueLoginArray),5,16);        
         foreach ($valueLoginArray as $keyLoginVector => $valueLoginVector) {
-            my_error_log("valueLoginVector=".  DumpArrayAsOneLine($valueLoginVector),5,16);
+            my_error_log("valueLoginVector=".  backyard_dumpArrayAsOneLine($valueLoginVector),5,16);
             if($valueLoginVector['auth_type']==$authType && $valueLoginVector['auth_id']==$authId){//if previously logged in with same social service
                 if($valueLoginVector['mail']!=$authMail){
                     //@TODO 3 - upozornit oba maily, že došlo ke změně
@@ -296,7 +297,7 @@ function getInternalUserId(){
         if(strtotime('now') - strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']) > 15*60){//@TODO 2 - ověřit, zda počítá správně více jak 15 minut
             my_error_log("ownerId={$ownerId} revisited", 5);            
             $query = "UPDATE `{$backyardDatabase['dbname']}`.`$tableNameOwners` SET `last_access` = CURRENT_TIMESTAMP, `olson_timezone` = '{$timezone}' WHERE `$tableNameOwners`.`owner_id` = {$ownerId};";
-            $tempUpdateQueryResult = make_mysql_query($query) or die_graciously('E137',"{$query}"); // End script with a specific error message if mysql query fails                     
+            $tempUpdateQueryResult = backyard_mysql_query($query) or backyard_dieGraciously('E137',"{$query}"); // End script with a specific error message if mysql query fails                     
         } else {//debug
             my_error_log("ownerId={$ownerId} sessioning from ".date("Y-m-d H:i:s",strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']))." till ".date("Y-m-d H:i:s",strtotime('now')), 5);
         }
@@ -308,13 +309,13 @@ function getInternalUserId(){
             ."VALUES ({$ownerId}, '{$authName}', '{$authMail}', '{$authName}', '{$authString}' , '3', CURRENT_TIMESTAMP, 2, '{$timezone}');"; 
             ////@TODO 3 - default je zapnout notifikace - k udělání jejich rozšířenou denní verzi//130409 - default notifikací je denní summary=3
             //@TODO 2 - zatím natvrdo nastaveno type_id=2 .. později inteligentě rozhazovat dle zdrojů
-        $mysql_query_result=make_mysql_query($query) or die_graciously('E131',"{$query}"); // End script with a specific error message if mysql query fails                     
+        $mysql_query_result=backyard_mysql_query($query) or backyard_dieGraciously('E131',"{$query}"); // End script with a specific error message if mysql query fails                     
         
         my_error_log("{$authType} create {$authVector['name']} {$authVector['mail']}", 4, 10);
     }
     //renegotiate the userLanguage //@TODO 4 - zoptimalizovat dotaz, protože (a) login už query provedl a (b) create owner_language nenastavuje, resp. víme jak
     $query = "SELECT `owner_language` FROM `{$backyardDatabase['dbname']}`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
-    $mysqlQueryResultArray = customMySQLQuery($query,true);
+    $mysqlQueryResultArray = backyard_mysqlQueryArray($query,true);
     if($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language']!=''){
         if (($userLanguage!=$mysqlQueryResultArray['owner_language']) && (in_array($mysqlQueryResultArray['owner_language'], $availableLanguages))) {
             $userLanguage = $mysqlQueryResultArray['owner_language'];
@@ -445,7 +446,7 @@ function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric){
         $query="SELECT `{$relevantMetric}` FROM  `{$backyardDatabase['dbname']}`.`{$table}` "
             .(($relevantMetric == 'owner_id')?(""):("WHERE  `owner_id` ={$ownerId} "))
             ." ORDER BY `{$relevantMetric}` DESC LIMIT 0 , 1;";                
-        $mysql_query_result=make_mysql_query($query) or die_graciously('E106',"$query"); // End script with a specific error message if mysql query fails
+        $mysql_query_result=backyard_mysql_query($query) or backyard_dieGraciously('E106',"$query"); // End script with a specific error message if mysql query fails
         //transforming the query result into an array            
         if(mysql_num_rows($mysql_query_result) > 0) {
             $one_row = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC);

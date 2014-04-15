@@ -87,9 +87,9 @@ if (isset($backyardDatabase)){
         $backyardDatabase['system_table_name'] = 'system';
     }
 
-    include (__BACKYARDROOT__."/openDB.php");
+    include (__BACKYARDROOT__."/backyard_openDB.php");
     $mysql_query_string = "SELECT `variable`, `value` FROM `{$backyardDatabase['dbname']}`.`{$backyardDatabase['system_table_name']}` WHERE `language` LIKE '{$backyardConf['language']}'";
-    $mysql_query_result = backyard_mysql_query($mysql_query_string, $backyardConnection, false) or die_graciously(552,$backyardLangString['lib_to_be_set']);
+    $mysql_query_result = backyard_mysql_query($mysql_query_string, $backyardConnection, false) or backyard_dieGraciously(552,$backyardLangString['lib_to_be_set']);
     $tempArray = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC);
     foreach($tempArray AS $key => $value){
         switch ($key) {
@@ -104,7 +104,7 @@ if (isset($backyardDatabase)){
                 break;
         }
     }
-    include (__BACKYARDROOT__."/closeDB.php");        
+    include (__BACKYARDROOT__."/backyard_closeDB.php");        
 }
 
 if ($backyardConf['error_hacked'] && isset($_GET['ERROR_HACK']) && $_GET['ERROR_HACK'] != "" && is_numeric($_GET['ERROR_HACK'])) {    

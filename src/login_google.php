@@ -11,6 +11,7 @@
  ** 
  * History
  * 2013-05-03, v.1 - compression of debugging
+ * 2014-04-06, v.2 - updated to work with backyard 2 and https://github.com/google/google-api-php-client/
  *
  ** TODO  
  * 
@@ -106,7 +107,7 @@ $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email', 'http
 //@TODO -140406 - při volání z localhost:8080 si app vyžádala Offline access - což je špatně!
 // $client->setScopes(array('userinfo.email', 'plus.me'));
 
-// $client->setDeveloperKey('insert_your_developer_key');
+//$client->setDeveloperKey($apiCredentials['google']['serverDeveloperApiKey']);
 my_error_log("Google client set", 6, 6);
 //$plus = new Google_PlusService($client);
 $plus = new Google_Service_Plus($client);
@@ -141,12 +142,12 @@ if (isset($_GET['code'])) {
   header('Location: ' . filter_var(parse_url(backyard_getCurPageURL(false),PHP_URL_SCHEME).'://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'], FILTER_SANITIZE_URL));  
 }
 
-if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {    
+if (isset($_SESSION['access_token']) && $_SESSION['access_token'] && (strlen($_SESSION['access_token']) > 2) ) {    
   $client->setAccessToken($_SESSION['access_token']);
   my_error_log("accessToken set", 6, 6);
 }
 $googleUserProfile = false;
-if ($client->getAccessToken()) {
+if ($client->getAccessToken() && (strlen($client->getAccessToken())>2)) {
     $googleUserProfile = array();
     my_error_log('G+ je zalogovan, nyni ziskat info o zalogovanem',5,6);
     try{ //http://stackoverflow.com/questions/9054656/uncaught-exception-apiserviceexception-with-message-error-calling-get
