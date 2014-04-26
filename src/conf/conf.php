@@ -49,18 +49,19 @@ $backyardLangString['lib_to_be_set'] = 'LIBrary In Backyard 2 to be set. Check a
  * Error log settings
  */
 $backyardConfDefault = array(
-    'language'                  => 'cs',    //použitý jazyk  
-    'logging_level'             => 5,    //úroveň logování//logovat az do urovne zde uvedene - default=5 = debug //logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
+    'language'                  => 'cs',    //default language
+    'logging_level'             => 5,       //úroveň logování//logovat az do urovne zde uvedene - default=5 = debug //logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
     'logging_level_name'        => array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'debug', 'speed'),
     'logging_file'              => '',      //soubor, do kterého má my_error_log() zapisovat
-    'logging_level_page_speed'  => 5,    //úroveň logování, do které má být zapisována rychlost vygenerování stránky
-    'error_log_message_type'    => 3,   //default log zapisuje do adresáře log; po spuštění functions.php je možné nastavit např. na 0 a směrovat tak do default logu //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 3, i.e. append to the file destination set in table system; it is however possible to set equal to 0 to send message to PHP's system logger       
+    'logging_level_page_speed'  => 5,       //úroveň logování, do které má být zapisována rychlost vygenerování stránky
+    'error_log_message_type'    => 3,       //default log zapisuje do adresáře log; po spuštění functions.php je možné nastavit např. na 0 a směrovat tak do default logu //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 3, i.e. append to the file destination set in table system; it is however possible to set equal to 0 to send message to PHP's system logger       
     'die_graciously_verbose'    => true,    //show details by die_graciously() on screen (it is always in the error_log); on production it is recomended to be set to to false due security
     'mail_for_admin_enabled'    => false,   //fatal error may just be written in log //$backyardMailForAdminEnabled = "rejthar@gods.cz";//on production, it is however recommended to set an e-mail, where to announce fatal errors
     'log_monthly_rotation'      => true,    //true, pokud má být přípona .log.Y-m.log (výhodou je měsíční rotace); false, pokud má být jen .log (výhodou je sekvenční zápis chyb přes my_error_log a jiných PHP chyb)
     'log_standard_output'       => false,   //true, pokud má zároveň vypisovat na obrazovku; false, pokud má vypisovat jen do logu
     'log_profiling_step'        => false,   //110812, my_error_log neprofiluje rychlost //$PROFILING_STEP = 0.008;//110812, my_error_log profiluje čas mezi dvěma měřenými body vyšší než udaná hodnota sec
     'error_hacked'              => true,    //ERROR_HACK parameter is reflected
+    'error_hack_from_get'       => 0,       //in this key, the value of $_GET['ERROR_HACK'] shall be set
 );
 
 if(!isset($backyardConf)){
@@ -109,10 +110,11 @@ if (isset($backyardDatabase)){
 
 if ($backyardConf['error_hacked'] && isset($_GET['ERROR_HACK']) && $_GET['ERROR_HACK'] != "" && is_numeric($_GET['ERROR_HACK'])) {    
     $backyardConf['log_standard_output'] = true;
-    if ((int)$_GET['ERROR_HACK'] > $backyardConf['logging_level']) {
-        $backyardConf['logging_level'] = (int)$_GET['ERROR_HACK'];
-    }
-    my_error_log("ERROR_HACK aplikovan na stranku", $_GET['ERROR_HACK']);    
+    //if ((int)$_GET['ERROR_HACK'] > $backyardConf['logging_level']) {
+    //    $backyardConf['logging_level'] = (int)$_GET['ERROR_HACK'];
+    //}
+    $backyardConf['error_hack_from_get']=(int)$_GET['ERROR_HACK'];
+    my_error_log("ERROR_HACK {$backyardConf['error_hack_from_get']} aplikovan na stranku", $backyardConf['error_hack_from_get']);
 }
 
 /* 140406 disabled because it effectively made ignore the lower $backyardConf['logging_level']

@@ -53,11 +53,16 @@ function my_error_log($message, $level = 0, $error_number = 0) {
     $username = 'anonymous';//placeholder
 
     $result = true; //pripadne by mohlo byt resetovano pri volani error_log na false
-    if ($ERROR_HACK > $backyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
-        $backyardConf['logging_level'] = $ERROR_HACK; //120918
-    }
+    //if ($ERROR_HACK > $backyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
+    //    $backyardConf['logging_level'] = $ERROR_HACK; //120918
+    //}
 
-    if (($level <= $backyardConf['logging_level']) //logovat 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed dle $level
+    if (($level <= max(array(
+                    $backyardConf['logging_level'],
+                    $backyardConf['error_hack_from_get'],
+                    $ERROR_HACK,
+                ))
+            ) //logovat 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed dle $level
         || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
     ) {
         $RUNNING_TIME_PREVIOUS = $RUNNING_TIME;
