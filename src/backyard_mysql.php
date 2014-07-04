@@ -70,3 +70,81 @@ function backyard_mysqlQueryArray($query, $justOneRow = false, $link_identifier 
     }
     return $result; //returns two dimensional array
 }
+
+/**
+ * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
+ */    
+class backyard_mysqli extends mysqli {
+
+    public function __construct($host, $user, $pass, $db) {
+        parent::__construct($host, $user, $pass, $db);
+
+        if (mysqli_connect_error()) {
+            backyard_dieGraciously(
+                    '5013', //@TODO 3 -  test die_graciously
+                    'Connect Error (' . mysqli_connect_errno() . ') ' 
+                    . mysqli_connect_error());
+        } //120914
+    }
+
+    //120914
+    // http://www.blrf.net/blog/223/code/php/extending-mysqli-class-with-example/
+    /**
+     * Query method
+     * if everything is OK, return the mysqli_result object
+     * that is returned from parent query method
+     * @param string $sql SQL to execute
+     * @return mysqli_result Object
+     * @throws DBQueryException
+     */
+    public function query($sql, $ERROR_LOG_OUTPUT = true) { //S.R. upravuji dle functions.php ... make_mysql_query
+        if ($ERROR_LOG_OUTPUT)
+            my_error_log("Start of query", 6, 11);
+        if ($sql != "") {
+            // here, we could log the query to sql.log file
+            // note that, no error check is being made for this file
+            //file_put_contents('/tmp/sql.log', $sql . "\n", FILE_APPEND);
+            if ($ERROR_LOG_OUTPUT) my_error_log($sql, 5, 11);
+            $result = @parent::query($sql);//parent query method called with @ operator, to supress error messages
+            if ($this->errno != 0) {
+                if ($ERROR_LOG_OUTPUT)
+                    my_error_log("{$this->errno} : {$this->error} /with query: {$sql}", 1, 11);
+            }
+        } else {
+            $result = false;
+            if ($ERROR_LOG_OUTPUT) my_error_log("No mysql_query_string set", 1, 11); //debug
+        }
+        if ($ERROR_LOG_OUTPUT) my_error_log("End of query", 6, 11);
+        return $result;
+    }
+
+    /**
+     * 
+     * @param string $sql
+     * @param boolean $justOneRow (default = false)
+     * @return 
+     *      false - if no results
+     *      one dimensional array - if $justOneRow == true
+     *      two dimensional array - if $justOneRow == false
+     */
+    public function queryArray($sql, $justOneRow = false) {
+        $result = false;
+        $mysqlQueryResult = $this->query($sql); //$ERROR_LOG_OUTPUT = true by default
+        //transforming the query result into an array
+        if($mysqlQueryResult == false || $mysqlQueryResult->num_rows == 0){
+            my_error_log("Query returned no results", 5, 16);  
+        } else {
+            $result = array();
+            while ($one_row = $mysqlQueryResult->fetch_assoc()) {
+                if ($justOneRow) {
+                    $mysqlQueryResult->close(); //free result set
+                    return $one_row; //returns one dimensional array
+                }
+                $result[] = $one_row;
+            }
+        }
+        if ($mysqlQueryResult != false) $mysqlQueryResult->close(); //free result set
+        return $result; //returns two dimensional array
+    }
+
+}
