@@ -52,6 +52,28 @@ function backyard_getOneColumnFromArray($myArray, $columnName) {
 }
 
 /**
+ * Returns array $myArray without column named in $columnName
+ * @param array $myArray
+ * @param string $columnName
+ * @return array
+ */
+function backyard_removeOneColumnFromArray($myArray, $columnName) {
+    if (!is_array($myArray)){
+        return array(); //empty array more consistant than false
+    }
+    $result = array();
+    foreach ($myArray as $key => $row) {
+        foreach ($row as $key2 => $row2){
+            if($key2 != $columnName){
+                $result[$key][$key2] = $row[$key2];
+            }
+        }
+    }
+    return $result;
+}
+
+
+/**
  * Return $myArray as a one-line string
  * @param array $myArray
  * @return string
