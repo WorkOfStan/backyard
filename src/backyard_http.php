@@ -145,14 +145,19 @@ function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeade
       $customArray = explode('|',$customHeaders);//$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
       $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
       if(!$tempOptSer){
-          my_error_log('Custom headers $customHeaders FAILED to be set',2,16);
+          my_error_log("Custom headers {$customHeaders} FAILED to be set",2,16);
       }
-  }  
+  }
+  /* cannot be activated when in safe_mode or an open_basedir is set
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+ */
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
   curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
   $data = array();
   $data['message_body']=curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
+  //@TODO - ovšem získat Location (a zachovat normální message_body výstup) není triviální, viz http://stackoverflow.com/questions/4062819/curl-get-redirect-url-to-a-variable
   /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
   header("Content-type: text/plain");//debug
   print_r(str_replace("i", "E", $data['MARKUP']));//debug
@@ -161,7 +166,10 @@ function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeade
   if(!$data['message_body']){
       my_error_log ("Curl error: ".curl_error($ch)." on {$url}",2);
   }
-  $data['CONTENT-TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);  
+  $data['CONTENT-TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
+  $data['CONTENT_TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
+  $data['HTTP_CODE'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);//0 when timeout
+  //$data['REDIRECT_URL'] = curl_getinfo($ch,CURLINFO_REDIRECT_URL);//added to PHP 5.3.7 - but not documented
   curl_close($ch);  
   return $data;
 }
