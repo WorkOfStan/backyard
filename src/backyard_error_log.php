@@ -59,8 +59,8 @@ function my_error_log($message, $level = 0, $error_number = 0) {
 
     if (($level <= max(array(
                     $backyardConf['logging_level'],
-                    $backyardConf['error_hack_from_get'],
-                    $ERROR_HACK,
+                    $backyardConf['error_hack_from_get'],   //set potentially as GET parameter
+                    $ERROR_HACK,                            //set as variable in the application script
                 ))
             ) //logovat 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed dle $level
         || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
@@ -77,8 +77,8 @@ function my_error_log($message, $level = 0, $error_number = 0) {
         $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $backyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] [" 
                 . $username . "@" . gethostbyaddr($_SERVER['REMOTE_ADDR']) . "] [" . $RUNNING_TIME . "] [" . $_SERVER["REQUEST_URI"] . "] ";
                 //gethostbyaddr($_SERVER['REMOTE_ADDR'])// co udělá s IP, která nelze přeložit? nebylo by lepší logovat přímo IP?
-        if (!$backyardConf['logging_file']) {//$logging_file není inicializován
-            $result = error_log($message_prefix . "(error: logging_file not set!) $message"); //zapisuje do default souboru
+        if (($backyardConf['error_log_message_type'] == 3) && !$backyardConf['logging_file']) {//$logging_file not set and it should be
+            $result = error_log($message_prefix . "(error: logging_file should be set!) $message"); //zapisuje do default souboru
             //zaroven by mohlo poslat mail nebo tak neco .. vypis na obrazovku je asi az krajni reseni
         } else {
             $messageType = 3;
@@ -86,9 +86,9 @@ function my_error_log($message, $level = 0, $error_number = 0) {
                 $messageType = $backyardConf['error_log_message_type'];
             }
             if ($backyardConf['log_monthly_rotation']) {
-            $result = error_log("{$message_prefix}{$message}" . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$backyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
+                $result = error_log("{$message_prefix}{$message}" . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$backyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
             } else {
-                $result = error_log("{$message_prefix}{$message}\r\n", $messageType, "$logging_file"); //zapisuje do souboru
+                $result = error_log("{$message_prefix}{$message}\r\n", $messageType, "{$backyardConf['logging_file']}"); //zapisuje do souboru
             }
         }
         if($level == 1 && $backyardConf['mail_for_admin_enabled']){//mailto admin, 130108

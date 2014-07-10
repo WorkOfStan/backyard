@@ -54,14 +54,14 @@ $backyardConfDefault = array(
     'logging_level_name'        => array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'debug', 'speed'),
     'logging_file'              => '',      //soubor, do kterého má my_error_log() zapisovat
     'logging_level_page_speed'  => 5,       //úroveň logování, do které má být zapisována rychlost vygenerování stránky
-    'error_log_message_type'    => 3,       //default log zapisuje do adresáře log; po spuštění functions.php je možné nastavit např. na 0 a směrovat tak do default logu //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 3, i.e. append to the file destination set in table system; it is however possible to set equal to 0 to send message to PHP's system logger       
+    'error_log_message_type'    => 0,       //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 0, i.e. to send message to PHP's system logger; recommended is however 3, i.e. append to the file destination set either in field $backyardConf['logging_file or in table system
     'die_graciously_verbose'    => true,    //show details by die_graciously() on screen (it is always in the error_log); on production it is recomended to be set to to false due security
     'mail_for_admin_enabled'    => false,   //fatal error may just be written in log //$backyardMailForAdminEnabled = "rejthar@gods.cz";//on production, it is however recommended to set an e-mail, where to announce fatal errors
     'log_monthly_rotation'      => true,    //true, pokud má být přípona .log.Y-m.log (výhodou je měsíční rotace); false, pokud má být jen .log (výhodou je sekvenční zápis chyb přes my_error_log a jiných PHP chyb)
     'log_standard_output'       => false,   //true, pokud má zároveň vypisovat na obrazovku; false, pokud má vypisovat jen do logu
     'log_profiling_step'        => false,   //110812, my_error_log neprofiluje rychlost //$PROFILING_STEP = 0.008;//110812, my_error_log profiluje čas mezi dvěma měřenými body vyšší než udaná hodnota sec
     'error_hacked'              => true,    //ERROR_HACK parameter is reflected
-    'error_hack_from_get'       => 0,       //in this key, the value of $_GET['ERROR_HACK'] shall be set
+    'error_hack_from_get'       => 0,       //in this field, the value of $_GET['ERROR_HACK'] shall be set below
 );
 
 if(!isset($backyardConf)){
