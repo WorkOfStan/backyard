@@ -133,6 +133,7 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
  * @param string $url
  * @param string $useragent default = 'PHP/cURL'
  * @param int $timeout [seconds] default =5
+ * @param string||false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
  * @return array or false
  */
 function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeaders = false)

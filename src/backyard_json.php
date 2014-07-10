@@ -50,11 +50,11 @@ function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 
  * @param   bool    $assoc   When TRUE, returned objects will be converted into associative arrays. 
  * @param   integer $depth   User specified recursion depth. (>=5.3) 
  * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
- * @return  string 
+ * @return  array or NULL is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 
  */
-function backyard_jsonCleanDecode($json, $assoc = false, $depth = 512, $options = 0) {
+function backyard_jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
     // search and remove comments like /* */ and //
-    $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json);
+    $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
     
     if(version_compare(phpversion(), '5.4.0', '>=')) {
         $json = json_decode($json, $assoc, $depth, $options);
@@ -65,7 +65,8 @@ function backyard_jsonCleanDecode($json, $assoc = false, $depth = 512, $options 
     else {
         $json = json_decode($json, $assoc);
     }
-    if(!is_array($json)){
+    if(is_null($json)){
+        my_error_log("Invalid JSON: ".$json2decode,5);
         return false;//invalid JSON
     }
     return $json;
