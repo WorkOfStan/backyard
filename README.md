@@ -38,7 +38,7 @@ require_once (__BACKYARDROOT__."/backyard_XXX.php");
 To be in control of the logging, set following before requiring LIB
 ```sh
 $backyardConf['logging_level'] = 3;         //so that only fatal, error, warning are logged
-$backyardConf['error_log_message_type'] = 3;//so that logging does not go to PHP\`s system logger but to the monthly rotated file specified on the next line
+$backyardConf['error_log_message_type'] = 3;//so that logging does not go to PHP system logger but to the monthly rotated file specified on the next line
 $backyardConf['logging_file'] = '/var/www/www.alfa.gods.cz/logs/error_php.log';
 $backyardConf['mail_for_admin_enabled']    = 'your@e-mail.address';   //fatal error are announced to this e-mail
 ```
