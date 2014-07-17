@@ -1,7 +1,7 @@
 <?php
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
-    require_once 'backyard_my_error_log_dummy.php';
+    require_once dirname(__FILE__) . '/backyard_my_error_log_dummy.php';
 }
 
 /******************************************************************************

@@ -45,7 +45,7 @@
 /**
  * Load Scripts & init
  */
-require_once ("backyard_http.php");
+require_once dirname(__FILE__) . "/backyard_http.php";
 
 if (!isset($URLinfo)){//if it is direct call or include without setting parameters
     $URLinfo = array (); //init
