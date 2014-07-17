@@ -197,8 +197,10 @@ function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeade
 function backyard_getHTTPstatusCode ($URL_STRING){
     $localDNSserver = array('81.31.47.101'); //@TODO - make configurable!
     $url = parse_url($URL_STRING);
-    if ($url['scheme'] == 'http') {
-
+    if ($url['scheme'] != 'http') {
+       my_error_log("Scheme: {$url['scheme']} not supported by GetHTTPstatusCode",4,16);//debug
+       return 0;
+    }
         $host = $url['host'];
         $port = (isset($url['port'])?$url['port']:80);
         $path = (isset($url['path'])?$url['path']:'/');
@@ -210,7 +212,10 @@ function backyard_getHTTPstatusCode ($URL_STRING){
               ."\r\n";
 
         my_error_log("IPv4 is ".$address = gethostbyname($host),5,16);//set & log
-        if(!in_array($address, $localDNSserver)){//gethostbyname returns this IP address on www.alfa.gods.cz if domain name does not exist
+        if(in_array($address, $localDNSserver)){//gethostbyname returns this IP address on www.alfa.gods.cz if domain name does not exist
+                        return 'DNS_error';
+        }
+
             $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
             $socketResult = @socket_connect($socket, $address, $port);
             if ($socketResult) {
@@ -248,26 +253,23 @@ function backyard_getHTTPstatusCode ($URL_STRING){
             socket_close($socket);
             my_error_log("result=".$result = (isset($response[1])?($response[1]):($socketLastErrorString)),5,16);//set & log 
             return $result;
-        }//if($address != "81.31.47.101")
-        else {
-            return 'DNS_error';
-        }
-   } else {
-       my_error_log("Scheme: {$url['scheme']} not supported by GetHTTPstatusCode",4,16);//debug
-       return 0;
-   }
+
 }
 
 function backyard_getHTTPstatusCodeByUA ($URL_STRING, $userAgent = "GetStatusCode/1.1"){
    $url = parse_url($URL_STRING);
-   if ($url['scheme'] == 'http') {
+   if ($url['scheme'] != 'http') {
+       my_error_log("Scheme: {$url['scheme']} not supported by GetHTTPstatusCode",4,16);//debug
+       return 0;
+   }       
     
     $host = $url['host'];
     $port = $url['port'];
     $path = $url['path'];
-    if(!$port)
+    if(!$port){
         $port = 80;
-
+    }
+    
     $request = "HEAD $path HTTP/1.1\r\n"
               ."Host: $host\r\n"
               ."User-agent: $userAgent\r\n"              
@@ -288,8 +290,4 @@ function backyard_getHTTPstatusCodeByUA ($URL_STRING, $userAgent = "GetStatusCod
 
     socket_close($socket);
     return $response[1];
-   } else {
-       my_error_log("Scheme: {$url['scheme']} not supported by GetHTTPstatusCode",4,16);//debug
-       return 0;
-   }
 }
