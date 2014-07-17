@@ -15,7 +15,7 @@
  * 2012-04-16, v.0.2 - custom Headers added
  * 2012-04-30, v.0.3 - default behaviour is to absolutize references, may be changed by parameter ORIGINAL;pipe as delimiter of custom headers
  * 2012-04-30, v.0.4 - enable force content-type
- * 
+ * 2014-07-17, v.0.5 - added to backyard 2
  *
  ** 
  * TODO  
@@ -51,7 +51,8 @@ Some examples:
 /**
  * Load Scripts & init
  */
-require_once ("./functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");
+//require_once ("./functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");
+require_once dirname(__FILE__) . '/backyard_system.php';//@TODO - is there a way to use the local backyard settings? //@TODO - maybe in future put out of backyard
 /* database *//*
 require_once ("tableName.php"); //configuration of database connection of that script
 require_once (__ROOT__."/lib/connectDB.php");
@@ -61,7 +62,7 @@ mysql_query("SET CHARACTER SET utf8");//aby se správně zapisovalo UTF-8 //http
 my_error_log("Knihovny pripojeny", 6, 6);
 
 //$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-require_once (__ROOT__."/lib/class_HTMLPage.php");//* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+require_once (__BACKYARDROOT__."/class_HTMLPage.php");//* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
 $pageInstance =  new HTMLPage ("Emulate","text/html",1,0);//jquery yes, style.css no
 //$pageInstance->addToBody("<b>RED info</b><br/>".PHP_EOL);
 /**
@@ -107,7 +108,7 @@ $pageInstance->addToBody('<br/><br/><a href="mailto:rejthar@gods.cz?Subject=Emul
 $pageInstance->addToBody('</div>'.PHP_EOL);
 
 
-$pageInstance->addToBody(file_get_contents('emulate-buttons-include.html').PHP_EOL);
+//$pageInstance->addToBody(file_get_contents('emulate-buttons-include.html').PHP_EOL);
 
 // **** END
 /* HTML output management */

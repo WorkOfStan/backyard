@@ -49,3 +49,7 @@ $backyardConf['die_graciously_verbose'] = false;    //so that description contai
 $backyardConf['error_hacked']           = false;    //so that *ERROR_HACK* GET parameter is ignored (and 3rd party can't *debug* your application
 ```
 
+
+src/emulator.php get_data in a defined manner (@TODO - better describe)
+
+src/emulate.php is an envelope for emulator.php
