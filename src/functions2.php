@@ -1,4 +1,5 @@
 <?php
+//140717, inkorporováno do backyard_http.php
 error_log('where is functions2.php used?');
 die('Contact administrator, please, concerning error f2.');
 /**
