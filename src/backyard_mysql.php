@@ -71,6 +71,30 @@ function backyard_mysqlQueryArray($query, $justOneRow = false, $link_identifier 
 }
 
 /**
+ * Find the next available id within selected dimension.
+ * It may be conditioned by an integer value of another dimension
+ * (Replacement for int function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric))
+ * 
+ * @param resource $link_identifier
+ * @param string $table
+ * @param string $metricDimension
+ * @param string $primaryDimension [optional]
+ * @param int $primaryDimensionValue [optional]
+ * @return int
+ */
+function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
+    $result = 1; //default value
+    $query = "SELECT `{$metricDimension}` FROM  `{$table}` "
+            . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
+            . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
+    $mysql_query_array = backyard_mysqlQueryArray($query, true, $link_identifier);
+    if ($mysql_query_array) {
+        $result += (int) $mysql_query_array[$metricDimension];
+    }
+    return $result;
+}
+
+/**
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
  */
 class backyard_mysqli extends mysqli {
@@ -154,6 +178,29 @@ class backyard_mysqli extends mysqli {
             $mysqlQueryResult->close(); //free result set
         }
         return $result; //returns two dimensional array
+    }
+
+    /**
+     * Find the next available id within selected dimension.
+     * It may be conditioned by an integer value of another dimension
+     * (Replacement for int function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric))
+     * 
+     * @param string $table
+     * @param string $metricDimension
+     * @param string $primaryDimension [optional]
+     * @param int $primaryDimensionValue [optional]
+     * @return int
+     */
+    public function nextIncrement($table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
+        $result = 1; //default value
+        $query = "SELECT `{$metricDimension}` FROM  `{$table}` "
+                . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
+                . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
+        $mysql_query_array = $this->queryArray($query, true);
+        if ($mysql_query_array) {
+            $result += (int)$mysql_query_array["$metricDimension"];
+        }
+        return $result;
     }
 
 }

@@ -137,7 +137,7 @@ function getInternalUserLanguage($ownerLanguage, $ownerId) {
     if (!$userLanguage && $ownerId) {//use owner preference ; Note: $ownerId is always set - either false or number
         $query = "SELECT `owner_language` FROM `$dbname`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
         //$mysqlQueryResultArray = customMySQLQuery($query,true);
-        $mysqlQueryResultArray = $mainDBConnection->customQuery($query, true);
+        $mysqlQueryResultArray = $mainDBConnection->queryArray($query, true);
         if ($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language'] != '') {
             $userLanguage = $mysqlQueryResultArray['owner_language'];
             if (!in_array($userLanguage, $availableLanguages)) {
@@ -201,7 +201,7 @@ function getInternalUserId() {
             $ownerId = false; //@TODO 2 - aby nespoléhalo na $ownerId global
         $query = "SELECT * FROM `$dbname`.`$tableNameOwners` WHERE (`owner_login` LIKE '%{$authType}%' AND `owner_login` LIKE '%{$authId}%') OR `owner_login` LIKE '%{$authMail}%'"; //výběr na hrubo
         //$mysqlQueryResultArrayMoreLines = customMySQLQuery($query);
-        $mysqlQueryResultArrayMoreLines = $mainDBConnection->customQuery($query);
+        $mysqlQueryResultArrayMoreLines = $mainDBConnection->queryArray($query);
         //@TODO - skonci pokud prazdny
         if ($mysqlQueryResultArrayMoreLines) {//zjistovat jen pokud neprazdny vysledek
             my_error_log("mysqlQueryResultArrayMoreLines=" . print_r($mysqlQueryResultArrayMoreLines, true), 5, 16);
@@ -255,7 +255,8 @@ function getInternalUserId() {
             }
         } else {
             //create
-            $ownerId = findFirstAvailableIdInRelevantTable($tableNameOwners, $ownerId, 'owner_id');
+            //$ownerId = findFirstAvailableIdInRelevantTable($tableNameOwners, $ownerId, 'owner_id');
+            $ownerId = $mainDBConnection->nextIncrement($tableNameOwners,'owner_id');
             $query = "INSERT INTO `$dbname`.`$tableNameOwners` "
                     . "(`owner_id`, `owner_name`, `owner_email`, `owner_signature`, `owner_login`, `owner_notification`, `created`, `type_id`) " //@TODO 4 - owner_language nastavit dle prvního přístupu, ať se uživateli nemění dle použitého browseru - ale $userLanguage ještě není nastaven, tak by se muselo promísit zalogování a nastavení jazyka
                     . "VALUES ({$ownerId}, '{$authName}', '{$authMail}', '{$authName}', '{$authString}' , 'on', CURRENT_TIMESTAMP, 2);";
@@ -268,7 +269,7 @@ function getInternalUserId() {
         }
         //renegotiate the userLanguage //@TODO 4 - zoptimalizovat dotaz, protože (a) login už query provedl a (b) create owner_language nenastavuje, resp. víme jak
         $query = "SELECT `owner_language` FROM `$dbname`.`$tableNameOwners` WHERE `owner_id` = {$ownerId}";
-        $mysqlQueryResultArray = $mainDBConnection->customQuery($query, true);
+        $mysqlQueryResultArray = $mainDBConnection->queryArray($query, true);
         if ($mysqlQueryResultArray && $mysqlQueryResultArray['owner_language'] != '') {
             if (($userLanguage != $mysqlQueryResultArray['owner_language']) && (in_array($mysqlQueryResultArray['owner_language'], $availableLanguages))) {
                 $userLanguage = $mysqlQueryResultArray['owner_language'];
@@ -388,6 +389,7 @@ class Language {
 //print_r(Language::get()); //languages ordered by preference
 //print_r(Language::getBestMatch(array('pt-br', 'pt', 'en'))); //retrieves the best match given a list of available languages
 
+/* obsoleted by backyard_mysqlNextIncrement / ->nextIncrement
 if (!function_exists('findFirstAvailableIdInRelevantTable')) {
     my_error_log('defining findFirstAvailableIdInRelevantTable conditionally', 3); //@TODO 2 - anebo move jako obecnou funkci do functions?? .. pozor na dualit procedurálně objektovou SQL!!!
 
@@ -411,3 +413,4 @@ if (!function_exists('findFirstAvailableIdInRelevantTable')) {
     }
 
 }
+*/
