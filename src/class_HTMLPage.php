@@ -39,6 +39,7 @@
  * 2013-05-02, v.0.8.1, jQM 1.3.1
  * 2013-05-04, v.0.8.2, text/html; charset=UTF-8 moved to HTTP headers following the GooglePageSpeed recommendation; endPage vyplivne všechno
  * 2013-10-06, v.0.9, method currentBodyOutput added
+ * 2014-07-30, v.0.9.1, link jQ 1.6.2,1.8.2,1.11.1 to CDN
  *
  *  
  * @TODO - sladit
@@ -51,7 +52,8 @@
  *  
  * TODO
  * @TODO LOAD_JQUERYMOBILE verzi jquery sjednotit s JQ, 120807
- *
+ * @TODO more flexibility where jQ is loaded from
+ * 
  * 
  * 
  */
@@ -73,8 +75,13 @@ class HTMLPage {
 
     /**
      *
-     * @param type $TITLE
-     * @param type $CONTENT_TYPE 
+     * @param type $TITLE [optional]
+     * @param type $CONTENT_TYPE [optional] If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+     * @param type $LOAD_JQ [optional]
+     * @param type $LOAD_STYLE [optional]
+     * @param type $LOAD_JQUERYMOBILE [optional]
+     * @param type $beforeViewport [optional]
+     * @param type $manifestCache [optional]
      * 
      * If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
      * 
@@ -129,9 +136,11 @@ class HTMLPage {
                 //if (($LOAD_JQ == 1)&&($LOAD_JQUERYMOBILE == 0)) {$this->header .= '<script src="/jq/jquery-1.6.2.min.js"></script>';}
                 if (($LOAD_JQ) && ($LOAD_JQUERYMOBILE == 0)) {
                     if ($LOAD_JQ == 1) {
-                        $this->header .= '<script src="/jq/jquery-1.6.2.min.js"></script>';
+                        $this->header .= '<script src="//code.jquery.com/jquery-1.6.2.min.js"></script>';
                     } elseif ($LOAD_JQ == '1.8.2') {
-                        $this->header .= '<script src="/jq/jquery-1.8.2.min.js"></script>';
+                        $this->header .= '<script src="//code.jquery.com/jquery-1.8.2.min.js"></script>';
+                    } elseif ($LOAD_JQ == '1.11.1') {
+                        $this->header .= '<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
                     }
                 }
                 if ($LOAD_JQUERYMOBILE == 1) {
