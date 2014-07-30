@@ -92,10 +92,10 @@ if (!isset($apiCredentials['facebook']['auth'])) {
     $apiCredentials['facebook']['auth'] = false;
 }
 if ($apiCredentials['facebook']['auth']) {
-    my_error_log("$facebookUserProfile: " . print_r($facebookUserProfile, true), 5, 16); //debug
+    my_error_log("facebookUserProfile: " . print_r($facebookUserProfile, true), 5, 16); //debug
 }
 if ($apiCredentials['google']['auth']) {
-    my_error_log("$googleUserProfile: " . print_r($googleUserProfile, true), 5, 16);    //debug
+    my_error_log("googleUserProfile: " . print_r($googleUserProfile, true), 5, 16);    //debug
 }
 
 /**
