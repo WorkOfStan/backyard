@@ -4,11 +4,12 @@ if (!function_exists('my_error_log')) {
     require_once dirname(__FILE__) . '/backyard_my_error_log_dummy.php';
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * HTTP FUNCTIONS
  */
 
 if (!function_exists('apache_request_headers')) {
+
     /**
      * array apache_request_headers ( void )
      * apache_request_headers replacement for nginx 
@@ -28,6 +29,7 @@ if (!function_exists('apache_request_headers')) {
         }
         return $out;
     }
+
 }
 
 /**
@@ -85,7 +87,9 @@ function backyard_movePage($num, $url, $stopCodeExecution = true) {
     header($http[$num]);
     header("Location: $url");
     my_error_log("Redirect to {$url} with {$num} status", 5);
-    if ($stopCodeExecution) exit; //default behaviour expects that no code should be interpreted after redirection
+    if ($stopCodeExecution){
+        exit; //default behaviour expects that no code should be interpreted after redirection
+    }
 }
 
 /**
@@ -106,7 +110,6 @@ function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
     return $result;
 }
 
-
 /**
  * Source: http://www.webcheatsheet.com/PHP/get_current_page_url.php
  * Usage: echo curPageURL();
@@ -123,8 +126,8 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
     }
     $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
     $port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
-    $port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
-    $pageURL = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$endGame;
+    $port = ($port) ? ':' . $_SERVER["SERVER_PORT"] : '';
+    $pageURL = ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"] . $port . $endGame;
     return $pageURL;
 }
 
@@ -136,45 +139,43 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
  * @param string||false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
  * @return array or false
  */
-function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeaders = false)
-{
-  my_error_log("backyard_getData({$url},{$useragent},{$timeout});",5,16);
-  $ch = curl_init();
-  curl_setopt($ch,CURLOPT_URL,$url);
-  curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-  if ($customHeaders) {
-      $customArray = explode('|',$customHeaders);//$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
-      $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
-      if(!$tempOptSer){
-          my_error_log("Custom headers {$customHeaders} FAILED to be set",2,16);
-      }
-  }
-  /* cannot be activated when in safe_mode or an open_basedir is set
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-  curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
- */
-  curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
-  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-  $data = array();
-  $data['message_body']=curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
-  //@TODO - ovšem získat Location (a zachovat normální message_body výstup) není triviální, viz http://stackoverflow.com/questions/4062819/curl-get-redirect-url-to-a-variable
-  /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
-  header("Content-type: text/plain");//debug
-  print_r(str_replace("i", "E", $data['MARKUP']));//debug
-  exit;
-  /* */ 
-  if(!$data['message_body']){
-      my_error_log ("Curl error: ".curl_error($ch)." on {$url}",2);
-  }
-  $data['CONTENT-TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
-  $data['CONTENT_TYPE'] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
-  $data['HTTP_CODE'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);//0 when timeout
-  //$data['REDIRECT_URL'] = curl_getinfo($ch,CURLINFO_REDIRECT_URL);//added to PHP 5.3.7 - but not documented
-  curl_close($ch);  
-  return $data;
+function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false) {
+    my_error_log("backyard_getData({$url},{$useragent},{$timeout});", 5, 16);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+    if ($customHeaders) {
+        $customArray = explode('|', $customHeaders); //$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
+        $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
+        if (!$tempOptSer) {
+            my_error_log("Custom headers {$customHeaders} FAILED to be set", 2, 16);
+        }
+    }
+    /* cannot be activated when in safe_mode or an open_basedir is set
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+      curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+     */
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $data = array();
+    $data['message_body'] = curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
+    //@TODO - ovšem získat Location (a zachovat normální message_body výstup) není triviální, viz http://stackoverflow.com/questions/4062819/curl-get-redirect-url-to-a-variable
+    /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
+      header("Content-type: text/plain");//debug
+      print_r(str_replace("i", "E", $data['MARKUP']));//debug
+      exit;
+      /* */
+    if (!$data['message_body']) {
+        my_error_log("Curl error: " . curl_error($ch) . " on {$url}", 2);
+    }
+    $data['CONTENT-TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
+    $data['CONTENT_TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    $data['HTTP_CODE'] = curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout
+    //$data['REDIRECT_URL'] = curl_getinfo($ch,CURLINFO_REDIRECT_URL);//added to PHP 5.3.7 - but not documented
+    curl_close($ch);
+    return $data;
 }
-
 
 /**
  * Purpose: 
@@ -182,7 +183,7 @@ function backyard_getData($url,$useragent = 'PHP/cURL',$timeout = 5,$customHeade
  * 
  * php_sockets required for socket_create
  *
- **
+ * *
  * History 
  * 120215, function GetHTTPstatusCode ($URL_STRING){ .. from r.godsapps.eu/index.php   
  * 120215, function get_data ($URL_STRING, $User-agent){ .. from r.godsapps.eu/magic-link.php

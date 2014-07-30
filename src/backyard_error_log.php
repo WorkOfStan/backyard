@@ -43,14 +43,14 @@ function my_error_log($message, $level = 0, $error_number = 0) {
     //$line - mělo by být vždy voláno jako basename(__FILE__)."#".__LINE__ , takže bude jasné, ze které řádky source souboru to bylo voláno
     // Ve výsledku do logu zapíše:
     //[Timestamp: d-M-Y H:i:s] [Logging level] [$error_number] [$_SERVER['SCRIPT_FILENAME']] [username@gethostbyaddr($_SERVER['REMOTE_ADDR'])] [sec od startu stránky] $message
-    global 
-        //$username,                  //Až zavedu uživatele, tak se budou zapisovat do my_error_log
-        $backyardPage_timestamp,
-        $RUNNING_TIME,
-        $ERROR_HACK,
-        $backyardConf
-            ;
-    $username = 'anonymous';//placeholder
+    global
+    //$username,                  //Až zavedu uživatele, tak se budou zapisovat do my_error_log
+    $backyardPage_timestamp,
+    $RUNNING_TIME,
+    $ERROR_HACK,
+    $backyardConf
+    ;
+    $username = 'anonymous'; //placeholder
 
     $result = true; //pripadne by mohlo byt resetovano pri volani error_log na false
     //if ($ERROR_HACK > $backyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
@@ -58,12 +58,12 @@ function my_error_log($message, $level = 0, $error_number = 0) {
     //}
 
     if (($level <= max(array(
-                    $backyardConf['logging_level'],
-                    $backyardConf['error_hack_from_get'],   //set potentially as GET parameter
-                    $ERROR_HACK,                            //set as variable in the application script
-                ))
+                $backyardConf['logging_level'],
+                $backyardConf['error_hack_from_get'], //set potentially as GET parameter
+                $ERROR_HACK, //set as variable in the application script
+            ))
             ) //logovat 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed dle $level
-        || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
+            || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
     ) {
         $RUNNING_TIME_PREVIOUS = $RUNNING_TIME;
         if ((( ($RUNNING_TIME = round(backyard_getmicrotime() - $backyardPage_timestamp, 4)) - $RUNNING_TIME_PREVIOUS) > $backyardConf['log_profiling_step'] ) && $backyardConf['log_profiling_step']) {
@@ -74,9 +74,9 @@ function my_error_log($message, $level = 0, $error_number = 0) {
             echo ((($level <= 2) ? "<b>" : "") . "{$message} [{$RUNNING_TIME}]" . (($level <= 2) ? "</b>" : "") . "<hr/>" . PHP_EOL); //110811, if fatal or error then bold//111119, RUNNING_TIME
         }
 
-        $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $backyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] [" 
+        $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $backyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] ["
                 . $username . "@" . gethostbyaddr($_SERVER['REMOTE_ADDR']) . "] [" . $RUNNING_TIME . "] [" . $_SERVER["REQUEST_URI"] . "] ";
-                //gethostbyaddr($_SERVER['REMOTE_ADDR'])// co udělá s IP, která nelze přeložit? nebylo by lepší logovat přímo IP?
+        //gethostbyaddr($_SERVER['REMOTE_ADDR'])// co udělá s IP, která nelze přeložit? nebylo by lepší logovat přímo IP?
         if (($backyardConf['error_log_message_type'] == 3) && !$backyardConf['logging_file']) {//$logging_file not set and it should be
             $result = error_log($message_prefix . "(error: logging_file should be set!) $message"); //zapisuje do default souboru
             //zaroven by mohlo poslat mail nebo tak neco .. vypis na obrazovku je asi az krajni reseni
@@ -91,12 +91,13 @@ function my_error_log($message, $level = 0, $error_number = 0) {
                 $result = error_log("{$message_prefix}{$message}\r\n", $messageType, "{$backyardConf['logging_file']}"); //zapisuje do souboru
             }
         }
-        if($level == 1 && $backyardConf['mail_for_admin_enabled']){//mailto admin, 130108
-          $resultMail = error_log($message_prefix . "$message\r\n", 1, $backyardConf['mail_for_admin_enabled']);
+        if ($level == 1 && $backyardConf['mail_for_admin_enabled']) {//mailto admin, 130108
+            $resultMail = error_log($message_prefix . "$message\r\n", 1, $backyardConf['mail_for_admin_enabled']);
         }
     }
     return $result;
 }
+
 /* Alternative way:
   Logging levels
   Log level   Description                                                                       Set bit

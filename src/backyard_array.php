@@ -4,10 +4,9 @@ if (!function_exists('my_error_log')) {
     require_once 'backyard_my_error_log_dummy.php';
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * ARRAY FUNCTIONS
  */
-
 
 /**
  * A version of in_array() that supports wildcards in the haystack.
@@ -33,7 +32,6 @@ function backyard_inArrayWildcards($needle, $haystack) {
     return false;
 }
 
-
 /**
  * Returns array named $columnName from $myArray
  * @param array $myArray
@@ -41,7 +39,7 @@ function backyard_inArrayWildcards($needle, $haystack) {
  * @return array
  */
 function backyard_getOneColumnFromArray($myArray, $columnName) {
-    if (!is_array($myArray)){
+    if (!is_array($myArray)) {
         return array(); //empty array more consistant than false
     }
     $result = array();
@@ -58,20 +56,19 @@ function backyard_getOneColumnFromArray($myArray, $columnName) {
  * @return array
  */
 function backyard_removeOneColumnFromArray($myArray, $columnName) {
-    if (!is_array($myArray)){
+    if (!is_array($myArray)) {
         return array(); //empty array more consistant than false
     }
     $result = array();
     foreach ($myArray as $key => $row) {
-        foreach ($row as $key2 => $row2){
-            if($key2 != $columnName){
+        foreach ($row as $key2 => $row2) {
+            if ($key2 != $columnName) {
                 $result[$key][$key2] = $row[$key2];
             }
         }
     }
     return $result;
 }
-
 
 /**
  * Return $myArray as a one-line string
@@ -84,9 +81,9 @@ function backyard_dumpArrayAsOneLine($myArray) {
                     '/\n/', ' ', preg_replace(
                             '/\r/', ' ', preg_replace(
                                     '/\s\s+/', ' ', print_r($myArray, true)
-                                    )
                             )
                     )
+            )
             );
 }
 
@@ -104,13 +101,13 @@ function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $all
         my_error_log("ArrayVlookup: array parameter is not an array", 2);
         return false;
     }
-    
-    $allMatchingRows = array();//used only if $allExactMatches === true
-    
+
+    $allMatchingRows = array(); //used only if $allExactMatches === true
+
     foreach ($searchedArray as $key => $row) {
         if (isset($row[$columnName])) {
-            if ($row[$columnName] == $searchedValue){
-                if($allExactMatches){
+            if ($row[$columnName] == $searchedValue) {
+                if ($allExactMatches) {
                     $allMatchingRows[$key] = $row;
                 } else {
                     return $row;

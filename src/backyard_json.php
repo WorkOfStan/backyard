@@ -1,10 +1,10 @@
 <?php
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
-    require_once 'backyard_my_error_log_dummy.php';
+    require_once dirname(__FILE__) . '/backyard_my_error_log_dummy.php';
 }
 
-/******************************************************************************
+/* * ****************************************************************************
  * JSON FUNCTIONS
  */
 
@@ -26,7 +26,6 @@ function backyard_minifyJSON($jsonInput, $logLevel = 5) {
     return $jsonOutput;
 }
 
-
 /**
  * @desc Output JSON
  * @param string $jsonString to be minified
@@ -41,12 +40,12 @@ function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 
     }
 }
 
-/** 
+/**
  * Clean comments of json content and decode it with json_decode(). 
  * Work like the original php json_decode() function with the same params 
  * http://www.php.net/manual/en/function.json-decode.php#112735
  * 
- * @param   string  $json    The json string being decoded 
+ * @param   string  $json2decode    The json string being decoded 
  * @param   bool    $assoc   When TRUE, returned objects will be converted into associative arrays. 
  * @param   integer $depth   User specified recursion depth. (>=5.3) 
  * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
@@ -55,19 +54,17 @@ function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 
 function backyard_jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
     // search and remove comments like /* */ and //
     $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
-    
-    if(version_compare(phpversion(), '5.4.0', '>=')) {
+
+    if (version_compare(phpversion(), '5.4.0', '>=')) {
         $json = json_decode($json, $assoc, $depth, $options);
-    }
-    elseif(version_compare(phpversion(), '5.3.0', '>=')) {
+    } elseif (version_compare(phpversion(), '5.3.0', '>=')) {
         $json = json_decode($json, $assoc, $depth);
-    }
-    else {
+    } else {
         $json = json_decode($json, $assoc);
     }
-    if(is_null($json)){
-        my_error_log("Invalid JSON: ".$json2decode,5);
-        return false;//invalid JSON
+    if (is_null($json)) {
+        my_error_log("Invalid JSON: " . $json2decode, 5);
+        return false; //invalid JSON
     }
     return $json;
 }
@@ -77,22 +74,22 @@ function backyard_jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $o
  * @param string $url
  * @return array|bool array if cURL($url) returns JSON else false
  */
-function backyard_getJsonAsArray($url){
+function backyard_getJsonAsArray($url) {
     $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $json = curl_exec($ch);
-    if(!$json) {
-        error_log ("Curl error: ".curl_error($ch)." on {$url}");
+    if (!$json) {
+        error_log("Curl error: " . curl_error($ch) . " on {$url}");
         return false;
     }
     curl_close($ch);
     $jsonArray = backyard_jsonCleanDecode($json, true);
-    if(!$jsonArray){
+    if (!$jsonArray) {
         //error_log("Trouble with decoding JSON from {$url}");
         return false;
-    }    
+    }
     return $jsonArray;
 }

@@ -1,6 +1,6 @@
 <?php
 
-/******************************************************************************
+/* * ****************************************************************************
  * Encoding FUNCTIONS
  */
 
@@ -19,7 +19,6 @@ function fix_xml($text) {
     return $text;
 }
 
-
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
@@ -32,7 +31,6 @@ function fix_html_input($text) {
     $text = str_replace(">", "&gt;", $text);
     return $text;
 }
-
 
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
@@ -53,10 +51,12 @@ function encode_wml_entity($string) {
             $utf = iconv("iso-8859-2", "utf-8", $char);
             $utf_char = dechex((ord($utf[0]) - 192) * 64 + ord($utf[1]) - 128);
 ///my_error_log($utf_char);
-            if (strlen($utf_char) < 4)
+            if (strlen($utf_char) < 4) {
                 $utf_char = "0" . $utf_char;
-            if (strlen($utf_char) < 4)
+            }
+            if (strlen($utf_char) < 4) {
                 $utf_char = "0" . $utf_char;
+            }
             $output .= "&#x$utf_char;";
         } else {
 ///my_error_log("ascii");
@@ -66,7 +66,6 @@ function encode_wml_entity($string) {
 //error_log("encoding $string to $output");
     return $output;
 }
-
 
 /**
  * internal function for decode_wml_entity()

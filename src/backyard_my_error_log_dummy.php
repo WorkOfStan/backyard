@@ -5,14 +5,16 @@ if (!defined('__BACKYARDROOT__')) {
 }
 
 if (!function_exists('my_error_log')) {
-    function my_error_log($message, $level = 0, $error_number = 0){
-        if($level<=3){
+
+    function my_error_log($message, $level = 0, $error_number = 0) {
+        if ($level <= 3) {
             error_log($message);
         }
     }
+
 }
 
-if (!isset($backyardConf['die_graciously_verbose'])){
+if (!isset($backyardConf['die_graciously_verbose'])) {
     $backyardConf['die_graciously_verbose'] = false;
 }
 
@@ -27,9 +29,9 @@ function backyard_dieGraciously($errorNumber, $errorString, $feedbackButtonMarku
     global $backyardConf;
     my_error_log("Die with error {$errorNumber} - {$errorString}", 1);
     if ($feedbackButtonMarkup) {
-        echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - " 
-            . (($backyardConf['die_graciously_verbose'])?" - {$errorString}":"")
+        echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - "
+                        . (($backyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")
                 ), $feedbackButtonMarkup)); //<html><body> na začátku pomůže, pokud ještě výstup nezačal
     }
-    die("Error {$errorNumber}".(($backyardConf['die_graciously_verbose'])?" - {$errorString}":""));
+    die("Error {$errorNumber}" . (($backyardConf['die_graciously_verbose']) ? " - {$errorString}" : ""));
 }

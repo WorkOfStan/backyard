@@ -38,6 +38,3 @@ function backyard_pageGeneratedIn() {
     my_error_log(round(backyard_getmicrotime() - $backyardPage_timestamp, 4), 6, 6);
     return $str;
 }
-
-
-
