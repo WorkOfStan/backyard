@@ -1,0 +1,9 @@
+{
+    "name": "GodsDev/backyard",
+    "description": "Library of useful functions and classes",
+    "homepage": "https://github.com/GodsDev/backyard",
+    "license": "Apache",
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
