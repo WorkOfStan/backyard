@@ -154,8 +154,8 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
     }
  
     if($postArray){
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS,http_build_query($postArray));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($postArray));
     }
     
     /* cannot be activated when in safe_mode or an open_basedir is set
