@@ -132,14 +132,15 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
 }
 
 /**
- * gets data from a URL through cURL
+ * gets data from a URL through cURL with optional POST
  * @param string $url
  * @param string $useragent default = 'PHP/cURL'
  * @param int $timeout [seconds] default =5
  * @param string||false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
+ * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
  * @return array or false
  */
-function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false) {
+function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array() ) {
     my_error_log("backyard_getData({$url},{$useragent},{$timeout});", 5, 16);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -151,6 +152,12 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
             my_error_log("Custom headers {$customHeaders} FAILED to be set", 2, 16);
         }
     }
+ 
+    if($postArray){
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS,http_build_query($postArray));
+    }
+    
     /* cannot be activated when in safe_mode or an open_basedir is set
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
       curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
