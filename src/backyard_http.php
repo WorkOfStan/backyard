@@ -132,14 +132,15 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
 }
 
 /**
- * gets data from a URL through cURL
+ * gets data from a URL through cURL with optional POST
  * @param string $url
  * @param string $useragent default = 'PHP/cURL'
  * @param int $timeout [seconds] default =5
  * @param string||false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
- * @return array or false
+ * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
+ * @return array
  */
-function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false) {
+function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array() ) {
     my_error_log("backyard_getData({$url},{$useragent},{$timeout});", 5, 16);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -151,6 +152,14 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
             my_error_log("Custom headers {$customHeaders} FAILED to be set", 2, 16);
         }
     }
+    
+    $data = array(); 
+    if($postArray){
+        $data['POST'] = http_build_query($postArray);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data['POST']);
+    }
+    
     /* cannot be activated when in safe_mode or an open_basedir is set
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
       curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
@@ -158,7 +167,7 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $data = array();
+    
     $data['message_body'] = curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
     //@TODO - ovšem získat Location (a zachovat normální message_body výstup) není triviální, viz http://stackoverflow.com/questions/4062819/curl-get-redirect-url-to-a-variable
     /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
