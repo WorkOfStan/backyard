@@ -92,7 +92,7 @@ function my_error_log($message, $level = 0, $error_number = 0) {
             }
         }
         if ($level == 1 && $backyardConf['mail_for_admin_enabled']) {//mailto admin, 130108
-            $resultMail = error_log($message_prefix . "$message\r\n", 1, $backyardConf['mail_for_admin_enabled']);
+            error_log($message_prefix . "$message\r\n", 1, $backyardConf['mail_for_admin_enabled']);
         }
     }
     return $result;

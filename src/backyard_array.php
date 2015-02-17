@@ -1,7 +1,7 @@
 <?php
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
-    require_once 'backyard_my_error_log_dummy.php';
+    require_once __DIR__ . '/backyard_my_error_log_dummy.php';    
 }
 
 /* * ****************************************************************************
@@ -57,7 +57,7 @@ function backyard_getOneColumnFromArray($myArray, $columnName) {
  */
 function backyard_removeOneColumnFromArray($myArray, $columnName) {
     if (!is_array($myArray)) {
-        return array(); //empty array more consistant than false
+        return array(); //empty array more consistent than false
     }
     $result = array();
     foreach ($myArray as $key => $row) {

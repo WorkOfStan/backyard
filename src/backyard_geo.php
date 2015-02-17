@@ -77,11 +77,12 @@ function backyard_getClosestPOI($lat, $long, $poiCategory) {
     );
 
     $listOfPOINearby = backyard_getListOfPOI($poiCategory);
-    if (!$listOfPOINearby)
+    if (!$listOfPOINearby) {
         return false;
+    }
 
     $listOfPOINearbyPreprocessed = array();
-    $roughtDistance = array();
+    $roughDistance = array();
 
     foreach ($listOfPOINearby as $key => $row) {
         $listOfPOINearbyPreprocessed[$key] = array(
@@ -116,8 +117,9 @@ function backyard_getClosestPOI($lat, $long, $poiCategory) {
         } //else too distant
     }
     array_multisort($distanceArray, SORT_ASC, $listOfPOINearbyProcessed);
-    if (!$listOfPOINearbyProcessed)
+    if (!$listOfPOINearbyProcessed) {
         return false;
+    }
     return array(
         'distance_m' => (int) floor($listOfPOINearbyProcessed[0]['distance']),
         'poi_id' => $listOfPOINearbyProcessed[0]['poi_id'],

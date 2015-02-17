@@ -21,7 +21,7 @@ $backyardPage_timestamp = backyard_getmicrotime(); //Initiation of $page_timesta
  * Use a combination of dirname(__FILE__) and subsequent calls to itself until you reach to the home of your '/index.php'. Then, attach this variable (that contains the path) to your included files. 
  * After this, if you copy paste your codes to another servers, it will still run, without requiring any further re-configurations.
  */
-define('__BACKYARDROOT__', dirname(__FILE__));
+define('__BACKYARDROOT__', __DIR__);
 
 /**
  * Random seed initiation for mt_rand()
