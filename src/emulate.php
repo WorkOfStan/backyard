@@ -51,7 +51,7 @@
  * Load Scripts & init
  */
 //require_once ("./functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");
-require_once dirname(__FILE__) . '/backyard_system.php'; //@TODO - is there a way to use the local backyard settings? //@TODO - maybe in future put out of backyard
+require_once __DIR__ . '/backyard_system.php'; //@TODO - is there a way to use the local backyard settings? //@TODO - maybe in future put out of backyard
 /* database *//*
   require_once ("tableName.php"); //configuration of database connection of that script
   require_once (__ROOT__."/lib/connectDB.php");
@@ -61,7 +61,7 @@ require_once dirname(__FILE__) . '/backyard_system.php'; //@TODO - is there a wa
 my_error_log("Knihovny pripojeny", 6, 6);
 
 //$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-require_once (__BACKYARDROOT__ . "/class_HTMLPage.php"); //* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+require_once __BACKYARDROOT__ . "/class_HTMLPage.php"; //* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
 $pageInstance = new HTMLPage("Emulate", "text/html", 1, 0); //jquery yes, style.css no
 //$pageInstance->addToBody("<b>RED info</b><br/>".PHP_EOL);
 /**

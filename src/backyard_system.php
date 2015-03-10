@@ -13,7 +13,7 @@
 /**
  * Initialization
  */
-require_once 'backyard_time.php';
+require_once __DIR__ . '/backyard_time.php';
 $backyardPage_timestamp = backyard_getmicrotime(); //Initiation of $page_timestamp must be the first thing a page will do.
 
 /**
@@ -36,19 +36,19 @@ define('__BACKYARDROOT__', __DIR__);
   mt_srand(make_seed());
  */
 
-require_once 'backyard_error_log.php';
-require_once 'backyard_mysql.php';
+require_once __BACKYARDROOT__ . '/backyard_error_log.php';
+require_once __BACKYARDROOT__ . '/backyard_mysql.php';
 
 if (!isset($ERROR_HACK)) {//120918, aby bylo možné nastavit ERROR_HACK jako proměnnou ve stránce před zavoláním functions.php
     $ERROR_HACK = 0;
 }
-require_once (__BACKYARDROOT__ . "/conf/conf.php");
+require_once __BACKYARDROOT__ . "/conf/conf.php";
 
 $RUNNING_TIME = 0; //110812, k profilování rychlosti
 
-include_once 'backyard_crypt.php';
-require_once 'backyard_my_error_log_dummy.php'; //required AFTER my_error_log is defined; contains backyard_dieGraciously()
-include_once 'functions_encoding.php';
-require_once 'backyard_http.php';
-require_once 'backyard_array.php';
-require_once 'backyard_json.php';
+include_once __BACKYARDROOT__ . '/backyard_crypt.php';
+require_once __BACKYARDROOT__ . '/backyard_my_error_log_dummy.php'; //required AFTER my_error_log is defined; contains backyard_dieGraciously()
+include_once __BACKYARDROOT__ . '/functions_encoding.php';
+require_once __BACKYARDROOT__ . '/backyard_http.php';
+require_once __BACKYARDROOT__ . '/backyard_array.php';
+require_once __BACKYARDROOT__ . '/backyard_json.php';

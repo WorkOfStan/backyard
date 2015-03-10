@@ -71,13 +71,15 @@
  * 130510: cookie muís vymazat logout tlačítko, např. onclick='document.cookie=\"logintimestamp=\";informAboutEid(68);'
  * 
  */
-if (!defined('__BACKYARDROOT__'))
+if (!defined('__BACKYARDROOT__')){
     die('backyard must be initialized beforehand');
 //require_once ("../lib/functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");//@TODO - jinak, aby univerzálně
+}
 
-if (!isset($apiCredentials))
+if (!isset($apiCredentials)){
     die('apiCredentials must be preinitialized');
 //require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
+}
 
 /* * *****************************************************************************
  *  Social login  //@TODO 3 - standardize this into LIB

@@ -58,3 +58,6 @@ $backyardConf['error_hacked']           = false;    //so that *ERROR_HACK* GET p
 src/emulator.php get_data in a defined manner (@TODO - better describe)
 
 src/emulate.php is an envelope for emulator.php
+
+Geolocation functions described in src/backyard_geo.php .
+Expected structure of geo related tables is in sql/poi.sql .
