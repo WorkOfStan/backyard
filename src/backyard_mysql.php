@@ -49,7 +49,7 @@ function backyard_mysql_query($mysql_query_string, $link_identifier = NULL, $ERR
  * @return mixed: array one or two dimensional or false
  */
 function backyard_mysqlQueryArray($query, $justOneRow = false, $link_identifier = NULL) {
-    $mysql_query_result = backyard_mysql_query($query, $link_identifier) or die_graciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
+    $mysql_query_result = backyard_mysql_query($query, $link_identifier) or backyard_dieGraciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
     if (is_bool($mysql_query_result)) {
         return $mysql_query_result; //For other type of SQL statements, INSERT, UPDATE, DELETE, DROP, etc, mysql_query() returns TRUE on success or FALSE on error.
     }
@@ -95,6 +95,7 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
 }
 
 /**
+ * Open as persistent: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
  */
 class backyard_mysqli extends mysqli {
@@ -107,7 +108,12 @@ class backyard_mysqli extends mysqli {
                     '5013', //@TODO 3 -  test die_graciously
                     'Connect Error (' . mysqli_connect_errno() . ') '
                     . mysqli_connect_error());
-        } //120914
+        }
+        
+        //change character set to utf8
+        if(!$this->set_charset("utf8")){
+            my_error_log(sprintf("Error loading character set utf8: %s\n", $uaprofDBConnection->error), 2); 
+        }
     }
 
     //120914
@@ -177,7 +183,7 @@ class backyard_mysqli extends mysqli {
         if ($mysqlQueryResult != false) {
             $mysqlQueryResult->close(); //free result set
         }
-        return $result; //returns two dimensional array
+        return $result; //returns two dimensional array or false
     }
 
     /**
