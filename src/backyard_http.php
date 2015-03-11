@@ -138,9 +138,9 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
  * @param int $timeout [seconds] default =5
  * @param string||false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
  * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
- * @return array
+ * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', ['REDIRECT_URL',])
  */
-function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array() ) {
+function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
     my_error_log("backyard_getData({$url},{$useragent},{$timeout});", 5, 16);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -152,36 +152,67 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
             my_error_log("Custom headers {$customHeaders} FAILED to be set", 2, 16);
         }
     }
-    
-    $data = array(); 
-    if($postArray){
+
+    $data = array();
+    if ($postArray) {
         $data['POST'] = http_build_query($postArray);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$data['POST']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data['POST']);
     }
-    
+
     /* cannot be activated when in safe_mode or an open_basedir is set
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
       curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
      */
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
-    $data['message_body'] = curl_exec($ch); //@TODO - pokud je 301 nebo 302, tak vypsat hlavičky do kodu a udělat z toho proklik anebo možná jít o krok dál a rovnou stáhnout i následující - je potřeba počítat do 5 redirektů
-    //@TODO - ovšem získat Location (a zachovat normální message_body výstup) není triviální, viz http://stackoverflow.com/questions/4062819/curl-get-redirect-url-to-a-variable
+
+
+    $response = curl_exec($ch);
+    //@TODO - if response is 301 or 302, then dump header into output and make it clickable or maybe download the next step automatically - it is necessary however to stop after 5 redirects
     /* how to DEBUG some wrong content that force redirection - such as http://www.alfa.gods.cz/lib/emulator.php?url=http%3A%2F%2Fpic4mms.com%2F&original=1 * /
       header("Content-type: text/plain");//debug
       print_r(str_replace("i", "E", $data['MARKUP']));//debug
       exit;
       /* */
+
+    // http://stackoverflow.com/a/9183272
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $data['message_body'] = substr($response, $header_size);
     if (!$data['message_body']) {
         my_error_log("Curl error: " . curl_error($ch) . " on {$url}", 2);
+        my_error_log(print_r($data,true),2);
+        my_error_log($response,2);
     }
+
+    // $fields contains array of string which are lines of response header
+    $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', 
+            substr($response, 0, $header_size) //message header
+    ));
+    // http://stackoverflow.com/a/4243667
+    foreach ($fields as $field) {
+        if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
+            $match[1] = preg_replace_callback('/(?<=^|[\x09\x20\x2D])./', function($matches) {
+                return strtoupper($matches[0]);
+            }, strtolower(trim($match[1])));
+            if (isset($retVal[$match[1]])) {
+                $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+            } else {
+                $retVal[$match[1]] = trim($match[2]);
+            }
+        }
+    }
+    // $retVal contains array("header_name": "header_value")
+    if (isset($retVal['Location'])) {
+        $data['REDIRECT_URL'] = $retVal['Location'];
+    }
+
     $data['CONTENT-TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
     $data['CONTENT_TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-    $data['HTTP_CODE'] = curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout
-    //$data['REDIRECT_URL'] = curl_getinfo($ch,CURLINFO_REDIRECT_URL);//added to PHP 5.3.7 - but not documented
+    $data['HTTP_CODE'] = curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout    
     curl_close($ch);
     return $data;
 }

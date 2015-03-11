@@ -31,13 +31,16 @@ function backyard_minifyJSON($jsonInput, $logLevel = 5) {
  * @param string $jsonString to be minified
  * @param bool $exitAfterOutput  - optional - default is to let the script continue
  * @param int $logLevel - optional - default is not to be verbose
+ * @return string minified JSON (works only if $exitAfterOuput === false)
  */
 function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
     header("Content-type: application/json");
-    echo(backyard_MinifyJSON($jsonString, $logLevel)); //jako json
+    $minifiedJson = backyard_MinifyJSON($jsonString, $logLevel);
+    echo($minifiedJson);
     if ($exitAfterOutput) {
         exit;
     }
+    return $minifiedJson;
 }
 
 /**

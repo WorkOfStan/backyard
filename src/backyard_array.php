@@ -34,17 +34,20 @@ function backyard_inArrayWildcards($needle, $haystack) {
 
 /**
  * Returns array named $columnName from $myArray
+ * Ignores rows where the field $columnName is not set
  * @param array $myArray
  * @param string $columnName
  * @return array
  */
 function backyard_getOneColumnFromArray($myArray, $columnName) {
     if (!is_array($myArray)) {
-        return array(); //empty array more consistant than false
+        return array(); //empty array more consistent than false
     }
     $result = array();
     foreach ($myArray as $key => $row) {
-        $result[$key] = $row[$columnName];
+        if(isset($row[$columnName])){
+            $result[$key] = $row[$columnName];
+        }
     }
     return $result;
 }
@@ -94,9 +97,10 @@ function backyard_dumpArrayAsOneLine($myArray) {
  * @param array $searchedArray
  * @param string $columnName
  * @param bool $allExactMatches - default false; if true function returns array with all exact matches
+ * @param bool $columnAlwaysExpected - default true; if false function does not log the missing column in a row as an error
  * @return mixed (string if found, false otherwise)
  */
-function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false) {
+function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
     if (!is_array($searchedArray)) {
         my_error_log("ArrayVlookup: array parameter is not an array", 2);
         return false;
@@ -113,9 +117,47 @@ function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $all
                     return $row;
                 }
             }
-        } else {
+        } elseif ($columnAlwaysExpected) {
             my_error_log("ArrayVlookup: $columnName not in " . print_r($row, true), 3);
         }
     }
     return $allExactMatches ? $allMatchingRows : false;
+}
+
+/*
+ * http://www.codeproject.com/Questions/780780/PHP-Finding-differences-in-two-multidimensional-ar
+[NOTE BY danbrown AT php DOT net: The array_diff_assoc_recursive function is a 
+combination of efforts from previous notes deleted.
+Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com), 
+(sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
+*/
+function array_diff_assoc_recursive($array1, $array2)
+{
+	foreach($array1 as $key => $value)
+	{
+		if(is_array($value))
+		{
+			if(!isset($array2[$key]))
+			{
+				$difference[$key] = $value;
+			}
+			elseif(!is_array($array2[$key]))
+			{
+				$difference[$key] = $value;
+			}
+			else
+			{
+				$new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+				if($new_diff != FALSE)
+				{
+					$difference[$key] = $new_diff;
+				}
+			}
+		}
+		elseif(!isset($array2[$key]) || $array2[$key] != $value)
+		{
+			$difference[$key] = $value;
+		}
+	}
+	return !isset($difference) ? 0 : $difference;
 }
