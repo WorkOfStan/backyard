@@ -184,8 +184,8 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
     $data['message_body'] = substr($response, $header_size);
     if (!$data['message_body']) {
         my_error_log("Curl error: " . curl_error($ch) . " on {$url}", 2);
-        my_error_log(print_r($data,true),2);
-        my_error_log($response,2);
+        my_error_log(print_r($data,true) . " response:" . ($response?"TRUE":"FALSE"),2);
+        //my_error_log($response,2);
     }
 
     // $fields contains array of string which are lines of response header
