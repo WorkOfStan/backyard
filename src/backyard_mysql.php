@@ -97,6 +97,7 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
 /**
  * Open as persistent: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
+ * Sets the connection charset to utf-8 and collation to utf8_general_ci
  */
 class backyard_mysqli extends mysqli {
 
@@ -112,7 +113,7 @@ class backyard_mysqli extends mysqli {
         
         //change character set to utf8
         if(!$this->set_charset("utf8")){
-            my_error_log(sprintf("Error loading character set utf8: %s\n", $uaprofDBConnection->error), 2); 
+            my_error_log(sprintf("Error loading character set utf8: %s\n", $this->error), 2); 
         }
     }
 
@@ -128,27 +129,29 @@ class backyard_mysqli extends mysqli {
      */
     public function query($sql, $ERROR_LOG_OUTPUT = true) { //S.R. upravuji dle functions.php ... make_mysql_query
         if ($ERROR_LOG_OUTPUT) {
-            my_error_log("Start of query", 6, 11);
+            my_error_log("Start of query {$sql}", 5, 11);
         }
-        if ($sql != "") {
+        if ($sql == "") {
+            if ($ERROR_LOG_OUTPUT) {
+                my_error_log("No mysql_query_string set. End of query", 1, 11); //debug
+                //my_error_log("End of query", 6, 11);                
+            }
+            return false;
+        }
+        //if ($sql != "") {
             // here, we could log the query to sql.log file
             // note that, no error check is being made for this file
             //file_put_contents('/tmp/sql.log', $sql . "\n", FILE_APPEND);
-            if ($ERROR_LOG_OUTPUT) {
-                my_error_log($sql, 5, 11);
-            }
+            //if ($ERROR_LOG_OUTPUT) {
+            //    my_error_log($sql, 5, 11);
+            //}
             $result = @parent::query($sql); //parent query method called with @ operator, to supress error messages
             if ($this->errno != 0) {
                 if ($ERROR_LOG_OUTPUT) {
                     my_error_log("{$this->errno} : {$this->error} /with query: {$sql}", 1, 11);
                 }
             }
-        } else {
-            $result = false;
-            if ($ERROR_LOG_OUTPUT) {
-                my_error_log("No mysql_query_string set", 1, 11); //debug
-            }
-        }
+        //}
         if ($ERROR_LOG_OUTPUT) {
             my_error_log("End of query", 6, 11);
         }
