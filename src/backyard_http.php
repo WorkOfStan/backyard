@@ -115,7 +115,7 @@ function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
  * Usage: echo curPageURL();
  * Added into dada/fb/lib.php: 2010-11-03
  * 
- * @param type $includeTheQueryPart
+ * @param bool $includeTheQueryPart
  * @return string
  */
 function backyard_getCurPageURL($includeTheQueryPart = true) {
@@ -165,7 +165,7 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
       curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
      */
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    //writes connection info to STDERR, only for debug//curl_setopt($ch, CURLOPT_VERBOSE, 1);
     curl_setopt($ch, CURLOPT_HEADER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -232,7 +232,7 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
  * 140714, moved to backyard_http
  * 
  * 
- * @param type $URL_STRING
+ * @param string $URL_STRING
  * @return int|string
  */
 function backyard_getHTTPstatusCode($URL_STRING) {
