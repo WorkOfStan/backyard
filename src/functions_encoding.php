@@ -7,8 +7,8 @@
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $text
- * @return type
+ * @param string $text
+ * @return string
  */
 function fix_xml($text) {
     $text = str_replace("&", "&amp;", $text);
@@ -22,8 +22,8 @@ function fix_xml($text) {
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $text
- * @return type
+ * @param string $text
+ * @return string
  */
 function fix_html_input($text) {
     $text = str_replace("\"", "&quot;", $text);
@@ -35,8 +35,8 @@ function fix_html_input($text) {
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $string
- * @return type
+ * @param string $string
+ * @return string
  */
 function encode_wml_entity($string) {
 // encode &amp; first. pouzito v administraci, ale proc preklada jen '&' ??
@@ -71,8 +71,8 @@ function encode_wml_entity($string) {
  * internal function for decode_wml_entity()
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $dec
- * @return type
+ * @param int $dec
+ * @return string
  */
 function unichr($dec) {
     if ($dec < 128) {
@@ -91,8 +91,8 @@ function unichr($dec) {
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $string
- * @return type
+ * @param string $string
+ * @return string
  */
 function decode_wml_entity($string) {
     return (preg_replace('/&#x([a-f0-9]+);/mei', "unichr(0x\\1)", $string));
@@ -101,8 +101,8 @@ function decode_wml_entity($string) {
 /**
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  * 
- * @param type $string
- * @return type
+ * @param string $string
+ * @return string
  */
 function strip_diacritics($string) {
     $trans = array("á" => "a", "ä" => "a", "č" => "c", "ď" => "d", "é" => "e", "ě" => "e", "ë" => "e", "í" => "i", "&#239;" => "i", "ň" => "n", "ó" => "o", "ö" => "o", "ř" => "r", "š" => "s", "ť" => "t", "ú" => "u", "ů" => "u", "ü" => "u", "ý" => "y", "&#255;" => "y", "ž" => "z", "Á" => "A", "Ä" => "A", "Č" => "C", "Ď" => "D", "É" => "E", "Ě" => "E", "Ë" => "E", "Í" => "I", "&#207;" => "I", "Ň" => "N", "Ó" => "O", "Ö" => "O", "Ř" => "R", "Š" => "S", "Ť" => "T", "Ú" => "U", "Ů" => "U", "Ü" => "U", "Ý" => "Y", "&#376;" => "Y", "Ž" => "Z");

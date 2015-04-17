@@ -3,8 +3,8 @@
 /**
  * returns the custom length unique id; default is 10
  * http://phpgoogle.blogspot.com/2007/08/four-ways-to-generate-unique-id-by-php.html
- * @param type $random_id_length
- * @return type
+ * @param int $random_id_length
+ * @return string
  */
 function backyard_randomId($random_id_length = 10) {
     //generate a random id encrypt it and store it in $rnd_id 

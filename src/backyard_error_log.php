@@ -31,8 +31,8 @@
  * @global array $backyardConf
  * 
  * @param string $message Zpráva k vypsání - při použití error_number bude obsahovat doplňující info
- * @param type $level Úroveň chyby
- * @param type $error_number Číslo chyby, dle které lze chybu vyhodnotit .. bude zapsaná v admin návodu apod. - zatím nepoužito
+ * @param int $level Úroveň chyby
+ * @param int $error_number Číslo chyby, dle které lze chybu vyhodnotit .. bude zapsaná v admin návodu apod. - zatím nepoužito
  * @return bool
  * 
  * 

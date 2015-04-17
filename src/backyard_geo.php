@@ -63,8 +63,8 @@ require_once __BACKYARDROOT__ . "/conf/conf.php";
  * contains name of the table with points of interest.
  * 
  * @global array $backyardConf
- * @param float $lat
- * @param float $long
+ * @param float $lat (in database as double)
+ * @param float $long (in database as double)
  * @param mixed $poiCategory (may be integer or string with comma separated integers) according to table set in $backyardConf['geo_poi_list_table_name']
  * @param object $poiConnection
  * @return array

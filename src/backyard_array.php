@@ -102,7 +102,7 @@ function backyard_dumpArrayAsOneLine($myArray) {
  */
 function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
     if (!is_array($searchedArray)) {
-        my_error_log("ArrayVlookup: array parameter is not an array", 2);
+        my_error_log("ArrayVlookup: second parameter is not an array", 2);
         return false;
     }
 

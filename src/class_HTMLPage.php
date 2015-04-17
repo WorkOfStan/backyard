@@ -75,13 +75,13 @@ class HTMLPage {
 
     /**
      *
-     * @param type $TITLE [optional]
-     * @param type $CONTENT_TYPE [optional] If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
-     * @param type $LOAD_JQ [optional]
-     * @param type $LOAD_STYLE [optional]
-     * @param type $LOAD_JQUERYMOBILE [optional]
-     * @param type $beforeViewport [optional]
-     * @param type $manifestCache [optional]
+     * @param string $TITLE [optional]
+     * @param string $CONTENT_TYPE [optional] If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+     * @param mixed $LOAD_JQ [optional]
+     * @param mixed $LOAD_STYLE [optional]
+     * @param mixed $LOAD_JQUERYMOBILE [optional]
+     * @param string $beforeViewport [optional]
+     * @param string $manifestCache [optional]
      * 
      * If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
      * 

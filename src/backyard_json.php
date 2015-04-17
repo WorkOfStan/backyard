@@ -10,8 +10,8 @@ if (!function_exists('my_error_log')) {
 
 /**
  * @desc Minify JSON and if JSON is not valid it report it in the my_error_log and outputs a preformatted error500 json string
- * @param type $jsonInput
- * @param type $logLevel - optional - default is not to be verbose
+ * @param string $jsonInput
+ * @param int $logLevel - optional - default is not to be verbose
  * @return string
  */
 function backyard_minifyJSON($jsonInput, $logLevel = 5) {
