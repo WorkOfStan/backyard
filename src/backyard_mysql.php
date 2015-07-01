@@ -1,4 +1,5 @@
 <?php
+
 //backyard 2 compliant
 if (!function_exists('my_error_log')) {
     require_once __DIR__ . '/backyard_my_error_log_dummy.php';
@@ -95,14 +96,34 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
 }
 
 /**
- * Open as persistent: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
+ * __construct
+ * @param string $host_port accepts either hostname (or IPv4) or hostname:port
+ * @param string $user
+ * @param string $pass
+ * @param string $db
+ * 
+ * To open as persistent use: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  */
 class backyard_mysqli extends mysqli {
 
-    public function __construct($host, $user, $pass, $db) {
-        parent::__construct($host, $user, $pass, $db);
+    public function __construct($host_port, $user, $pass, $db) {
+        $temp = explode(":", $host_port);
+        $host = (string) $temp[0];
+        if (isset($temp[1])) {
+            $port = (int) $temp[1];
+        }
+        if (isset($port)) {
+            if ($host === 'localhost') {
+                $host = "127.0.0.1"; //localhost uses just the default port
+            }
+            my_error_log("Connecting to $host, $user, pass, $db, $port", 5); //debug
+            parent::__construct($host, $user, $pass, $db, $port);
+        } else {
+            my_error_log("Connecting to $host, $user, pass, $db", 5); //debug
+            parent::__construct($host, $user, $pass, $db);
+        }
 
         if (mysqli_connect_error()) {
             backyard_dieGraciously(
@@ -110,10 +131,10 @@ class backyard_mysqli extends mysqli {
                     'Connect Error (' . mysqli_connect_errno() . ') '
                     . mysqli_connect_error());
         }
-        
+
         //change character set to utf8
-        if(!$this->set_charset("utf8")){
-            my_error_log(sprintf("Error loading character set utf8: %s\n", $this->error), 2); 
+        if (!$this->set_charset("utf8")) {
+            my_error_log(sprintf("Error loading character set utf8: %s\n", $this->error), 2);
         }
     }
 
@@ -139,18 +160,18 @@ class backyard_mysqli extends mysqli {
             return false;
         }
         //if ($sql != "") {
-            // here, we could log the query to sql.log file
-            // note that, no error check is being made for this file
-            //file_put_contents('/tmp/sql.log', $sql . "\n", FILE_APPEND);
-            //if ($ERROR_LOG_OUTPUT) {
-            //    my_error_log($sql, 5, 11);
-            //}
-            $result = @parent::query($sql); //parent query method called with @ operator, to supress error messages
-            if ($this->errno != 0) {
-                if ($ERROR_LOG_OUTPUT) {
-                    my_error_log("{$this->errno} : {$this->error} /with query: {$sql}", 1, 11);
-                }
+        // here, we could log the query to sql.log file
+        // note that, no error check is being made for this file
+        //file_put_contents('/tmp/sql.log', $sql . "\n", FILE_APPEND);
+        //if ($ERROR_LOG_OUTPUT) {
+        //    my_error_log($sql, 5, 11);
+        //}
+        $result = @parent::query($sql); //parent query method called with @ operator, to supress error messages
+        if ($this->errno != 0) {
+            if ($ERROR_LOG_OUTPUT) {
+                my_error_log("{$this->errno} : {$this->error} /with query: {$sql}", 1, 11);
             }
+        }
         //}
         if ($ERROR_LOG_OUTPUT) {
             my_error_log("End of query", 6, 11);
@@ -207,7 +228,7 @@ class backyard_mysqli extends mysqli {
                 . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
         $mysql_query_array = $this->queryArray($query, true);
         if ($mysql_query_array) {
-            $result += (int)$mysql_query_array["$metricDimension"];
+            $result += (int) $mysql_query_array["$metricDimension"];
         }
         return $result;
     }
