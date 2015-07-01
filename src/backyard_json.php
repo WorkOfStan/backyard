@@ -32,6 +32,8 @@ function backyard_minifyJSON($jsonInput, $logLevel = 5) {
  * @param bool $exitAfterOutput  - optional - default is to let the script continue
  * @param int $logLevel - optional - default is not to be verbose
  * @return string minified JSON (works only if $exitAfterOuput === false)
+ * 
+ * @todo - add posibility to return HTTP status codes other than 200  
  */
 function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
     header("Content-type: application/json");
