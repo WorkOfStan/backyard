@@ -105,15 +105,25 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
  * To open as persistent use: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
+ * @todo add IPv6 , e.g ::1 as $host_port
  */
 class backyard_mysqli extends mysqli {
 
     public function __construct($host_port, $user, $pass, $db) {
         $temp = explode(":", $host_port);
-        $host = (string) $temp[0];
-        if (isset($temp[1])) {
-            $port = (int) $temp[1];
+        
+        if($temp[0] === 'p'){
+            $host = 'p:' . (string) $temp[1];
+            if (isset($temp[2])) {
+                $port = (int) $temp[2];
+            }            
+        } else {
+            $host = (string) $temp[0];
+            if (isset($temp[1])) {
+                $port = (int) $temp[1];
+            }
         }
+        
         if (isset($port)) {
             if ($host === 'localhost') {
                 $host = "127.0.0.1"; //localhost uses just the default port
