@@ -37,17 +37,20 @@ function backyard_inArrayWildcards($needle, $haystack) {
  * Ignores rows where the field $columnName is not set
  * @param array $myArray
  * @param string $columnName
+ * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
  * @return array
  */
-function backyard_getOneColumnFromArray($myArray, $columnName) {
+function backyard_getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected = false) {
     if (!is_array($myArray)) {
         return array(); //empty array more consistent than false
     }
     $result = array();
     foreach ($myArray as $key => $row) {
-        if(isset($row[$columnName])){
+        if(isset($row[$columnName]) || is_null($row[$columnName])){
             $result[$key] = $row[$columnName];
-        }
+        } elseif ($columnAlwaysExpected) {
+            my_error_log("getOneColumnFromArray: {$columnName} not in " . print_r($row, true), 3);
+        }        
     }
     return $result;
 }
@@ -118,7 +121,7 @@ function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $all
                 }
             }
         } elseif ($columnAlwaysExpected) {
-            my_error_log("ArrayVlookup: $columnName not in " . print_r($row, true), 3);
+            my_error_log("ArrayVlookup: {$columnName} not in " . print_r($row, true), 3);
         }
     }
     return $allExactMatches ? $allMatchingRows : false;
