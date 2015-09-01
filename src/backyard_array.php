@@ -4,6 +4,17 @@ if (!function_exists('my_error_log')) {
     require_once __DIR__ . '/backyard_my_error_log_dummy.php';
 }
 
+/**
+ * @todo: http://php.net/manual/en/function.array-key-exists.php#107786
+ * If you want to take the performance advantage of isset() while keeping the NULL element correctly detected, use this:
+
+    if (isset(..) || array_key_exists(...))
+    {
+    ...
+    }
+ * 
+ */
+
 /* * ****************************************************************************
  * ARRAY FUNCTIONS
  */
@@ -46,7 +57,7 @@ function backyard_getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpe
     }
     $result = array();
     foreach ($myArray as $key => $row) {
-        if(isset($row[$columnName]) || is_null($row[$columnName])){
+        if (array_key_exists($columnName, $row)) {
             $result[$key] = $row[$columnName];
         } elseif ($columnAlwaysExpected) {
             my_error_log("getOneColumnFromArray: {$columnName} not in " . print_r($row, true), 3);
@@ -112,7 +123,7 @@ function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $all
     $allMatchingRows = array(); //used only if $allExactMatches === true
 
     foreach ($searchedArray as $key => $row) {
-        if (isset($row[$columnName])) {
+        if (array_key_exists($columnName, $row)) {
             if ($row[$columnName] == $searchedValue) {
                 if ($allExactMatches) {
                     $allMatchingRows[$key] = $row;
@@ -140,7 +151,7 @@ function array_diff_assoc_recursive($array1, $array2)
 	{
 		if(is_array($value))
 		{
-			if(!isset($array2[$key]))
+			if(!array_key_exists($key, $array2))
 			{
 				$difference[$key] = $value;
 			}
@@ -157,7 +168,7 @@ function array_diff_assoc_recursive($array1, $array2)
 				}
 			}
 		}
-		elseif(!isset($array2[$key]) || $array2[$key] != $value)
+		elseif(!array_key_exists($key, $array2) || $array2[$key] != $value)
 		{
 			$difference[$key] = $value;
 		}
