@@ -111,18 +111,16 @@ function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
 }
 
 /**
- * Source: http://www.webcheatsheet.com/PHP/get_current_page_url.php
- * Usage: echo curPageURL();
- * Added into dada/fb/lib.php: 2010-11-03
+ * Inspired by http://www.webcheatsheet.com/PHP/get_current_page_url.php
  * 
  * @param bool $includeTheQueryPart
  * @return string
  */
 function backyard_getCurPageURL($includeTheQueryPart = true) {
-    if ($includeTheQueryPart) {//added 120819
-        $endGame = $_SERVER["REQUEST_URI"];
+    if ($includeTheQueryPart) {
+        $endGame = $_SERVER["REQUEST_URI"]; //including RewriteRule result
     } else {
-        $endGame = $_SERVER["SCRIPT_NAME"]; //without the query part
+        $endGame = $_SERVER["SCRIPT_NAME"]; //without the query part and RewriteRule result
     }
     $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
     $port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));

@@ -128,10 +128,12 @@ class backyard_mysqli extends mysqli {
             if ($host === 'localhost') {
                 $host = "127.0.0.1"; //localhost uses just the default port
             }
-            my_error_log("Connecting to $host, $user, pass, $db, $port", 5); //debug
+            $tempErrorString = "Connecting to $host, $user, pass, $db, $port";
+            my_error_log($tempErrorString, 5); //debug
             parent::__construct($host, $user, $pass, $db, $port);
         } else {
-            my_error_log("Connecting to $host, $user, pass, $db", 5); //debug
+            $tempErrorString = "Connecting to $host, $user, pass, $db";
+            my_error_log($tempErrorString, 5); //debug
             parent::__construct($host, $user, $pass, $db);
         }
 
@@ -139,7 +141,8 @@ class backyard_mysqli extends mysqli {
             backyard_dieGraciously(
                     '5013', //@TODO 3 -  test die_graciously
                     'Connect Error (' . mysqli_connect_errno() . ') '
-                    . mysqli_connect_error());
+                    . mysqli_connect_error() 
+                    . " | " . $tempErrorString);
         }
 
         //change character set to utf8
