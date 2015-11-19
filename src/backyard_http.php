@@ -179,9 +179,10 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
 
     // http://stackoverflow.com/a/9183272
     $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout        
     $data['message_body'] = substr($response, $header_size);
-    if (!$data['message_body']) {
-        my_error_log("Curl error: " . curl_error($ch) . " on {$url}", 2);
+    if (!$data['message_body'] && !in_array($data['HTTP_CODE'], array(301, 302))) {//redirects may have empty body
+        my_error_log("Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}", 2);
         if (count($data) > 1) {my_error_log(print_r($data, true), 2);}
         if ($response) {my_error_log($response, 2);}
     }
@@ -210,7 +211,7 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
 
     $data['CONTENT-TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
     $data['CONTENT_TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-    $data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout    
+    //$data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout    
     curl_close($ch);
     return $data;
 }
