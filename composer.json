@@ -3,6 +3,13 @@
     "description": "Library of useful functions and classes",
     "homepage": "https://github.com/GodsDev/backyard",
     "license": "Apache",
+    "authors": [
+        {
+            "name": "Stanislav Rejthar",
+            "email": "rejthar@stanislavrejthar.com",
+            "homepage": "http://www.stanislavrejthar.com/"
+        }
+    ],
     "require": {
         "php": ">=5.3.0"
     }

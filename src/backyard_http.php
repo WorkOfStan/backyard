@@ -177,11 +177,15 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
       exit;
       /* */
 
+//    if($response === false){
+//        $curlError = curl_error($ch);// to prevent some previous curl_error($ch) be reported
+//        my_error_log("Curl error: {$curlError}", 2); //@todo if curl_exec($ch) === false then some operation on $response below are meaningless
+//    }
     // http://stackoverflow.com/a/9183272
     $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout        
-    $data['message_body'] = substr($response, $header_size);
-    if (!$data['message_body'] && !in_array($data['HTTP_CODE'], array(301, 302))) {//redirects may have empty body
+    if($response) {$data['message_body'] = substr($response, $header_size);}
+    if (!$response || (!$data['message_body'] && !in_array($data['HTTP_CODE'], array(301, 302)))) {//redirects may have empty body
         my_error_log("Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}", 2);
         if (count($data) > 1) {my_error_log(print_r($data, true), 2);}
         if ($response) {my_error_log($response, 2);}
