@@ -42,7 +42,7 @@ require_once __BACKYARDROOT__ . '/backyard_mysql.php';
 if (!isset($ERROR_HACK)) {//120918, aby bylo možné nastavit ERROR_HACK jako proměnnou ve stránce před zavoláním functions.php
     $ERROR_HACK = 0;
 }
-require_once __BACKYARDROOT__ . "/conf/conf.php";
+require_once __BACKYARDROOT__ . "/conf/conf.php";//due to thisServer() in conf_private.php backyard_dieGraciously() definition MUST precede or else
 
 $RUNNING_TIME = 0; //110812, k profilování rychlosti
 
