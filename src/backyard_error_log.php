@@ -75,7 +75,11 @@ function my_error_log($message, $level = 0, $error_number = 0) {
         }
 
         $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $backyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] ["
-                . $username . "@" . gethostbyaddr($_SERVER['REMOTE_ADDR']) . "] [" . $RUNNING_TIME . "] [" . $_SERVER["REQUEST_URI"] . "] ";
+                . $username . "@" 
+                . (isset($_SERVER['REMOTE_ADDR'])?gethostbyaddr($_SERVER['REMOTE_ADDR']):'-')//phpunit test does not set REMOTE_ADDR
+                . "] [" . $RUNNING_TIME . "] [" 
+                . (isset($_SERVER["REQUEST_URI"])?$_SERVER["REQUEST_URI"]:'-')//phpunit test does not set REQUEST_URI
+                . "] ";
         //gethostbyaddr($_SERVER['REMOTE_ADDR'])// co udělá s IP, která nelze přeložit? nebylo by lepší logovat přímo IP?
         if (($backyardConf['error_log_message_type'] == 3) && !$backyardConf['logging_file']) {//$logging_file not set and it should be
             $result = error_log($message_prefix . "(error: logging_file should be set!) $message"); //zapisuje do default souboru
