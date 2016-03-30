@@ -12,10 +12,13 @@ class Backyard {
     protected $backyardConf = array();
 
     public function __construct(array $backyardConfConstruct = array()) {
-        global $backyardConf;
+        //global $backyardConf;
         $this->backyardConf = $backyardConfConstruct;
         $backyardConf = $this->backyardConf;        
         require_once __DIR__ . '/../src/backyard_system.php';
+        
+        $this->Json = new \GodsDev\Backyard\Json($backyardConf);
+        
     }
 
 }
