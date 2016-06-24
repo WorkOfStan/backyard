@@ -1,9 +1,9 @@
 <?php
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
 
-//backyard 2 compliant
-if (!function_exists('my_error_log')) {
-    require_once __DIR__ . '/backyard_my_error_log_dummy.php';
-}
+
+class BackyardMysql {
 
 /* * ****************************************************************************
  * Database (MySQL) FUNCTIONS
@@ -17,7 +17,7 @@ if (!function_exists('my_error_log')) {
  * @param boolean $ERROR_LOG_OUTPUT [optional]
  * @return a resource on success, or <b>FALSE</b> on error
  */
-function backyard_mysql_query($mysql_query_string, $link_identifier = NULL, $ERROR_LOG_OUTPUT = true) {
+public function mysqlQuery($mysql_query_string, $link_identifier = NULL, $ERROR_LOG_OUTPUT = true) {
     //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false);
     if ($ERROR_LOG_OUTPUT) {
         my_error_log("Start of query", 6, 11);
@@ -49,7 +49,7 @@ function backyard_mysql_query($mysql_query_string, $link_identifier = NULL, $ERR
  * @param resource $link_identifier [optional]
  * @return mixed: array one or two dimensional or false
  */
-function backyard_mysqlQueryArray($query, $justOneRow = false, $link_identifier = NULL) {
+public function mysqlQueryArray($query, $justOneRow = false, $link_identifier = NULL) {
     $mysql_query_result = backyard_mysql_query($query, $link_identifier) or backyard_dieGraciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
     if (is_bool($mysql_query_result)) {
         return $mysql_query_result; //For other type of SQL statements, INSERT, UPDATE, DELETE, DROP, etc, mysql_query() returns TRUE on success or FALSE on error.
@@ -83,7 +83,7 @@ function backyard_mysqlQueryArray($query, $justOneRow = false, $link_identifier 
  * @param int $primaryDimensionValue [optional]
  * @return int
  */
-function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
+public function mysqlNextIncrement($link_identifier, $table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
     $result = 1; //default value
     $query = "SELECT `{$metricDimension}` FROM  `{$table}` "
             . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
@@ -93,6 +93,7 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
         $result += (int) $mysql_query_array[$metricDimension];
     }
     return $result;
+}
 }
 
 /**
@@ -107,7 +108,7 @@ function backyard_mysqlNextIncrement($link_identifier, $table, $metricDimension,
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  * @todo add IPv6 , e.g ::1 as $host_port
  */
-class backyard_mysqli extends mysqli {
+class backyard_mysqli extends \mysqli {
 
     public function __construct($host_port, $user, $pass, $db) {
         $temp = explode(":", $host_port);

@@ -1,8 +1,6 @@
 <?php
-//backyard 2 compliant
-if (!function_exists('my_error_log')) {
-    require_once __DIR__ . '/backyard_my_error_log_dummy.php';
-}
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
 
 /* * ****************************************************************************
  * HTTP FUNCTIONS
@@ -32,6 +30,8 @@ if (!function_exists('apache_request_headers')) {
 
 }
 
+class BackyardHttp {
+
 /**
  * http://www.cyberciti.biz/faq/php-redirect/
  * PHP Redirect Code
@@ -42,7 +42,7 @@ if (!function_exists('apache_request_headers')) {
  * @param string $url
  * @param bool $stopCodeExecution default true
  */
-function backyard_movePage($num, $url, $stopCodeExecution = true) {
+public function movePage($num, $url, $stopCodeExecution = true) {
     static $http = array(
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
@@ -97,7 +97,7 @@ function backyard_movePage($num, $url, $stopCodeExecution = true) {
  * @param string $nameOfTheParameter
  * @return string or false
  */
-function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
+public function retrieveFromPostThenGet($nameOfTheParameter) {
     $result = false; //default value
     if (isset($_POST[$nameOfTheParameter])) {
         $result = $_POST[$nameOfTheParameter];
@@ -116,7 +116,7 @@ function backyard_retrieveFromPostThenGet($nameOfTheParameter) {
  * @param bool $includeTheQueryPart
  * @return string
  */
-function backyard_getCurPageURL($includeTheQueryPart = true) {
+public function getCurPageURL($includeTheQueryPart = true) {
     if ($includeTheQueryPart) {
         $endGame = $_SERVER["REQUEST_URI"]; //including RewriteRule result
     } else {
@@ -138,7 +138,7 @@ function backyard_getCurPageURL($includeTheQueryPart = true) {
  * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
  * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', ['REDIRECT_URL',])
  */
-function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
+public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
     my_error_log("backyard_getData({$url},{$useragent},{$timeout});", 5, 16);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -238,7 +238,7 @@ function backyard_getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHe
  * @param string $URL_STRING
  * @return int|string
  */
-function backyard_getHTTPstatusCode($URL_STRING) {
+public function getHTTPstatusCode($URL_STRING) {
     $localDNSserver = array('81.31.47.101'); //@TODO - make configurable!
     $url = parse_url($URL_STRING);
     if ($url['scheme'] != 'http') {
@@ -298,7 +298,7 @@ function backyard_getHTTPstatusCode($URL_STRING) {
     return $result;
 }
 
-function backyard_getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode/1.1") {
+public function getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode/1.1") {
     $url = parse_url($URL_STRING);
     if ($url['scheme'] != 'http') {
         my_error_log("Scheme: {$url['scheme']} not supported by GetHTTPstatusCode", 4, 16); //debug
@@ -332,4 +332,5 @@ function backyard_getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode
 
     socket_close($socket);
     return $response[1];
+}
 }

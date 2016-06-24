@@ -1,12 +1,17 @@
 <?php
-//backyard 2 compliant
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+
+
+class BackyardCrypt {
+
 /**
  * returns the custom length unique id; default is 10
  * http://phpgoogle.blogspot.com/2007/08/four-ways-to-generate-unique-id-by-php.html
  * @param int $random_id_length
  * @return string
  */
-function backyard_randomId($random_id_length = 10) {
+public function randomId($random_id_length = 10) {
     //generate a random id encrypt it and store it in $rnd_id 
     $rnd_id = crypt(uniqid(rand(), 1));
 
@@ -21,4 +26,5 @@ function backyard_randomId($random_id_length = 10) {
     $rnd_id = substr($rnd_id, 0, $random_id_length);
     my_error_log("Random id is " . $rnd_id, 5, 16);
     return ($rnd_id);
+}
 }

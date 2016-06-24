@@ -1,10 +1,16 @@
 <?php
-//backyard 2 compliant
-if (!function_exists('my_error_log')) {
-    require_once __DIR__ . '/backyard_my_error_log_dummy.php';
-}
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
 
-require_once __BACKYARDROOT__ . "/conf/conf.php";
+
+class BackyardGeo {
+        protected $BackyardConf = array();
+
+    public function __construct(array $backyardConfConstruct = array()) {
+        //global $backyardConf;
+        $this->BackyardConf = $backyardConfConstruct;        
+    }
+
 
 /* * ****************************************************************************
  * GEOLOCATION FUNCTIONS
@@ -69,8 +75,8 @@ require_once __BACKYARDROOT__ . "/conf/conf.php";
  * @param object $poiConnection
  * @return array
  */
-function backyard_getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
-    global $backyardConf;
+public function getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
+   // global $backyardConf;
     my_error_log("Looking for closest POI: lat={$lat} long={$long}", 4);
     $uom = 'm';
     //current
@@ -79,7 +85,7 @@ function backyard_getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
         'longitude' => $long
     );
 
-    $listOfPOINearby = backyard_getListOfPOI($poiCategory, $poiConnection);
+    $listOfPOINearby = $this->getListOfPOI($poiCategory, $poiConnection);
     if (!$listOfPOINearby) {
         return false;
     }
@@ -107,8 +113,8 @@ function backyard_getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
     $distanceArray = array();
     $listOfPOINearbyProcessed = array();
     foreach ($listOfPOINearbyPreprocessed as $key => $row) {
-        if ($row['roughDistance'] < $backyardConf['geo_rough_distance_limit']) {
-            $distance = backyard_calculateDistanceFromLatLong(
+        if ($row['roughDistance'] < $this->BackyardConf['geo_rough_distance_limit']) {
+            $distance = $this->calculateDistanceFromLatLong(
                     $startPoint, array(
                 'latitude' => $row['lat'],
                 'longitude' => $row['lng']
@@ -146,14 +152,14 @@ function backyard_getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
  * 
  * bacykard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database only those that do not overpass the perpendicular backyardGeo['rough_distance_limit']
  */
-function backyard_getListOfPOI($poiCategory, $poiConnection) {
-    global $backyardConf;
+public function getListOfPOI($poiCategory, $poiConnection) {
+    //global $backyardConf;
     if (is_int($poiCategory)) {
         $poiCategorySecured = $poiCategory;
     } else {
         $poiCategorySecured = preg_replace("/[^0-9,]/", '', $poiCategory);
     }
-    $query = "SELECT * FROM `{$backyardConf['geo_poi_list_table_name']}` WHERE `category` IN ( " . $poiCategorySecured . " )";
+    $query = "SELECT * FROM `{$this->BackyardConf['geo_poi_list_table_name']}` WHERE `category` IN ( " . $poiCategorySecured . " )";
     $listOfPOINearby = $poiConnection->queryArray($query);
     if (!$listOfPOINearby) {
         my_error_log('No result for query ' . $query, 2, 11);
@@ -169,7 +175,7 @@ function backyard_getListOfPOI($poiCategory, $poiConnection) {
  * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
  * @return float distance
  */
-function backyard_calculateDistanceFromLatLong($point1, $point2, $uom = 'km') {
+public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km') {
     //  Uses Haversine formula to calculate the great circle distance
     //  between two points identified by longitude and latitude
     switch (strtolower($uom)) {
@@ -201,4 +207,5 @@ function backyard_calculateDistanceFromLatLong($point1, $point2, $uom = 'km') {
             sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
     $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
     return $earthMeanRadius * $c;
+}
 }

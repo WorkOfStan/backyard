@@ -16,7 +16,7 @@ class BackyardJson {
  * @param int $logLevel - optional - default is not to be verbose
  * @return string
  */
-public function backyard_minifyJSON($jsonInput, $logLevel = 5) {
+public function minifyJSON($jsonInput, $logLevel = 5) {
     $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
     if ($jsonOutput == 'null') {
         my_error_log("ERROR IN JSON: {$jsonInput}", 1, 16);
@@ -37,7 +37,7 @@ public function backyard_minifyJSON($jsonInput, $logLevel = 5) {
  * 
  * @todo - add posibility to return HTTP status codes other than 200  
  */
-public function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
+public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
     header("Content-type: application/json");
     $minifiedJson = backyard_MinifyJSON($jsonString, $logLevel);
     echo($minifiedJson);
@@ -58,7 +58,7 @@ public function backyard_outputJSON($jsonString, $exitAfterOutput = false, $logL
  * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
  * @return  array or NULL is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 
  */
-public function backyard_jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
+public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
     // search and remove comments like /* */ and //
     $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
 
@@ -81,7 +81,7 @@ public function backyard_jsonCleanDecode($json2decode, $assoc = false, $depth = 
  * @param string $url
  * @return array|bool array if cURL($url) returns JSON else false
  */
-public function backyard_getJsonAsArray($url) {
+public function getJsonAsArray($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

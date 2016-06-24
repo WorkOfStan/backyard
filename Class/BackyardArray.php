@@ -1,8 +1,9 @@
 <?php
-//backyard 2 compliant
-if (!function_exists('my_error_log')) {
-    require_once __DIR__ . '/backyard_my_error_log_dummy.php';
-}
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+
+
+class BackyardArray {
 
 /**
  * Note http://php.net/manual/en/function.array-key-exists.php#107786
@@ -34,7 +35,7 @@ if (!function_exists('my_error_log')) {
  * @param array $haystack
  * @return boolean
  */
-function backyard_inArrayWildcards($needle, $haystack) {
+public function inArrayWildcards($needle, $haystack) {
     foreach ($haystack as $value) {
         if (true === fnmatch($value, $needle)) {
             return true;
@@ -51,7 +52,7 @@ function backyard_inArrayWildcards($needle, $haystack) {
  * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
  * @return array
  */
-function backyard_getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected = false) {
+public function getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected = false) {
     if (!is_array($myArray)) {
         return array(); //empty array more consistent than false
     }
@@ -72,7 +73,7 @@ function backyard_getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpe
  * @param string $columnName
  * @return array
  */
-function backyard_removeOneColumnFromArray($myArray, $columnName) {
+public function removeOneColumnFromArray($myArray, $columnName) {
     if (!is_array($myArray)) {
         return array(); //empty array more consistent than false
     }
@@ -92,7 +93,7 @@ function backyard_removeOneColumnFromArray($myArray, $columnName) {
  * @param array $myArray
  * @return string
  */
-function backyard_dumpArrayAsOneLine($myArray) {
+public function dumpArrayAsOneLine($myArray) {
     return (
             preg_replace(
                     '/\n/', ' ', preg_replace(
@@ -114,7 +115,7 @@ function backyard_dumpArrayAsOneLine($myArray) {
  * @param bool $columnAlwaysExpected - default true; if false function does not log the missing column in a row as an error
  * @return mixed (string if found, false otherwise)
  */
-function backyard_arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
+public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
     if (!is_array($searchedArray)) {
         my_error_log("ArrayVlookup: second parameter is not an array", 2);
         return false;
@@ -145,7 +146,7 @@ combination of efforts from previous notes deleted.
 Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com), 
 (sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
 */
-function array_diff_assoc_recursive($array1, $array2)
+public function array_diff_assoc_recursive($array1, $array2)
 {
 	foreach($array1 as $key => $value)
 	{
@@ -174,4 +175,5 @@ function array_diff_assoc_recursive($array1, $array2)
 		}
 	}
 	return !isset($difference) ? 0 : $difference;
+}
 }

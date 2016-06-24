@@ -1,5 +1,10 @@
 <?php
-//backyard 2 compliant
+namespace GodsDev\Backyard;
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+
+
+class BackyardErrorLog {
+
 /**
  * Error_log() modified to log necessary debug information by application to its own log (common to the whole host by default).
  * 
@@ -37,7 +42,7 @@
  * 
  * 
  */
-function my_error_log($message, $level = 0, $error_number = 0) {
+public function my_error_log($message, $level = 0, $error_number = 0) {
     //mozna by stalo za to prepsat i jmeno te puvodni, aby se treba i sphpblog psal tam, kde to vidim
     //mohla by být zavedena čtvrtá vstupní proměnná $line=''
     //$line - mělo by být vždy voláno jako basename(__FILE__)."#".__LINE__ , takže bude jasné, ze které řádky source souboru to bylo voláno
@@ -119,3 +124,4 @@ function my_error_log($message, $level = 0, $error_number = 0) {
   4         00000100  Warnings and Trace
   7         00000111  Warnings, Debug, Information and Trace
  */
+}
