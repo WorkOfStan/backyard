@@ -9,14 +9,15 @@ if(!isset($backyardConf)){
 }
 
 class Backyard {
-    protected $backyardConf = array();
+    protected $BackyardConf = array();
 
     public function __construct(array $backyardConfConstruct = array()) {
         //global $backyardConf;
-        $this->backyardConf = $backyardConfConstruct;
-        $backyardConf = $this->backyardConf;        
+        $this->BackyardConf = $backyardConfConstruct;
+        $backyardConf = $this->BackyardConf;        
         require_once __DIR__ . '/../src/backyard_system.php';
         
+        //@todo how to automatically $this->Something assign to new \GodsDev\Backyard\Something($backyardConf)
         $this->Json = new \GodsDev\Backyard\Json($backyardConf);
         
     }

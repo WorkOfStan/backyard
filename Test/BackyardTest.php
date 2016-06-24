@@ -5,12 +5,12 @@ namespace GodsDev\Backyard\Test;
 //use GodsDev\DefaultDeviceConnector;
 
 class BackyardTest extends \PHPUnit_Framework_TestCase {
-    protected $backyard = NULL;
+    protected $Backyard = NULL;
 
-    protected function setUp() {
-        global $backyardConf;
-        $this->backyard = new \GodsDev\Backyard\Backyard($backyardConf);
-    }
+//    protected function setUp() {
+//        global $backyardConf;
+//        $this->Backyard = new \GodsDev\Backyard\Backyard($backyardConf);
+//    }
 
 //    public function testGetCurPageUrlIncludeQueryPart() {
 //        //$backyard = new \GodsDev\Backyard\Backyard();
@@ -23,12 +23,13 @@ class BackyardTest extends \PHPUnit_Framework_TestCase {
 //        $this->assertEquals('', backyard_getCurPageURL(false));
 //    }
 
-    public function testBackyardJson() {
-        $this->setUp();
+    public function testBackyardJsonMinifyJson() {
+//        $this->setUp();
+        $this->Backyard = new \GodsDev\Backyard\Backyard(array());
         $orig = '{"status": "123", "text": "abc"}';
         $expected = '{"status":"123","text":"abc"}';
         
-        $this->assertEquals($expected, $this->backyard->Json->backyard_minifyJSON($orig));
+        $this->assertEquals($expected, $this->Backyard->Json->backyard_minifyJSON($orig));
     }
     
     
