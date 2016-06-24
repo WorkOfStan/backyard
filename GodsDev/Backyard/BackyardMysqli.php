@@ -2,99 +2,97 @@
 namespace GodsDev\Backyard;
 //@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
 
-
-class BackyardMysql {
-
-/* * ****************************************************************************
- * Database (MySQL) FUNCTIONS
- */
-
-/**
- * mysql_query() with error message management and link identifier
- * Replaces make_mysql_query($mysql_query_string, $ERROR_LOG_OUTPUT = true)
- * @param string $mysql_query_string
- * @param resource $link_identifier [optional]
- * @param boolean $ERROR_LOG_OUTPUT [optional]
- * @return a resource on success, or <b>FALSE</b> on error
- */
-public function mysqlQuery($mysql_query_string, $link_identifier = NULL, $ERROR_LOG_OUTPUT = true) {
-    //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false);
-    if ($ERROR_LOG_OUTPUT) {
-        my_error_log("Start of query", 6, 11);
-    }
-    if (!$mysql_query_string) {
-        if ($ERROR_LOG_OUTPUT) {
-            my_error_log("mysql_query_string is empty", 1, 11); //debug               
-        }
-        return false;
-    }
-    if ($link_identifier == NULL) {
-        $mysql_query_result = mysql_query($mysql_query_string);
-    } else {
-        $mysql_query_result = mysql_query($mysql_query_string, $link_identifier);
-    }
-    if (!$mysql_query_result) {
-        my_error_log(mysql_errno() . ": " . mysql_error() . " /with query: $mysql_query_string", 1, 11);
-    } elseif ($ERROR_LOG_OUTPUT) {
-        my_error_log("$mysql_query_string", 5, 11); //debug
-    }
-    return $mysql_query_result;
-}
-
-/**
- * Make a MySQL query and if the result is non empty, transforms the query result into a one or two dimensional array.
- * Replaces customMySQLQuery()
- * @param string $query
- * @param bool $justOneRow [optional]
- * @param resource $link_identifier [optional]
- * @return mixed: array one or two dimensional or false
- */
-public function mysqlQueryArray($query, $justOneRow = false, $link_identifier = NULL) {
-    $mysql_query_result = backyard_mysql_query($query, $link_identifier) or backyard_dieGraciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
-    if (is_bool($mysql_query_result)) {
-        return $mysql_query_result; //For other type of SQL statements, INSERT, UPDATE, DELETE, DROP, etc, mysql_query() returns TRUE on success or FALSE on error.
-    }
-    if (!mysql_num_rows($mysql_query_result)) {//either false or zero
-        my_error_log("Query {$query} returned no results", 5, 16);
-        return false;
-    }
-    $result = array();
-    while ($one_row = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
-        if ($justOneRow) {
-            if (mysql_num_rows($mysql_query_result) > 1) {
-                my_error_log("query={$query} returned more than one row, but only one row is requested", 11, 3);
-            }
-            return $one_row; //returns one dimensional array
-        }
-        $result[] = $one_row;
-    }
-    return $result; //returns two dimensional array
-}
-
-/**
- * Find the next available id within selected dimension.
- * It may be conditioned by an integer value of another dimension
- * (Replacement for int function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric))
- * 
- * @param resource $link_identifier
- * @param string $table
- * @param string $metricDimension
- * @param string $primaryDimension [optional]
- * @param int $primaryDimensionValue [optional]
- * @return int
- */
-public function mysqlNextIncrement($link_identifier, $table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
-    $result = 1; //default value
-    $query = "SELECT `{$metricDimension}` FROM  `{$table}` "
-            . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
-            . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
-    $mysql_query_array = backyard_mysqlQueryArray($query, true, $link_identifier);
-    if ($mysql_query_array) {
-        $result += (int) $mysql_query_array[$metricDimension];
-    }
-    return $result;
-}
-}
+// @todo - check that BackyardMysqli implements logic from procedural functions below
+///* * ****************************************************************************
+// * Database (MySQL) FUNCTIONS
+// */
+//
+///**
+// * mysql_query() with error message management and link identifier
+// * Replaces make_mysql_query($mysql_query_string, $ERROR_LOG_OUTPUT = true)
+// * @param string $mysql_query_string
+// * @param resource $link_identifier [optional]
+// * @param boolean $ERROR_LOG_OUTPUT [optional]
+// * @return a resource on success, or <b>FALSE</b> on error
+// */
+//function mysqlQuery($mysql_query_string, $link_identifier = NULL, $ERROR_LOG_OUTPUT = true) {
+//    //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false);
+//    if ($ERROR_LOG_OUTPUT) {
+//        my_error_log("Start of query", 6, 11);
+//    }
+//    if (!$mysql_query_string) {
+//        if ($ERROR_LOG_OUTPUT) {
+//            my_error_log("mysql_query_string is empty", 1, 11); //debug               
+//        }
+//        return false;
+//    }
+//    if ($link_identifier == NULL) {
+//        $mysql_query_result = mysql_query($mysql_query_string);
+//    } else {
+//        $mysql_query_result = mysql_query($mysql_query_string, $link_identifier);
+//    }
+//    if (!$mysql_query_result) {
+//        my_error_log(mysql_errno() . ": " . mysql_error() . " /with query: $mysql_query_string", 1, 11);
+//    } elseif ($ERROR_LOG_OUTPUT) {
+//        my_error_log("$mysql_query_string", 5, 11); //debug
+//    }
+//    return $mysql_query_result;
+//}
+//
+///**
+// * Make a MySQL query and if the result is non empty, transforms the query result into a one or two dimensional array.
+// * Replaces customMySQLQuery()
+// * @param string $query
+// * @param bool $justOneRow [optional]
+// * @param resource $link_identifier [optional]
+// * @return mixed: array one or two dimensional or false
+// */
+//function mysqlQueryArray($query, $justOneRow = false, $link_identifier = NULL) {
+//    $mysql_query_result = backyard_mysql_query($query, $link_identifier) or backyard_dieGraciously('E100', "{$query} " . mysql_error()); // End script with a specific error message if mysql query fails
+//    if (is_bool($mysql_query_result)) {
+//        return $mysql_query_result; //For other type of SQL statements, INSERT, UPDATE, DELETE, DROP, etc, mysql_query() returns TRUE on success or FALSE on error.
+//    }
+//    if (!mysql_num_rows($mysql_query_result)) {//either false or zero
+//        my_error_log("Query {$query} returned no results", 5, 16);
+//        return false;
+//    }
+//    $result = array();
+//    while ($one_row = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC)) {
+//        if ($justOneRow) {
+//            if (mysql_num_rows($mysql_query_result) > 1) {
+//                my_error_log("query={$query} returned more than one row, but only one row is requested", 11, 3);
+//            }
+//            return $one_row; //returns one dimensional array
+//        }
+//        $result[] = $one_row;
+//    }
+//    return $result; //returns two dimensional array
+//}
+//
+///**
+// * Find the next available id within selected dimension.
+// * It may be conditioned by an integer value of another dimension
+// * (Replacement for int function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric))
+// * 
+// * @param resource $link_identifier
+// * @param string $table
+// * @param string $metricDimension
+// * @param string $primaryDimension [optional]
+// * @param int $primaryDimensionValue [optional]
+// * @return int
+// */
+//function mysqlNextIncrement($link_identifier, $table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
+//    $result = 1; //default value
+//    $query = "SELECT `{$metricDimension}` FROM  `{$table}` "
+//            . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
+//            . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
+//    $mysql_query_array = backyard_mysqlQueryArray($query, true, $link_identifier);
+//    if ($mysql_query_array) {
+//        $result += (int) $mysql_query_array[$metricDimension];
+//    }
+//    return $result;
+//}
+//
 
 /**
  * __construct
@@ -108,9 +106,14 @@ public function mysqlNextIncrement($link_identifier, $table, $metricDimension, $
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  * @todo add IPv6 , e.g ::1 as $host_port
  */
-class backyard_mysqli extends \mysqli {
+class BackyardMysqli extends \mysqli {
 
-    public function __construct($host_port, $user, $pass, $db) {
+        protected $BackyardError = NULL;
+    
+    public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+        
         $temp = explode(":", $host_port);
         
         if($temp[0] === 'p'){

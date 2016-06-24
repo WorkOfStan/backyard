@@ -5,6 +5,15 @@ namespace GodsDev\Backyard;
 
 class BackyardTime {
 
+    protected $BackyardError = NULL;
+
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+    }
+    
+    
 /**
  * Initiation of $page_timestamp must be the first thing a page will do 
  * Store "time" for benchmarking.
@@ -27,8 +36,8 @@ public function getmicrotime() {
  * @return float
  */
 public function getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
-    global $backyardPage_timestamp;
-    return round(backyard_getmicrotime() - $backyardPage_timestamp, 4);
+    global $backyardPage_timestamp; //@todo to class property
+    return round($this->getmicrotime() - $backyardPage_timestamp, 4);
 }
 
 /**
@@ -40,7 +49,7 @@ public function getRunningTime() {//111105, because $RUNNING_TIME got updated on
 public function pageGeneratedIn() {
     global $backyardLangString, $backyardPage_timestamp;
     $str = str_replace('%s', round(backyard_getmicrotime() - $backyardPage_timestamp, 4), $backyardLangString['page_generated_in']);
-    my_error_log(round(backyard_getmicrotime() - $backyardPage_timestamp, 4), 6, 6);
+    $this->myErrorLog(round(backyard_getmicrotime() - $backyardPage_timestamp, 4), 6, 6);
     return $str;
 }
 }

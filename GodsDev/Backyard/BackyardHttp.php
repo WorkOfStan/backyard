@@ -32,6 +32,15 @@ if (!function_exists('apache_request_headers')) {
 
 class BackyardHttp {
 
+    protected $BackyardError = NULL;
+
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+    }
+    
+    
 /**
  * http://www.cyberciti.biz/faq/php-redirect/
  * PHP Redirect Code

@@ -5,6 +5,14 @@ namespace GodsDev\Backyard;
 
 class BackyardArray {
 
+    protected $BackyardError = NULL;
+
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+    }
+    
 /**
  * Note http://php.net/manual/en/function.array-key-exists.php#107786
  * If you want to take the performance advantage of isset() while keeping the NULL element correctly detected, use this:

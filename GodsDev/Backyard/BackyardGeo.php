@@ -4,13 +4,13 @@ namespace GodsDev\Backyard;
 
 
 class BackyardGeo {
-        protected $BackyardConf = array();
+    protected $BackyardError = NULL;
 
-    public function __construct(array $backyardConfConstruct = array()) {
-        //global $backyardConf;
-        $this->BackyardConf = $backyardConfConstruct;        
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
     }
-
 
 /* * ****************************************************************************
  * GEOLOCATION FUNCTIONS

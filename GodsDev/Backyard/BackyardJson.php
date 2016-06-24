@@ -6,7 +6,15 @@ namespace GodsDev\Backyard;
 
 class BackyardJson {
 
-/* * ****************************************************************************
+    protected $BackyardError = NULL;
+
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+    }
+
+    /* * ****************************************************************************
  * JSON FUNCTIONS
  */
 
@@ -19,11 +27,11 @@ class BackyardJson {
 public function minifyJSON($jsonInput, $logLevel = 5) {
     $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
     if ($jsonOutput == 'null') {
-        my_error_log("ERROR IN JSON: {$jsonInput}", 1, 16);
+        $this->BackyardError->log("ERROR IN JSON: {$jsonInput}", 1, 16);
         $jsonOutput = '{"status": "500", "error": "Internal error"}'; //error output
     } else {
-        my_error_log("JSON input: {$jsonInput}", $logLevel, 16);
-        my_error_log("JSON output: {$jsonOutput}", $logLevel, 16);
+        $this->BackyardError->log("JSON input: {$jsonInput}", $logLevel, 16);
+        $this->BackyardError->log("JSON output: {$jsonOutput}", $logLevel, 16);
     }
     return $jsonOutput;
 }
@@ -39,7 +47,7 @@ public function minifyJSON($jsonInput, $logLevel = 5) {
  */
 public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
     header("Content-type: application/json");
-    $minifiedJson = backyard_MinifyJSON($jsonString, $logLevel);
+    $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
     echo($minifiedJson);
     if ($exitAfterOutput) {
         exit;
