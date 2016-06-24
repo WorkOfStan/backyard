@@ -56,6 +56,11 @@ var my_error_log_event_session_counter = 0;
 /**
  * Requires jQuery
  * Requires include_once (__BACKYARDROOT__."/my_error_log_js.php"); or may call api
+ * 
+ * @param {string} message
+ * @param {int} level
+ * @param {string} apiUrl
+ * @returns {Boolean}
  */
 function my_error_log(message,level,apiUrl){
     if(apiUrl == null) apiUrl = '';//this page
