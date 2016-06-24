@@ -4,7 +4,7 @@ namespace GodsDev\Backyard;
 //@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
 
 
-class Json {
+class BackyardJson {
 
 /* * ****************************************************************************
  * JSON FUNCTIONS

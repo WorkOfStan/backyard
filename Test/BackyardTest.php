@@ -29,8 +29,16 @@ class BackyardTest extends \PHPUnit_Framework_TestCase {
         $orig = '{"status": "123", "text": "abc"}';
         $expected = '{"status":"123","text":"abc"}';
         
-        $this->assertEquals($expected, $this->Backyard->Json->backyard_minifyJSON($orig));
+        $this->assertEquals($expected, $this->Backyard->BackyardJson->backyard_minifyJSON($orig));
     }
     
+    public function testOtherClass() {
+        $this->Backyard = new \GodsDev\Backyard\Backyard(array());
+        $orig = '{"status": "123", "text": "abc"}';
+        $expected = '{"status":"123","text":"abc"}';
+        
+        $this->assertEquals($expected, $this->Backyard->BackyardHttp->backyard_minifyJSON($orig));
+    }
+
     
 }
