@@ -2,12 +2,38 @@
 
 namespace GodsDev\Backyard;
 
+use GodsDev\Backyard\BackyardTime;
+
+//@todo see PSR-x with Logger
 class BackyardError {
 
     protected $BackyardConf = array();
+    private $PageTimestamp = null;  
+    protected $BackyardTime;
 
-    public function __construct(array $backyardConfConstruct = array()) {        //global $backyardConf;
+    public function __construct(
+            array $backyardConfConstruct = array(), 
+            BackyardTime $BackyardTime = null
+            ) {
+        $this->BackyardTime = ($BackyardTime === null)?(new BackyardTime()):$BackyardTime;        
+        $backyardConfConstruct = array_merge(                
+                array(//default values
+                    'logging_level'             => 5,       //úroveň logování//logovat az do urovne zde uvedene - default=5 = debug //logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
+                    'logging_level_name'        => array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'debug', 'speed'),
+                    'logging_file'              => '',      //soubor, do kterého má my_error_log() zapisovat
+                    'logging_level_page_speed'  => 5,       //úroveň logování, do které má být zapisována rychlost vygenerování stránky
+                    'error_log_message_type'    => 0,       //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 0, i.e. to send message to PHP's system logger; recommended is however 3, i.e. append to the file destination set either in field $this->BackyardConf['logging_file or in table system
+                    'die_graciously_verbose'    => true,    //show details by die_graciously() on screen (it is always in the error_log); on production it is recomended to be set to to false due security
+                    'mail_for_admin_enabled'    => false,   //fatal error may just be written in log //$backyardMailForAdminEnabled = "rejthar@gods.cz";//on production, it is however recommended to set an e-mail, where to announce fatal errors
+                    'log_monthly_rotation'      => true,    //true, pokud má být přípona .log.Y-m.log (výhodou je měsíční rotace); false, pokud má být jen .log (výhodou je sekvenční zápis chyb přes my_error_log a jiných PHP chyb)
+                    'log_standard_output'       => false,   //true, pokud má zároveň vypisovat na obrazovku; false, pokud má vypisovat jen do logu
+                    'log_profiling_step'        => false,   //110812, my_error_log neprofiluje rychlost //$PROFILING_STEP = 0.008;//110812, my_error_log profiluje čas mezi dvěma měřenými body vyšší než udaná hodnota sec
+                    'error_hacked'              => true,    //ERROR_HACK parameter is reflected
+                    'error_hack_from_get'       => 0,       //in this field, the value of $_GET['ERROR_HACK'] shall be set below                    
+                ),
+                $backyardConfConstruct);
         $this->BackyardConf = $backyardConfConstruct;
+        //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
     }
     
 /**
@@ -38,7 +64,7 @@ class BackyardError {
  * @global float $backyardPage_timestamp
  * @global float $RUNNING_TIME
  * @global int $ERROR_HACK
- * @global array $backyardConf
+ //x* @global array $backyardConf
  * 
  * @param string $message Zpráva k vypsání - při použití error_number bude obsahovat doplňující info
  * @param int $level Úroveň chyby
@@ -55,58 +81,58 @@ public function log($message, $level = 0, $error_number = 0) {
     //[Timestamp: d-M-Y H:i:s] [Logging level] [$error_number] [$_SERVER['SCRIPT_FILENAME']] [username@gethostbyaddr($_SERVER['REMOTE_ADDR'])] [sec od startu stránky] $message
     global
     //$username,                  //Až zavedu uživatele, tak se budou zapisovat do my_error_log
-    $backyardPage_timestamp,
+    //$backyardPage_timestamp,
     $RUNNING_TIME,
-    $ERROR_HACK,
-    $backyardConf
+    $ERROR_HACK//,
+    //$backyardConf
     ;
     $username = 'anonymous'; //placeholder
 
     $result = true; //pripadne by mohlo byt resetovano pri volani error_log na false
-    //if ($ERROR_HACK > $backyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
-    //    $backyardConf['logging_level'] = $ERROR_HACK; //120918
+    //if ($ERROR_HACK > $this->BackyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
+    //    $this->BackyardConf['logging_level'] = $ERROR_HACK; //120918
     //}
 
     if (($level <= max(array(
-                $backyardConf['logging_level'],
-                $backyardConf['error_hack_from_get'], //set potentially as GET parameter
+                $this->BackyardConf['logging_level'],
+                $this->BackyardConf['error_hack_from_get'], //set potentially as GET parameter
                 $ERROR_HACK, //set as variable in the application script
             ))
             ) //logovat 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed dle $level
-            || (($error_number == "6") && ($backyardConf['logging_level_page_speed'] <= $backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
+            || (($error_number == "6") && ($this->BackyardConf['logging_level_page_speed'] <= $this->BackyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
     ) {
         $RUNNING_TIME_PREVIOUS = $RUNNING_TIME;
-        if ((( ($RUNNING_TIME = round(backyard_getmicrotime() - $backyardPage_timestamp, 4)) - $RUNNING_TIME_PREVIOUS) > $backyardConf['log_profiling_step'] ) && $backyardConf['log_profiling_step']) {
+        if ((( ($RUNNING_TIME = round($this->BackyardTime->getmicrotime() - $this->BackyardTime->getPageTimestamp(), 4)) - $RUNNING_TIME_PREVIOUS) > $this->BackyardConf['log_profiling_step'] ) && $this->BackyardConf['log_profiling_step']) {
             $message = "SLOWSTEP " . $message; //110812, PROFILING
         }
 
-        if ($backyardConf['log_standard_output']) {
+        if ($this->BackyardConf['log_standard_output']) {
             echo ((($level <= 2) ? "<b>" : "") . "{$message} [{$RUNNING_TIME}]" . (($level <= 2) ? "</b>" : "") . "<hr/>" . PHP_EOL); //110811, if fatal or error then bold//111119, RUNNING_TIME
         }
 
-        $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $backyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] ["
+        $message_prefix = "[" . date("d-M-Y H:i:s") . "] [" . $this->BackyardConf['logging_level_name'][$level] . "] [" . $error_number . "] [" . $_SERVER['SCRIPT_FILENAME'] . "] ["
                 . $username . "@" 
                 . (isset($_SERVER['REMOTE_ADDR'])?gethostbyaddr($_SERVER['REMOTE_ADDR']):'-')//phpunit test does not set REMOTE_ADDR
                 . "] [" . $RUNNING_TIME . "] [" 
                 . (isset($_SERVER["REQUEST_URI"])?$_SERVER["REQUEST_URI"]:'-')//phpunit test does not set REQUEST_URI
                 . "] ";
         //gethostbyaddr($_SERVER['REMOTE_ADDR'])// co udělá s IP, která nelze přeložit? nebylo by lepší logovat přímo IP?
-        if (($backyardConf['error_log_message_type'] == 3) && !$backyardConf['logging_file']) {//$logging_file not set and it should be
+        if (($this->BackyardConf['error_log_message_type'] == 3) && !$this->BackyardConf['logging_file']) {//$logging_file not set and it should be
             $result = error_log($message_prefix . "(error: logging_file should be set!) $message"); //zapisuje do default souboru
             //zaroven by mohlo poslat mail nebo tak neco .. vypis na obrazovku je asi az krajni reseni
         } else {
             $messageType = 3;
-            if ($backyardConf['error_log_message_type'] == 0) {
-                $messageType = $backyardConf['error_log_message_type'];
+            if ($this->BackyardConf['error_log_message_type'] == 0) {
+                $messageType = $this->BackyardConf['error_log_message_type'];
             }
-            if ($backyardConf['log_monthly_rotation']) {
-                $result = error_log("{$message_prefix}{$message}" . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$backyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
+            if ($this->BackyardConf['log_monthly_rotation']) {
+                $result = error_log($message_prefix . $message . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$this->BackyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
             } else {
-                $result = error_log("{$message_prefix}{$message}\r\n", $messageType, "{$backyardConf['logging_file']}"); //zapisuje do souboru
+                $result = error_log($message_prefix . $message . PHP_EOL, $messageType, "{$this->BackyardConf['logging_file']}"); //zapisuje do souboru
             }
         }
-        if ($level == 1 && $backyardConf['mail_for_admin_enabled']) {//mailto admin, 130108
-            error_log($message_prefix . "$message\r\n", 1, $backyardConf['mail_for_admin_enabled']);
+        if ($level == 1 && $this->BackyardConf['mail_for_admin_enabled']) {//mailto admin, 130108
+            error_log($message_prefix . $message . PHP_EOL, 1, $this->BackyardConf['mail_for_admin_enabled']);
         }
     }
     return $result;
@@ -131,5 +157,22 @@ public function log($message, $level = 0, $error_number = 0) {
  */
     
     
+/**
+ * 
+ * @param string $errorNumber
+ * @param string $errorString
+ * @param string $feedbackButtonMarkup
+ * @return void (die)
+ */
+public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = false) {
+    //global $backyardConf;
+    $this->BackyardError->log("Die with error {$errorNumber} - {$errorString}", 1);
+    if ($feedbackButtonMarkup) {
+        echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - "
+                        . (($this->BackyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")
+                ), $feedbackButtonMarkup)); //<html><body> na začátku pomůže, pokud ještě výstup nezačal
+    }
+    die("Error {$errorNumber}" . (($this->BackyardConf['die_graciously_verbose']) ? " - {$errorString}" : ""));
+}
     
 }

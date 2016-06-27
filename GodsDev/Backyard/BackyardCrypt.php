@@ -1,9 +1,17 @@
 <?php
 namespace GodsDev\Backyard;
-//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Crypt ?
 
 
 class BackyardCrypt {
+    protected $BackyardError = NULL;
+
+    public function __construct(
+    BackyardError $BackyardError) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        $this->BackyardError = $BackyardError;
+    }
+    
 
 /**
  * returns the custom length unique id; default is 10
@@ -22,9 +30,13 @@ public function randomId($random_id_length = 10) {
     $rnd_id = str_replace(".", "", $rnd_id);
     $rnd_id = strrev(str_replace("/", "", $rnd_id));
 
+    if(strlen($rnd_id)<$random_id_length){
+        $rnd_id = $rnd_id . $this->randomId($random_id_length-strlen($rnd_id));
+    }
+    
     //finally I take the first 10 characters from the $rnd_id 
     $rnd_id = substr($rnd_id, 0, $random_id_length);
-    my_error_log("Random id is " . $rnd_id, 5, 16);
+    $this->BackyardError->log("Random id is " . $rnd_id, 5, 16);
     return ($rnd_id);
 }
 }

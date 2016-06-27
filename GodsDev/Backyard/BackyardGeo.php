@@ -1,15 +1,27 @@
 <?php
 namespace GodsDev\Backyard;
-//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Geo ?
 
 
 class BackyardGeo {
+    protected $BackyardConf = array();
     protected $BackyardError = NULL;
 
     public function __construct(
-    BackyardError $BackyardError) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+    BackyardError $BackyardError, array $backyardConfConstruct = array()) {
+        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);        
+        $backyardConfConstruct = array_merge(                
+                array(//default values
+                    'geo_rough_distance_limit' => 1,        //float //to quickly get rid off too distant POIs; 1 ~ 100km
+                    'geo_maximum_meters_from_poi' => 2500,  //float //distance considered to be overlapping with the device position // 2500 m is considered exact location due to mobile phone GPS caching
+                    'geo_poi_list_table_name' => 'poi_list',//string //name of table with POI coordinates    
+                ),
+                $backyardConfConstruct); 
+        //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
+        $this->BackyardConf = $backyardConfConstruct;
+        
         $this->BackyardError = $BackyardError;
+        
     }
 
 /* * ****************************************************************************
@@ -77,7 +89,7 @@ class BackyardGeo {
  */
 public function getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
    // global $backyardConf;
-    my_error_log("Looking for closest POI: lat={$lat} long={$long}", 4);
+    $this->BackyardError->log("Looking for closest POI: lat={$lat} long={$long}", 4);
     $uom = 'm';
     //current
     $startPoint = array(
@@ -162,7 +174,7 @@ public function getListOfPOI($poiCategory, $poiConnection) {
     $query = "SELECT * FROM `{$this->BackyardConf['geo_poi_list_table_name']}` WHERE `category` IN ( " . $poiCategorySecured . " )";
     $listOfPOINearby = $poiConnection->queryArray($query);
     if (!$listOfPOINearby) {
-        my_error_log('No result for query ' . $query, 2, 11);
+        $this->BackyardError->log('No result for query ' . $query, 2, 11);
     }
     return $listOfPOINearby;
 }

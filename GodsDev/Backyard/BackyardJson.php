@@ -78,7 +78,7 @@ public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $opt
         $json = json_decode($json, $assoc);
     }
     if (is_null($json)) {
-        my_error_log("Invalid JSON: " . $json2decode, 5);
+        $this->BackyardError->log("Invalid JSON: " . $json2decode, 5);
         return false; //invalid JSON
     }
     return $json;
@@ -88,6 +88,9 @@ public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $opt
  * @desc Retrieves JSON from $url and puts it into associative array
  * @param string $url
  * @return array|bool array if cURL($url) returns JSON else false
+ * 
+ * 
+ * @todo - use BackyardHttp
  */
 public function getJsonAsArray($url) {
     $ch = curl_init();
@@ -97,13 +100,13 @@ public function getJsonAsArray($url) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $json = curl_exec($ch);
     if (!$json) {
-        error_log("Curl error: " . curl_error($ch) . " on {$url}");
+        $this->BackyardError->log("Curl error: " . curl_error($ch) . " on {$url}", 2);
         return false;
     }
     curl_close($ch);
-    $jsonArray = backyard_jsonCleanDecode($json, true);
+    $jsonArray = $this->jsonCleanDecode($json, true);
     if (!$jsonArray) {
-        //error_log("Trouble with decoding JSON from {$url}");
+        $this->BackyardError->log("Trouble with decoding JSON from {$url}", 2);
         return false;
     }
     return $jsonArray;

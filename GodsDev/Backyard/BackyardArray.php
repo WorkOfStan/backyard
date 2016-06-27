@@ -1,6 +1,6 @@
 <?php
 namespace GodsDev\Backyard;
-//@todo SHOULDN'T IT BE GodsDev\Backyard\Json ?
+//@todo SHOULDN'T IT BE GodsDev\Backyard\Array ?
 
 
 class BackyardArray {
@@ -69,7 +69,7 @@ public function getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpect
         if (isset($row[$columnName]) || array_key_exists($columnName, $row)) {
             $result[$key] = $row[$columnName];
         } elseif ($columnAlwaysExpected) {
-            my_error_log("getOneColumnFromArray: {$columnName} not in " . print_r($row, true), 3);
+            $this->BackyardError->log("getOneColumnFromArray: {$columnName} not in " . print_r($row, true), 3);
         }        
     }
     return $result;
@@ -115,17 +115,18 @@ public function dumpArrayAsOneLine($myArray) {
 
 /**
  * Returns first row with exact match //@TODO 4 - přidat parametr na vrácení všech rows s exact match
+ * Useful for at least 2-dimensional arrays
  * 
- * @param string $searchedValue
+ * @param mixed $searchedValue
  * @param array $searchedArray
  * @param string $columnName
  * @param bool $allExactMatches - default false; if true function returns array with all exact matches
  * @param bool $columnAlwaysExpected - default true; if false function does not log the missing column in a row as an error
- * @return mixed (string if found, false otherwise)
+ * @return mixed (array if found, false otherwise)
  */
 public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
     if (!is_array($searchedArray)) {
-        my_error_log("ArrayVlookup: second parameter is not an array", 2);
+        $this->BackyardError->log("ArrayVlookup: second parameter is not an array", 2);
         return false;
     }
 
@@ -141,7 +142,7 @@ public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allEx
                 }
             }
         } elseif ($columnAlwaysExpected) {
-            my_error_log("ArrayVlookup: {$columnName} not in " . print_r($row, true), 3);
+            $this->BackyardError->log("ArrayVlookup: {$columnName} not in " . print_r($row, true), 3);
         }
     }
     return $allExactMatches ? $allMatchingRows : false;
@@ -153,8 +154,14 @@ public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allEx
 combination of efforts from previous notes deleted.
 Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com), 
 (sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
-*/
-public function array_diff_assoc_recursive($array1, $array2)
+ *
+ *  
+ * 
+ * @param array $array1
+ * @param array $array2
+ * @return mixed (array|0)
+ */
+public function arrayDiffAssocRecursive($array1, $array2)
 {
 	foreach($array1 as $key => $value)
 	{
@@ -170,7 +177,7 @@ public function array_diff_assoc_recursive($array1, $array2)
 			}
 			else
 			{
-				$new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+				$new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
 				if($new_diff != FALSE)
 				{
 					$difference[$key] = $new_diff;
