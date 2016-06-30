@@ -9,7 +9,7 @@ class BackyardGeo {
 
     public function __construct(
     BackyardError $BackyardError, array $backyardConfConstruct = array()) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);        
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);        
         $backyardConfConstruct = array_merge(                
                 array(//default values
                     'geo_rough_distance_limit' => 1,        //float //to quickly get rid off too distant POIs; 1 ~ 100km
@@ -89,7 +89,7 @@ class BackyardGeo {
  */
 public function getClosestPOI($lat, $long, $poiCategory, $poiConnection) {
    // global $backyardConf;
-    $this->BackyardError->log("Looking for closest POI: lat={$lat} long={$long}", 4);
+    $this->BackyardError->log(4, "Looking for closest POI: lat={$lat} long={$long}");
     $uom = 'm';
     //current
     $startPoint = array(
@@ -174,7 +174,7 @@ public function getListOfPOI($poiCategory, $poiConnection) {
     $query = "SELECT * FROM `{$this->BackyardConf['geo_poi_list_table_name']}` WHERE `category` IN ( " . $poiCategorySecured . " )";
     $listOfPOINearby = $poiConnection->queryArray($query);
     if (!$listOfPOINearby) {
-        $this->BackyardError->log('No result for query ' . $query, 2, 11);
+        $this->BackyardError->log(2, 'No result for query ' . $query, array(11));
     }
     return $listOfPOINearby;
 }

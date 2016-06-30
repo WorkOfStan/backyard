@@ -18,7 +18,7 @@ class BackyardTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Backyard;
+        $this->object = new Backyard(array('logging_level' => 4));
     }
 
     /**
@@ -30,9 +30,9 @@ class BackyardTest extends \PHPUnit_Framework_TestCase
     }
     
     public function testBackyardJsonMinifyJson() {
-        $this->Backyard = new \GodsDev\Backyard\Backyard(array());
-        $orig = '{"status": "123", "text": "abc"}';
-        $expected = '{"status":"123","text":"abc"}';
+        //$this->Backyard = new \GodsDev\Backyard\Backyard(array());
+        $orig = '{"status": "1230", "text": "abc"}';
+        $expected = '{"status":"1230","text":"abc"}';
         
         $this->assertEquals($expected, $this->object->Json->minifyJSON($orig));
     }

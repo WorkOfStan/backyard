@@ -10,7 +10,7 @@ class BackyardJson {
 
     public function __construct(
     BackyardError $BackyardError) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
     }
 
@@ -27,11 +27,11 @@ class BackyardJson {
 public function minifyJSON($jsonInput, $logLevel = 5) {
     $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
     if ($jsonOutput == 'null') {
-        $this->BackyardError->log("ERROR IN JSON: {$jsonInput}", 1, 16);
+        $this->BackyardError->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
         $jsonOutput = '{"status": "500", "error": "Internal error"}'; //error output
     } else {
-        $this->BackyardError->log("JSON input: {$jsonInput}", $logLevel, 16);
-        $this->BackyardError->log("JSON output: {$jsonOutput}", $logLevel, 16);
+        $this->BackyardError->log($logLevel, "JSON input: {$jsonInput}", array(16));
+        $this->BackyardError->log($logLevel, "JSON output: {$jsonOutput}", array(16));
     }
     return $jsonOutput;
 }
@@ -78,7 +78,7 @@ public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $opt
         $json = json_decode($json, $assoc);
     }
     if (is_null($json)) {
-        $this->BackyardError->log("Invalid JSON: " . $json2decode, 5);
+        $this->BackyardError->log(5, "Invalid JSON: " . $json2decode);
         return false; //invalid JSON
     }
     return $json;
@@ -100,13 +100,13 @@ public function getJsonAsArray($url) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $json = curl_exec($ch);
     if (!$json) {
-        $this->BackyardError->log("Curl error: " . curl_error($ch) . " on {$url}", 2);
+        $this->BackyardError->log(2, "Curl error: " . curl_error($ch) . " on {$url}");
         return false;
     }
     curl_close($ch);
     $jsonArray = $this->jsonCleanDecode($json, true);
     if (!$jsonArray) {
-        $this->BackyardError->log("Trouble with decoding JSON from {$url}", 2);
+        $this->BackyardError->log(2, "Trouble with decoding JSON from {$url}");
         return false;
     }
     return $jsonArray;

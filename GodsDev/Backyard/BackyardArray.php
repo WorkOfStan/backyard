@@ -9,7 +9,7 @@ class BackyardArray {
 
     public function __construct(
     BackyardError $BackyardError) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
     }
     
@@ -69,7 +69,7 @@ public function getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpect
         if (isset($row[$columnName]) || array_key_exists($columnName, $row)) {
             $result[$key] = $row[$columnName];
         } elseif ($columnAlwaysExpected) {
-            $this->BackyardError->log("getOneColumnFromArray: {$columnName} not in " . print_r($row, true), 3);
+            $this->BackyardError->log(3, "getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
         }        
     }
     return $result;
@@ -126,7 +126,7 @@ public function dumpArrayAsOneLine($myArray) {
  */
 public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
     if (!is_array($searchedArray)) {
-        $this->BackyardError->log("ArrayVlookup: second parameter is not an array", 2);
+        $this->BackyardError->log(2, "ArrayVlookup: second parameter is not an array");
         return false;
     }
 
@@ -142,7 +142,7 @@ public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allEx
                 }
             }
         } elseif ($columnAlwaysExpected) {
-            $this->BackyardError->log("ArrayVlookup: {$columnName} not in " . print_r($row, true), 3);
+            $this->BackyardError->log(3, "ArrayVlookup: {$columnName} not in " . print_r($row, true));
         }
     }
     return $allExactMatches ? $allMatchingRows : false;

@@ -11,7 +11,7 @@ class BackyardTime {
     public function __construct(
     //BackyardError $BackyardError
             ) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
       //  $this->BackyardError = $BackyardError;
         $this->PageTimestamp = $this->getmicrotime();//initialisation
     }
@@ -53,7 +53,7 @@ public function getRunningTime() {//111105, because $RUNNING_TIME got updated on
  */
 public function pageGeneratedIn($langStringPageGeneratedIn = '%s') {    
     $str = str_replace('%s', round($this->getmicrotime() - $this->PageTimestamp, 4), $langStringPageGeneratedIn);
-    //$this->BackyardError->log(round($this->getmicrotime() - $this->PageTimestamp, 4), 6, 6);
+    //$this->BackyardError->log(6, round($this->getmicrotime() - $this->PageTimestamp, 4), array(6));
     return $str;
 }
 }

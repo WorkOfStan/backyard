@@ -20,7 +20,7 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new BackyardCrypt(new BackyardError);
+        $this->object = new BackyardCrypt(new BackyardError(array('logging_level' => 4)));
     }
 
     /**

@@ -25,7 +25,7 @@ class BackyardMysqli extends \mysqli {
         protected $BackyardError = NULL;
     
     public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
         
         $temp = explode(":", $host_port);
@@ -47,11 +47,11 @@ class BackyardMysqli extends \mysqli {
                 $host = "127.0.0.1"; //localhost uses just the default port
             }
             $tempErrorString = "Connecting to $host, $user, pass, $db, $port";
-            $this->BackyardError->log($tempErrorString, 5); //debug
+            $this->BackyardError->log(5, $tempErrorString); //debug
             parent::__construct($host, $user, $pass, $db, $port);
         } else {
             $tempErrorString = "Connecting to $host, $user, pass, $db";
-            $this->BackyardError->log($tempErrorString, 5); //debug
+            $this->BackyardError->log(5, $tempErrorString); //debug
             parent::__construct($host, $user, $pass, $db);
         }
 
@@ -65,7 +65,7 @@ class BackyardMysqli extends \mysqli {
 
         //change character set to utf8
         if (!$this->set_charset("utf8")) {
-            $this->BackyardError->log(sprintf("Error loading character set utf8: %s\n", $this->error), 2);
+            $this->BackyardError->log(2, sprintf("Error loading character set utf8: %s\n", $this->error));
         }
     }
 
@@ -82,11 +82,11 @@ class BackyardMysqli extends \mysqli {
     public function query($sql, $ERROR_LOG_OUTPUT = true) { //S.R. upravuji dle functions.php ... make_mysql_query
         //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false); 160625 - is it still necessary?
         if ($ERROR_LOG_OUTPUT) {
-            $this->BackyardError->log("Start of query {$sql}", 5, 11);
+            $this->BackyardError->log(5, "Start of query {$sql}", array(11));
         }
         if (empty($sql) || !is_string($sql)) {
             if ($ERROR_LOG_OUTPUT) {
-                $this->BackyardError->log("No mysql_query_string set. End of query", 1, 11); //debug
+                $this->BackyardError->log(1, "No mysql_query_string set. End of query", array(11)); //debug
                 //my_error_log("End of query", 6, 11);                
             }
             return false;
@@ -102,12 +102,12 @@ class BackyardMysqli extends \mysqli {
                 parent::query($sql); //parent query method called with @ operator, to supress error messages
         if ($this->errno != 0) {
             if ($ERROR_LOG_OUTPUT) {
-                $this->BackyardError->log("{$this->errno} : {$this->error} /with query: {$sql}", 1, 11);
+                $this->BackyardError->log(1, "{$this->errno} : {$this->error} /with query: {$sql}", array(11));
             }
         }
         //}
         if ($ERROR_LOG_OUTPUT) {
-            $this->BackyardError->log("End of query {$sql}", 6, 11);
+            $this->BackyardError->log(6, "End of query {$sql}", array(11));
         }
         return $result;
     }
@@ -127,7 +127,7 @@ class BackyardMysqli extends \mysqli {
         $mysqlQueryResult = $this->query($sql); //$ERROR_LOG_OUTPUT = true by default
         //transforming the query result into an array
         if ($mysqlQueryResult == false || $mysqlQueryResult->num_rows == 0) {
-            $this->BackyardError->log("Query returned no results", 5, 16);
+            $this->BackyardError->log(5, "Query returned no results", array(16));
         } else {
             $result = array();
             while ($one_row = $mysqlQueryResult->fetch_assoc()) {

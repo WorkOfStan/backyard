@@ -8,7 +8,7 @@ class BackyardCrypt {
 
     public function __construct(
     BackyardError $BackyardError) {
-        error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
+        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
     }
     
@@ -27,8 +27,7 @@ public function randomId($random_id_length = 10) {
     $rnd_id = strip_tags(stripslashes($rnd_id));
 
     //Removing any . or / and reversing the string 
-    $rnd_id = str_replace(".", "", $rnd_id);
-    $rnd_id = strrev(str_replace("/", "", $rnd_id));
+    $rnd_id = strrev(str_replace("/", "", str_replace(".", "", $rnd_id)));
 
     if(strlen($rnd_id)<$random_id_length){
         $rnd_id = $rnd_id . $this->randomId($random_id_length-strlen($rnd_id));
@@ -36,7 +35,7 @@ public function randomId($random_id_length = 10) {
     
     //finally I take the first 10 characters from the $rnd_id 
     $rnd_id = substr($rnd_id, 0, $random_id_length);
-    $this->BackyardError->log("Random id is " . $rnd_id, 5, 16);
-    return ($rnd_id);
+    $this->BackyardError->log(5, "Random id is " . $rnd_id, array(16));
+    return $rnd_id;
 }
 }

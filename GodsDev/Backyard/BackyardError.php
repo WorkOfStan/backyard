@@ -73,7 +73,17 @@ class BackyardError {
  * 
  * 
  */
-public function log($message, $level = 0, $error_number = 0) {
+   /**
+    * @todo rework to be compliant with PSR-3 http://www.php-fig.org/psr/psr-3/
+     * Logs with an arbitrary level.
+     *
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    //public function log($level, $message, array $context = array());    
+public function log($level, $message, array $context = array()) {//($message, $level = 0, $error_number = 0) {
     //mozna by stalo za to prepsat i jmeno te puvodni, aby se treba i sphpblog psal tam, kde to vidim
     //mohla by být zavedena čtvrtá vstupní proměnná $line=''
     //$line - mělo by být vždy voláno jako basename(__FILE__)."#".__LINE__ , takže bude jasné, ze které řádky source souboru to bylo voláno
@@ -87,6 +97,19 @@ public function log($message, $level = 0, $error_number = 0) {
     //$backyardConf
     ;
     $username = 'anonymous'; //placeholder
+    
+    if(!is_string($message)){
+        error_log("wrong message: Backyard->log({$level},{$message})");
+    }
+    if($context === array()){
+        $error_number = 0;
+    } else {
+        $error_number = reset($context);//get the value of the first element //@todo do this only if there is just one element otherwise use field named 'error_number'
+    }
+//    if(is_int($context)){
+//        $error_number = $context;
+//    }
+    //@todo $context as Array
 
     $result = true; //pripadne by mohlo byt resetovano pri volani error_log na false
     //if ($ERROR_HACK > $this->BackyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
@@ -166,7 +189,7 @@ public function log($message, $level = 0, $error_number = 0) {
  */
 public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = false) {
     //global $backyardConf;
-    $this->BackyardError->log("Die with error {$errorNumber} - {$errorString}", 1);
+    $this->BackyardError->log(1, "Die with error {$errorNumber} - {$errorString}");
     if ($feedbackButtonMarkup) {
         echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - "
                         . (($this->BackyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")

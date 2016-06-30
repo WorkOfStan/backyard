@@ -21,7 +21,7 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new BackyardJson(new BackyardError);
+        $this->object = new BackyardJson(new BackyardError(array('logging_level' => 4)));
     }
 
     /**
@@ -38,8 +38,8 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testMinifyJSON()
     {
-        $orig = '{"status": "123", "text": "abc"}';
-        $expected = '{"status":"123","text":"abc"}';
+        $orig = '{"status": "1233", "text": "abc"}';
+        $expected = '{"status":"1233","text":"abc"}';
         
         $this->assertEquals($expected, $this->object->minifyJSON($orig));
     }
@@ -50,8 +50,8 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputJSON()
     {
-        $orig = '{"status": "123", "text": "abc"}';
-        $expected = '{"status":"123","text":"abc"}';
+        $orig = '{"status": "1234", "text": "abc"}';
+        $expected = '{"status":"1234","text":"abc"}';
         
         //$this->assertEquals($expected, $this->object->outputJSON($orig));
         $this->markTestSkipped('It would output: Cannot modify header information - headers already sent by ');
@@ -64,10 +64,10 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
     public function testJsonCleanDecode()
     {
         $orig = '{'
-                . '"status": "123", //some comment' . PHP_EOL
+                . '"status": "1235", //some comment' . PHP_EOL
                 . ' "text": "abc" //another comment' . PHP_EOL
                 . '}';
-        $expected = '{"status":"123","text":"abc"}';
+        $expected = '{"status":"1235","text":"abc"}';
         
         $this->assertEquals($expected, json_encode($this->object->jsonCleanDecode($orig,true)));
     }
