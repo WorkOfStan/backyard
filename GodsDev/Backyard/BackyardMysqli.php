@@ -1,4 +1,5 @@
 <?php
+
 namespace GodsDev\Backyard;
 
 use GodsDev\Backyard\BackyardError;
@@ -8,7 +9,6 @@ use GodsDev\Backyard\BackyardError;
 /* * ****************************************************************************
  * Database (MySQL) FUNCTIONS
  */
-
 
 /**
  * __construct
@@ -23,37 +23,36 @@ use GodsDev\Backyard\BackyardError;
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  * @todo add IPv6 , e.g ::1 as $host_port
  */
-
 class BackyardMysqli extends \mysqli {
 
-        protected $BackyardError = NULL;
-    
-        /**
-         * 
-         * @param string $host_port accepts either hostname (or IPv4) or hostname:port
-         * @param string $user
-         * @param string $pass
-         * @param string $db
-         * @param BackyardError $BackyardError
-         */
+    protected $BackyardError = NULL;
+
+    /**
+     * 
+     * @param string $host_port accepts either hostname (or IPv4) or hostname:port
+     * @param string $user
+     * @param string $pass
+     * @param string $db
+     * @param BackyardError $BackyardError
+     */
     public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError) {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
-        
+
         $temp = explode(":", $host_port);
-        
-        if($temp[0] === 'p'){
+
+        if ($temp[0] === 'p') {
             $host = 'p:' . (string) $temp[1];
             if (isset($temp[2])) {
                 $port = (int) $temp[2];
-            }            
+            }
         } else {
             $host = (string) $temp[0];
             if (isset($temp[1])) {
                 $port = (int) $temp[1];
             }
         }
-        
+
         if (isset($port)) {
             if ($host === 'localhost') {
                 $host = "127.0.0.1"; //localhost uses just the default port
@@ -71,7 +70,7 @@ class BackyardMysqli extends \mysqli {
             $this->BackyardError->dieGraciously(
                     '5013', //@TODO 3 -  test die_graciously
                     'Connect Error (' . $this->connect_errno . ') '
-                    . $this->connect_error 
+                    . $this->connect_error
                     . " | " . $tempErrorString);
         }
 

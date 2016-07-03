@@ -1,5 +1,7 @@
 <?php
-namespace GodsDev\backyard;
+error_log('Obsolete LIB 2 initiated. Exiting.');
+die('LIB2');
+//namespace GodsDev\backyard;
 
 
 /*

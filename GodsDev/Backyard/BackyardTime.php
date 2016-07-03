@@ -1,61 +1,56 @@
 <?php
-namespace GodsDev\Backyard;
-//@todo SHOULDN'T IT BE GodsDev\Backyard\BackyardTime ?
 
+namespace GodsDev\Backyard;
 
 class BackyardTime {
 
-    //protected $BackyardError = null;
     private $PageTimestamp = null;
 
-    public function __construct(
-    //BackyardError $BackyardError
-            ) {
-        //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-      //  $this->BackyardError = $BackyardError;
-        $this->PageTimestamp = $this->getmicrotime();//initialisation
+    public function __construct() {
+        $this->PageTimestamp = $this->getmicrotime(); //initialisation
     }
-    
-    
-/**
- * Initiation of $page_timestamp must be the first thing a page will do 
- * Store "time" for benchmarking.
- * Inspired by sb_functions.php in sphpblog
- * 
- * @return float
- */
-public function getmicrotime() {
-    if (version_compare(phpversion(), '5.0.0') == -1) {
-        list($usec, $sec) = explode(' ', microtime());
-        return ((float) $usec + (float) $sec);
-    } else {
-        return( microtime(true) );
+
+    /**
+     * Initiation of $page_timestamp must be the first thing a page will do 
+     * Store "time" for benchmarking.
+     * Inspired by sb_functions.php in sphpblog
+     * 
+     * @return float
+     */
+    public function getmicrotime() {
+        if (version_compare(phpversion(), '5.0.0') == -1) {
+            list($usec, $sec) = explode(' ', microtime());
+            return ((float) $usec + (float) $sec);
+        } else {
+            return( microtime(true) );
+        }
     }
-}
-public function getPageTimestamp(){
-    return $this->PageTimestamp;
-}
 
-/**
- * 
- * @global float $backyardPage_timestamp
- * @return float
- */
-public function getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
-    return round($this->getmicrotime() - $this->PageTimestamp, 4);
-}
+    public function getPageTimestamp() {
+        return $this->PageTimestamp;
+    }
 
-/**
- * If called with 'Page Generated in %s seconds', it returns "Page Generated in x.xxxx seconds"
- *
- * @param string $langStringPageGeneratedIn instead of $backyardLangString['page_generated_in']
- * @return string
- */
-public function pageGeneratedIn($langStringPageGeneratedIn = '%s') {    
-    $str = str_replace('%s', round($this->getmicrotime() - $this->PageTimestamp, 4), $langStringPageGeneratedIn);
-    //$this->BackyardError->log(6, round($this->getmicrotime() - $this->PageTimestamp, 4), array(6));
-    return $str;
-}
+    /**
+     * 
+     * @global float $backyardPage_timestamp
+     * @return float
+     */
+    public function getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
+        return round($this->getmicrotime() - $this->PageTimestamp, 4);
+    }
+
+    /**
+     * If called with 'Page Generated in %s seconds', it returns "Page Generated in x.xxxx seconds"
+     *
+     * @param string $langStringPageGeneratedIn instead of $backyardLangString['page_generated_in']
+     * @return string
+     */
+    public function pageGeneratedIn($langStringPageGeneratedIn = '%s') {
+        $str = str_replace('%s', round($this->getmicrotime() - $this->PageTimestamp, 4), $langStringPageGeneratedIn);
+        //$this->BackyardError->log(6, round($this->getmicrotime() - $this->PageTimestamp, 4), array(6));
+        return $str;
+    }
+
 }
 
 /**
