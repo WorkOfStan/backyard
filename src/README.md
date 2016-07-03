@@ -1,0 +1,1 @@
+Folder src contains files from LIB2, that were not yet moved to LIB3 or destined to be deleted.
