@@ -1,6 +1,8 @@
 <?php
 namespace GodsDev\Backyard;
-//@todo SHOULDN'T IT BE GodsDev\Backyard\Mysqli ?
+
+use GodsDev\Backyard\BackyardError;
+
 //@TODO create TestBackyardMysqli.php
 
 /* * ****************************************************************************
@@ -14,16 +16,26 @@ namespace GodsDev\Backyard;
  * @param string $user
  * @param string $pass
  * @param string $db
+ * @param BackyardError $BackyardError
  * 
  * To open as persistent use: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
  * class backyard_mysqli based on my_mysqli from https://github.com/GodsDev/repo1/blob/58fa783d4c7128579b729465dc36b45568f9ddb1/myreport/src/mreport_functions.php as of 120914
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  * @todo add IPv6 , e.g ::1 as $host_port
  */
+
 class BackyardMysqli extends \mysqli {
 
         protected $BackyardError = NULL;
     
+        /**
+         * 
+         * @param string $host_port accepts either hostname (or IPv4) or hostname:port
+         * @param string $user
+         * @param string $pass
+         * @param string $db
+         * @param BackyardError $BackyardError
+         */
     public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError) {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;

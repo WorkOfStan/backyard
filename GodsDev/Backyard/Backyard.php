@@ -8,10 +8,14 @@ class Backyard {
     
     protected $BackyardConf = array();
     
-    public $BackyardArray, $Crypt, $BackyardError, $Geo, $Http, $Json, $Mysqli, $BackyardTime;//object
+    public $BackyardArray, $Crypt, $BackyardError, $Geo, $Http, $Json, //$Mysqli, 
+            $BackyardTime;//object
     public $PageTimestamp;
 
-
+    /**
+     * 
+     * @param array $backyardConfConstruct
+     */
     public function __construct(array $backyardConfConstruct = array()) {        //global $backyardConf;
         $this->BackyardTime = new BackyardTime($this->BackyardError);
         $this->PageTimestamp = $this->BackyardTime->getPageTimestamp(); //Initiation of $page_timestamp SHOULD be the first thing a page will do.
@@ -23,7 +27,9 @@ class Backyard {
         //$this->BackyardTime = new \GodsDev\Backyard\BackyardTime($this->BackyardError);
         //$this->PageTimestamp = $this->BackyardTime->getmicrotime();
 
-        $this->initLazyProperties(['BackyardArray', 'Crypt', 'Geo', 'Http', 'Json', 'Mysqli']);
+        $this->initLazyProperties(['BackyardArray', 'Crypt', 'Geo', 'Http', 'Json'
+            //, 'Mysqli'
+            ]);
         
     }
 
@@ -47,8 +53,16 @@ class Backyard {
         return $this->Json ?: $this->Json = new BackyardJson($this->BackyardError);
     }
 
-    private function getMysqli($host_port, $user, $pass, $db){
-        return $this->Mysqli ?: $this->Mysqli = new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError);
+    /**
+     * 
+     * @param string $host_port
+     * @param string $user
+     * @param string $pass
+     * @param string $db
+     * @return \GodsDev\Backyard\BackyardMysqli
+     */
+    public function newMysqli($host_port, $user, $pass, $db){
+        return new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError);
     }    
         
 

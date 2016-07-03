@@ -77,4 +77,8 @@ Expected structure of geo related tables is in sql/poi.sql .
     - Primary language of comments is English.
     - Deprecated or obsolete code blocks are commented with prefix of the letter “x”. I may add reason for making the code obsolete as in the following:
     - //Xhe’s got id from the beginning: $_SESSION["id"] = User::$himself->getId();
-  
+
+
+backyard 3 usage
+-------------------
+NB: BackyardMysqli creates no Backyard->Mysqli object (as e.g. Backyard->Json does) because it is not used by LIB itself and more importantly user of LIB may create any number of those.
