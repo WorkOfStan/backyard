@@ -3,3 +3,4 @@
 /deploy/backyard/conf/conf_private.php
 /src/conf/conf_private.php
 /vendor/
+/composer.lock

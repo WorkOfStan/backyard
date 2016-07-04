@@ -22,7 +22,7 @@ class Backyard {
         $this->BackyardError = new BackyardError($this->BackyardConf, $this->BackyardTime);
 
         //@todo - when LazyProperty is active, NetBeans does not hint the methods - wouldn't using interface solved it?
-        $this->initLazyProperties(['BackyardArray', 'Crypt', 'Geo', 'Http', 'Json']);
+        $this->initLazyProperties(array('BackyardArray', 'Crypt', 'Geo', 'Http', 'Json'));
     }
 
     private function getBackyardArray() {
