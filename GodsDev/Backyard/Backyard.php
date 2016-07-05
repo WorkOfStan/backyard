@@ -26,23 +26,28 @@ class Backyard {
     }
 
     private function getBackyardArray() {
-        return $this->BackyardArray ? : $this->BackyardArray = new BackyardArray($this->BackyardError);
+        return $this->BackyardArray ? : 
+                $this->BackyardArray = new BackyardArray($this->BackyardError);
     }
 
     private function getCrypt() {
-        return $this->Crypt ? : $this->Crypt = new BackyardCrypt($this->BackyardError);
+        return $this->Crypt ? : 
+                $this->Crypt = new BackyardCrypt($this->BackyardError);
     }
 
     private function getGeo() {
-        return $this->Geo ? : $this->Geo = new BackyardGeo($this->BackyardError, $this->BackyardConf);
+        return $this->Geo ? : 
+                $this->Geo = new BackyardGeo($this->BackyardError, $this->BackyardConf);
     }
 
     private function getHttp() {
-        return $this->Http ? : $this->Http = new BackyardHttp($this->BackyardError);
+        return $this->Http ? : 
+                $this->Http = new BackyardHttp($this->BackyardError);
     }
 
     private function getJson() {
-        return $this->Json ? : $this->Json = new BackyardJson($this->BackyardError);
+        return $this->Json ? : 
+                $this->Json = new BackyardJson($this->BackyardError);
     }
 
     /**
