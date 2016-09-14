@@ -9,7 +9,7 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardArray {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
@@ -22,7 +22,7 @@ class BackyardArray {
 
     /**
      * Note http://php.net/manual/en/function.array-key-exists.php#107786
-     * If you want to take the performance advantage of isset() while keeping the NULL element correctly detected, use this:
+     * If you want to take the performance advantage of isset() while keeping the null element correctly detected, use this:
 
       if (isset(..) || array_key_exists(...))
       {

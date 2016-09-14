@@ -3,6 +3,7 @@ namespace GodsDev\Backyard\Test;
 
 use GodsDev\Backyard\BackyardJson;
 use GodsDev\Backyard\BackyardError;
+use GodsDev\Backyard\BackyardHttp;
 
 
 /**
@@ -21,7 +22,8 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new BackyardJson(new BackyardError(array('logging_level' => 4)));
+        $backyardError = new BackyardError(array('logging_level' => 4));
+        $this->object = new BackyardJson($backyardError, new BackyardHttp($backyardError));
     }
 
     /**
@@ -43,6 +45,18 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $this->object->minifyJSON($orig));
     }
+    
+    /**
+     * @covers GodsDev\Backyard\BackyardJson::minifyJSON
+     * @todo   Implement testMinifyJSON().
+     */
+    public function testMinifyJSONInvalid()
+    {
+        $orig = '"status": "1233", "text": "abc"}';
+        $expected = '{"status": "500", "error": "Internal error"}';
+        
+        $this->assertEquals($expected, $this->object->minifyJSON($orig));
+    }    
 
     /**
      * @covers GodsDev\Backyard\BackyardJson::outputJSON

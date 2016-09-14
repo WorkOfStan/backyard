@@ -3,20 +3,24 @@
 namespace GodsDev\Backyard;
 
 use GodsDev\Backyard\BackyardError;
+use GodsDev\Backyard\BackyardHttp;
 
 /**
  * JSON FUNCTIONS
  */
 class BackyardJson {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
+    protected $BackyardHttp = null;
 
     /**
      * 
-     * @param BackyardError $BackyardError
+     * @param BackyardError $backyardError
+     * @param BackyardHttp $backyardHttp
      */
-    public function __construct(BackyardError $BackyardError) {
-        $this->BackyardError = $BackyardError;
+    public function __construct(BackyardError $backyardError, BackyardHttp $backyardHttp) {
+        $this->BackyardError = $backyardError;
+        $this->BackyardHttp = $backyardHttp;
     }
 
     /**
@@ -49,6 +53,9 @@ class BackyardJson {
     public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
         header("Content-type: application/json");
         $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
+        if($minifiedJson === '{"status": "500", "error": "Internal error"}'){ //error output from minifyJSON
+            header("HTTP/1.1 500 Internal Server Error");
+        }
         echo($minifiedJson);
         if ($exitAfterOutput) {
             exit;
@@ -65,7 +72,7 @@ class BackyardJson {
      * @param   bool    $assoc   When TRUE, returned objects will be converted into associative arrays. 
      * @param   integer $depth   User specified recursion depth. (>=5.3) 
      * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
-     * @return  array or NULL is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 
+     * @return  array or null is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 
      */
     public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
         // search and remove comments like /* */ and //
@@ -90,21 +97,14 @@ class BackyardJson {
      * @param string $url
      * @return array|bool array if cURL($url) returns JSON else false
      * 
-     * 
-     * @todo - use BackyardHttp
      */
-    public function getJsonAsArray($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $json = curl_exec($ch);
+    public function getJsonAsArray($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
+        $result = $this->BackyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
+        $json = $result['message_body'];
         if (!$json) {
-            $this->BackyardError->log(2, "Curl error: " . curl_error($ch) . " on {$url}");
+            $this->BackyardError->log(2, "No content on {$url}");
             return false;
         }
-        curl_close($ch);
         $jsonArray = $this->jsonCleanDecode($json, true);
         if (!$jsonArray) {
             $this->BackyardError->log(2, "Trouble with decoding JSON from {$url}");

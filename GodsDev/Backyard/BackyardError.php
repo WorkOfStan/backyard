@@ -20,7 +20,7 @@ class BackyardError {
             BackyardTime $BackyardTime = null
             ) {
         $this->BackyardTime = ($BackyardTime === null)?(new BackyardTime()):$BackyardTime;        
-        $backyardConfConstruct = array_merge(                
+        $this->BackyardConf = array_merge(                
                 array(//default values
                     'logging_level'             => 5,       //log up to the level set here, default=5 = debug//logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
                     'logging_level_name'        => array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'debug', 'speed'),
@@ -36,7 +36,6 @@ class BackyardError {
                     'error_hack_from_get'       => 0,       //in this field, the value of $_GET['ERROR_HACK'] shall be set below                    
                 ),
                 $backyardConfConstruct);
-        $this->BackyardConf = $backyardConfConstruct;
         //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
     }
     

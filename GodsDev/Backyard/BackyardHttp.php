@@ -34,7 +34,7 @@ if (!function_exists('apache_request_headers')) {
 
 class BackyardHttp {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
@@ -44,6 +44,7 @@ class BackyardHttp {
     BackyardError $BackyardError) {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
+        //@todo set $this->post etc from $_POST, $_GET and $_SERVER to make the functions below testable in isolation
     }
 
     /**
@@ -153,7 +154,7 @@ class BackyardHttp {
      * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', ['REDIRECT_URL',])
      */
     public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
-        $this->BackyardError->log(5, "backyard_getData({$url},{$useragent},{$timeout});", array(16));
+        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout});", array(16));
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
