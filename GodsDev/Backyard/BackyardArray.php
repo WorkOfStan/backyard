@@ -173,7 +173,7 @@ class BackyardArray {
                     $difference[$key] = $value;
                 } else {
                     $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
-                    if ($new_diff != FALSE) {
+                    if ($new_diff != false) {
                         $difference[$key] = $new_diff;
                     }
                 }

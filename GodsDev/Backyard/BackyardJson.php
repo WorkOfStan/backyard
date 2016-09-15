@@ -54,7 +54,7 @@ class BackyardJson {
         header("Content-type: application/json");
         $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
         if($minifiedJson === '{"status": "500", "error": "Internal error"}'){ //error output from minifyJSON
-            header("HTTP/1.1 500 Internal Server Error");
+            header("HTTP/1.1 500 Internal Server Error", true, 500);
         }
         echo($minifiedJson);
         if ($exitAfterOutput) {
@@ -69,7 +69,7 @@ class BackyardJson {
      * http://www.php.net/manual/en/function.json-decode.php#112735
      * 
      * @param   string  $json2decode    The json string being decoded 
-     * @param   bool    $assoc   When TRUE, returned objects will be converted into associative arrays. 
+     * @param   bool    $assoc   When true, returned objects will be converted into associative arrays. 
      * @param   integer $depth   User specified recursion depth. (>=5.3) 
      * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
      * @return  array or null is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 

@@ -177,7 +177,7 @@ class BackyardHttp {
         }
 
         /* cannot be activated when in safe_mode or an open_basedir is set
-          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
           curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
          */
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -279,7 +279,7 @@ class BackyardHttp {
         $host = $url['host'];
         $port = (isset($url['port']) ? $url['port'] : 80);
         $path = (isset($url['path']) ? $url['path'] : '/');
-        $this->BackyardError->log(4, "url: " . print_r($url, TRUE), array(16)); //debug
+        $this->BackyardError->log(4, "url: " . print_r($url, true), array(16)); //debug
 
         $request = "HEAD $path HTTP/1.1\r\n"
                 . "Host: $host\r\n"
@@ -298,7 +298,7 @@ class BackyardHttp {
             socket_write($socket, $request, strlen($request));
             $socketRead = socket_read($socket, 1024);
             $response = explode(' ', $socketRead);
-            $this->BackyardError->log(4, "HEAD HTTP response: " . print_r($response, TRUE), array(16)); //debug
+            $this->BackyardError->log(4, "HEAD HTTP response: " . print_r($response, true), array(16)); //debug
             //120427, if the result is not number, maybe the server doesn't understand HEAD, let's try GET
             if (!is_numeric($response[1])) {
                 $request = "GET $path HTTP/1.1\r\n"
@@ -308,7 +308,7 @@ class BackyardHttp {
 
                 socket_write($socket, $request, strlen($request));
                 $response = explode(' ', socket_read($socket, 1024));
-                $this->BackyardError->log(4, "GET HTTP response: " . print_r($response, TRUE), array(16)); //debug
+                $this->BackyardError->log(4, "GET HTTP response: " . print_r($response, true), array(16)); //debug
                 if (!is_numeric($response[1])) {
                     $this->BackyardError->log(3, "REQUEST = $request RETURNED RESPONSE = {$response[1]} INSTEAD OF HTTP status");
                 }
@@ -360,7 +360,7 @@ class BackyardHttp {
             socket_write($socket, $request, strlen($request));
 
             $response = explode(' ', socket_read($socket, 1024));
-            $this->BackyardError->log(4, "HTTP response: " . print_r($response, TRUE), array(16)); //debug
+            $this->BackyardError->log(4, "HTTP response: " . print_r($response, true), array(16)); //debug
         } else {
             $this->BackyardError->log(3, "socket_connect to $host $path failed", array(13)); //debug        
         }
