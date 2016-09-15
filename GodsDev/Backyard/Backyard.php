@@ -24,7 +24,7 @@ class Backyard {
                 $this->Crypt = new BackyardCrypt($this->BackyardError);
                 $this->Geo = new BackyardGeo($this->BackyardError, $this->BackyardConf);
                 $this->Http = new BackyardHttp($this->BackyardError);
-                $this->Json = new BackyardJson($this->BackyardError);
+                $this->Json = new BackyardJson($this->BackyardError, $this->Http);
     }
 
     /**

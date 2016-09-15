@@ -6,7 +6,7 @@ use GodsDev\Backyard\BackyardError;
 
 class BackyardCrypt {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
