@@ -58,7 +58,7 @@ class BackyardArray {
     /**
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
-     * @param array $myArray
+     * @param array $myArray at least two-dimensional
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
      * @return array
@@ -69,7 +69,7 @@ class BackyardArray {
         }
         $result = array();
         foreach ($myArray as $key => $row) {
-            if (isset($row[$columnName]) || array_key_exists($columnName, $row)) {
+            if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
                 $result[$key] = $row[$columnName];
             } elseif ($columnAlwaysExpected) {
                 $this->BackyardError->log(3, "getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
