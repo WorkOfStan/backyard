@@ -6,8 +6,14 @@ class Backyard {
 
 
     protected $BackyardConf = array();
-    public $BackyardArray, $Crypt, $BackyardError, $Geo, $Http, $Json, $BackyardTime; //object
-    public $PageTimestamp;
+    public $BackyardArray; //object
+    public $Crypt; //object
+    public $BackyardError; //object
+    public $Geo; //object
+    protected $varHttp; //object
+    public $Json; //object
+    public $BackyardTime; //object
+    public $PageTimestamp; //object
 
     /**
      * 
@@ -20,10 +26,15 @@ class Backyard {
         $this->BackyardConf = $backyardConfConstruct;
         $this->BackyardError = new BackyardError($this->BackyardConf, $this->BackyardTime);
 
+        /*
+         * Works for functions. Btw: getter cannot be overwritten by mistake
+         * 
+         * @return \GodsDev\Backyard\BackyardArray BackyardArray object
+         */
                 $this->BackyardArray = new BackyardArray($this->BackyardError);
                 $this->Crypt = new BackyardCrypt($this->BackyardError);
                 $this->Geo = new BackyardGeo($this->BackyardError, $this->BackyardConf);
-                $this->Http = new BackyardHttp($this->BackyardError);
+                $this->varHttp = $this->Http();//new BackyardHttp($this->BackyardError);
                 $this->Json = new BackyardJson($this->BackyardError, $this->Http);
     }
 
@@ -38,5 +49,16 @@ class Backyard {
     public function newMysqli($host_port, $user, $pass, $db) {
         return new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError);
     }
+    
+    /**
+     * 
+     * @return \GodsDev\Backyard\BackyardHttp BackyardHttp object
+     */
+    public function Http() {
+        return $this->varHttp ? : 
+                $this->varHttp = 
+                new BackyardHttp($this->BackyardError);
+    }
+
 
 }
