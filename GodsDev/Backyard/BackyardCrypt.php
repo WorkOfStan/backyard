@@ -6,7 +6,7 @@ use GodsDev\Backyard\BackyardError;
 
 class BackyardCrypt {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
@@ -25,7 +25,7 @@ class BackyardCrypt {
      */
     public function randomId($random_id_length = 10) {
         //generate a random id encrypt it and store it in $rnd_id 
-        $rnd_id = crypt(uniqid(rand(), 1));
+        $rnd_id = crypt(uniqid(rand(), 1), uniqid(rand(), 1));
 
         //to remove any slashes that might have come 
         $rnd_id = strip_tags(stripslashes($rnd_id));

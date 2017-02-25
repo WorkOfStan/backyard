@@ -96,10 +96,18 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         $result['message_body'] = preg_replace('/^.+\n/', '', preg_replace('/^.+\n/', '', $result['message_body']));//remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
         
 //        $this->assertEquals($expected, $result);
-     $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE']);
-     $this->assertEquals(preg_replace('/\s+/', '', $expected['message_body']), preg_replace('/\s+/', '', $result['message_body']));
-  //   $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
-     $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);        
+        $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE']);
+
+        $tempExpected = explode('<br/>', preg_replace('/\s+/', '', $expected['message_body']));
+        asort($tempExpected);
+        $tempResult = explode('<br/>', preg_replace('/\s+/', '', $result['message_body']));
+        asort($tempResult);
+        $this->assertEquals(
+                implode('|', $tempExpected), implode('|', $tempResult)
+        );
+
+        //   $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
+        $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
     }
 
     public function testGetDataRedirect()

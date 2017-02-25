@@ -20,7 +20,7 @@ class BackyardError {
             BackyardTime $BackyardTime = null
             ) {
         $this->BackyardTime = ($BackyardTime === null)?(new BackyardTime()):$BackyardTime;        
-        $backyardConfConstruct = array_merge(                
+        $this->BackyardConf = array_merge(                
                 array(//default values
                     'logging_level'             => 5,       //log up to the level set here, default=5 = debug//logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
                     'logging_level_name'        => array(0 => 'unknown', 1 => 'fatal', 'error', 'warning', 'info', 'debug', 'speed'),
@@ -36,10 +36,116 @@ class BackyardError {
                     'error_hack_from_get'       => 0,       //in this field, the value of $_GET['ERROR_HACK'] shall be set below                    
                 ),
                 $backyardConfConstruct);
-        $this->BackyardConf = $backyardConfConstruct;
         //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
     }
-    
+
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function emergency($message, array $context = array()){
+        return $this->log(0,$message,$context);
+    }
+
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function alert($message, array $context = array()){
+        return $this->log(1,$message,$context);
+    }
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function critical($message, array $context = array()){
+        return $this->log(1,$message,$context);
+    }
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function error($message, array $context = array()){
+        return $this->log(2,$message,$context);
+    }
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function warning($message, array $context = array()){
+        return $this->log(3,$message,$context);
+    }
+
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function notice($message, array $context = array()){
+        return $this->log(4,$message,$context);
+    }
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function info($message, array $context = array()){
+        return $this->log(4,$message,$context);
+    }
+
+    /**
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function debug($message, array $context = array()){
+        return $this->log(5,$message,$context);
+    }
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     * @return null
+     */    
 /**
  * Error_log() modified to log necessary debug information by application to its own log (common to the whole host by default).
  * 

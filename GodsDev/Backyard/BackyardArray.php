@@ -9,7 +9,7 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardArray {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
@@ -22,7 +22,7 @@ class BackyardArray {
 
     /**
      * Note http://php.net/manual/en/function.array-key-exists.php#107786
-     * If you want to take the performance advantage of isset() while keeping the NULL element correctly detected, use this:
+     * If you want to take the performance advantage of isset() while keeping the null element correctly detected, use this:
 
       if (isset(..) || array_key_exists(...))
       {
@@ -58,7 +58,7 @@ class BackyardArray {
     /**
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
-     * @param array $myArray
+     * @param array $myArray at least two-dimensional
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
      * @return array
@@ -69,7 +69,7 @@ class BackyardArray {
         }
         $result = array();
         foreach ($myArray as $key => $row) {
-            if (isset($row[$columnName]) || array_key_exists($columnName, $row)) {
+            if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
                 $result[$key] = $row[$columnName];
             } elseif ($columnAlwaysExpected) {
                 $this->BackyardError->log(3, "getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
@@ -173,7 +173,7 @@ class BackyardArray {
                     $difference[$key] = $value;
                 } else {
                     $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
-                    if ($new_diff != FALSE) {
+                    if ($new_diff != false) {
                         $difference[$key] = $new_diff;
                     }
                 }

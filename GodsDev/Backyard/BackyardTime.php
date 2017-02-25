@@ -25,14 +25,17 @@ class BackyardTime {
             return( microtime(true) );
         }
     }
-
+    
+    /**
+     * 
+     * @return float
+     */
     public function getPageTimestamp() {
         return $this->PageTimestamp;
     }
 
     /**
      * 
-     * @global float $backyardPage_timestamp
      * @return float
      */
     public function getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row

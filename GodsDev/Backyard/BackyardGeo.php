@@ -17,14 +17,13 @@ class BackyardGeo {
      */
     public function __construct(
     BackyardError $BackyardError, array $backyardConfConstruct = array()) {
-        $backyardConfConstruct = array_merge(
+        //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
+        $this->BackyardConf = array_merge(
                 array(//default values
             'geo_rough_distance_limit' => 1, //float //to quickly get rid off too distant POIs; 1 ~ 100km
             'geo_maximum_meters_from_poi' => 2500, //float //distance considered to be overlapping with the device position // 2500 m is considered exact location due to mobile phone GPS caching
             'geo_poi_list_table_name' => 'poi_list', //string //name of table with POI coordinates    
-                ), $backyardConfConstruct);
-        //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
-        $this->BackyardConf = $backyardConfConstruct;
+                ), $backyardConfConstruct);        
 
         $this->BackyardError = $BackyardError;
     }
@@ -74,10 +73,25 @@ class BackyardGeo {
      * js/geo.js
      * 
      * @todo 4 - consider not indexing lat and long in MySQL table
-     * @todo 4 - consider spatial indexes in MySQL tabel
+     * @todo 4 - consider renaming long as column in MySQL table (because long is reserved word)
+     * @todo 4 - consider spatial indexes in MySQL table
      * 
      * 
      */
+    
+    /**
+     * 1 ~ 100km
+     * @param float $clientLng
+     * @param float $clientLat
+     * @param float $poiLng
+     * @param float $poiLat
+     * @return float
+     */
+    public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat) {
+        $result = abs($clientLng - $poiLng) + abs($clientLat - $poiLat);
+        $this->BackyardError->log(5, "client({$clientLng}, {$clientLat}) poi({$poiLng}, {$poiLat}) roughDistance = {$result}");
+        return $result;
+    }
 
     /**
      * Returns associative array of the closest POI.
@@ -118,11 +132,12 @@ class BackyardGeo {
                 'adresa' => $row['adresa'],
                 'lng' => $row['long'],
                 'lat' => $row['lat'],
-                'roughDistance' => abs($long - $row['long']) + abs($lat - $row['lat'])
+                'roughDistance' => $this->getRoughDistance($long, $lat, $row['long'], $row['lat'])// abs($long - $row['long']) + abs($lat - $row['lat'])
             );
             $roughDistance[$key] = $listOfPOINearbyPreprocessed[$key]['roughDistance'];
         }
-
+        
+        $this->BackyardError->log(4, 'Count of rows listOfPOINearbyPreprocessed: ' . count($listOfPOINearbyPreprocessed), array(11));
         array_multisort($roughDistance, SORT_ASC, $listOfPOINearbyPreprocessed);
 
         $distanceArray = array();
@@ -144,6 +159,7 @@ class BackyardGeo {
         if (!$listOfPOINearbyProcessed) {
             return false;
         }
+        $this->BackyardError->log(4, 'Count of rows listOfPOINearbyProcessed: ' . count($listOfPOINearbyProcessed), array(11));        
         return array(
             'distance_m' => (int) floor($listOfPOINearbyProcessed[0]['distance']),
             'poi_id' => $listOfPOINearbyProcessed[0]['poi_id'],
@@ -178,6 +194,8 @@ class BackyardGeo {
         $listOfPOINearby = $poiConnection->queryArray($query);
         if (!$listOfPOINearby) {
             $this->BackyardError->log(2, 'No result for query ' . $query, array(11));
+        } else {
+            $this->BackyardError->log(4, 'Count of rows listOfPOINearby: ' . count($listOfPOINearby), array(11));
         }
         return $listOfPOINearby;
     }

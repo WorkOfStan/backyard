@@ -25,7 +25,7 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardMysqli extends \mysqli {
 
-    protected $BackyardError = NULL;
+    protected $BackyardError = null;
 
     /**
      * 
@@ -109,8 +109,7 @@ class BackyardMysqli extends \mysqli {
         //if ($ERROR_LOG_OUTPUT) {
         //    my_error_log($sql, 5, 11);
         //}
-        $result = //@
-                parent::query($sql); //parent query method called with @ operator, to supress error messages
+        $result = parent::query($sql);
         if ($this->errno != 0) {
             if ($ERROR_LOG_OUTPUT) {
                 $this->BackyardError->log(1, "{$this->errno} : {$this->error} /with query: {$sql}", array(11));
