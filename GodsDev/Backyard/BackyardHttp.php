@@ -100,7 +100,7 @@ class BackyardHttp {
             504 => "HTTP/1.1 504 Gateway Time-out"
         );
         header($http[$num]);
-        header("Location: $url");
+        header("Location: {$url}");
         $this->BackyardError->log(5, "Redirect to {$url} with {$num} status");
         if ($stopCodeExecution) {
             exit; //default behaviour expects that no code should be interpreted after redirection
@@ -151,10 +151,10 @@ class BackyardHttp {
      * @param int $timeout [seconds] default =5
      * @param string|false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
      * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
-     * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', ['REDIRECT_URL',])
+     * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',])
      */
     public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
-        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout});", array(16));
+        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout});", array(16));        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
@@ -234,13 +234,12 @@ class BackyardHttp {
             }
         }
         // $retVal contains array("header_name": "header_value")
+        $data['HEADER_FIELDS'] = $retVal;        
         if (isset($retVal['Location'])) {
             $data['REDIRECT_URL'] = $retVal['Location'];
         }
 
-        //obsoleted//$data['CONTENT-TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);  //@TODO - original, to be made obsolete by CONTENT_TYPE
         $data['CONTENT_TYPE'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        //$data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout    
         curl_close($ch);
         return $data;
     }
