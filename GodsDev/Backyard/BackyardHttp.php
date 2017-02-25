@@ -220,6 +220,7 @@ class BackyardHttp {
         // $fields contains array of string which are lines of response header
         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', substr($response, 0, $header_size) //message header
         ));
+        $retVal = array();
         // http://stackoverflow.com/a/4243667
         foreach ($fields as $field) {
             if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
