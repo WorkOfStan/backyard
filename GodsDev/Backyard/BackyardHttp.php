@@ -151,13 +151,17 @@ class BackyardHttp {
      * @param int $timeout [seconds] default =5
      * @param string|false $customHeaders default = false; string of HTTP headers delimited by pipe without trailing spaces
      * @param array $postArray OPTIONAL array of parameters to be POST-ed as the normal application/x-www-form-urlencoded string
+     * @param string $customRequest OPTIONAL fills in CURLOPT_CUSTOMREQUEST
      * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',])
      */
-    public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
-        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout});", array(16));        
+    public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array(), $customRequest = null) {
+        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout},{$customHeaders},".(empty($postArray)?'[]':(count($postArray).' fields')).",{$customRequest});", array(16));        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        if(!is_null($customRequest) && is_string($customRequest) && in_array($customRequest, array('GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'))){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
+        }
         if ($customHeaders) {
             if (!is_string($customHeaders)) {
                 $this->BackyardError->log(2, 'customHeaders string expected, got ' . gettype($customHeaders));
@@ -185,7 +189,7 @@ class BackyardHttp {
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //accepts also private SSL certificates //@todo it could be possible to try without that option and if it fails, it may try with this option and inform about it
 
         $response = curl_exec($ch);
         //@TODO - if response is 301 or 302, then dump header into output and make it clickable or maybe download the next step automatically - it is necessary however to stop after 5 redirects

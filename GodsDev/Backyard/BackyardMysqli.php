@@ -67,11 +67,8 @@ class BackyardMysqli extends \mysqli {
         }
 
         if ($this->connect_error) {
-            $this->BackyardError->dieGraciously(
-                    '5013', //@TODO 3 -  test die_graciously
-                    'Connect Error (' . $this->connect_errno . ') '
-                    . $this->connect_error
-                    . " | " . $tempErrorString);
+            //@TODO 3 -  test die_graciously            
+            $this->BackyardError->dieGraciously('5013', "Connect Error ({$this->connect_errno}) {$this->connect_error} | {$tempErrorString}");
         }
 
         //change character set to utf8
