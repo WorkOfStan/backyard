@@ -245,10 +245,7 @@ public function log($level, $message, array $context = array()) {//($message, $l
             $result = error_log($message_prefix . "(error: logging_file should be set!) $message"); //zapisuje do default souboru
             //zaroven by mohlo poslat mail nebo tak neco .. vypis na obrazovku je asi az krajni reseni
         } else {
-            $messageType = 3;
-            if ($this->BackyardConf['error_log_message_type'] == 0) {
-                $messageType = $this->BackyardConf['error_log_message_type'];
-            }
+            $messageType = ($this->BackyardConf['error_log_message_type'] == 0) ? $this->BackyardConf['error_log_message_type'] : 3;
             if ($this->BackyardConf['log_monthly_rotation']) {
                 $result = error_log($message_prefix . $message . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$this->BackyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
             } else {
