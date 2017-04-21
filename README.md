@@ -2,8 +2,8 @@ Library In Backyard
 ===================
 **Collection of useful functions**
 
-backyard 3 usage
--------------------
+[![Total Downloads](https://img.shields.io/packagist/dt/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
+[![Latest Stable Version](https://img.shields.io/packagist/v/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
 
 
 ## Requirements ##
@@ -81,8 +81,13 @@ $backyard = new \GodsDev\Backyard\Backyard(
 ## Notes
 
 NB: BackyardMysqli creates no Backyard->Mysqli object (as e.g. Backyard->Json does) because it is not used by LIB itself and more importantly user of LIB may create any number of those.
+Example of usage:
 
-
+```php
+$backyard = new GodsDev\Backyard\Backyard(array('logging_level' => 3));
+$logger = $backyard->BackyardError;
+$dbLink = new GodsDev\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
+```
 
 
 

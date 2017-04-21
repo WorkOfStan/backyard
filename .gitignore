@@ -1,6 +1,11 @@
-/nbproject/private/
-/nbproject/
+# Environment specific configuration
 /deploy/backyard/conf/conf_private.php
 /src/conf/conf_private.php
+
+# Composer infrastructure
 /vendor/
 /composer.lock
+
+# IDE
+/nbproject
+/.idea
