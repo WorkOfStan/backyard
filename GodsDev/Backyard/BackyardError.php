@@ -3,8 +3,10 @@
 namespace GodsDev\Backyard;
 
 use GodsDev\Backyard\BackyardTime;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 
-class BackyardError {
+class BackyardError extends AbstractLogger implements LoggerInterface {
 
     protected $BackyardConf = array();
     //private $PageTimestamp = null;  
