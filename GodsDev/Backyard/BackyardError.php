@@ -141,57 +141,42 @@ class BackyardError extends AbstractLogger implements LoggerInterface {
     }
 
     /**
+     * Error_log() modified to log necessary debug information by application to its own log
      * Logs with an arbitrary level.
-     *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
+     * Compliant with PSR-3 http://www.php-fig.org/psr/psr-3/
+     *  
+     * @global float $RUNNING_TIME
+     * @global int $ERROR_HACK
+     * 
+     * @param int $level Error level
+     * @param string $message Message to be logged
+     * @param array $context OPTIONAL To enable error log filtering 'error_number' field expected or the first element element expected containing number of error category
+     * 
+     * @return bool
+     *    
+     * <b>ERROR NUMBER LIST</b>
+     *  0 Unspecified<br/>
+     *  1-5 Reserved
+     *  6 Speed<br/>
+     *  7-9 Reserved<br/>
+     *  10 Authentization<br/>
+     *  11 MySQL<br/>
+     *  12 Domain name<br/>
+     *  13 Tampered URL or ID<br/>
+     *  14 Improve this functionality<br/>
+     *  15 Page was refreshed with the same URL therefore action imposed by URL is ignored<br/>
+     *  16 Logging values<br/>
+     *  17 Missing input value<br/>
+     *  18 Setting of a system value<br/>
+     *  19 Redirecting<br/>
+     *  20 Facebook API<br/>
+     *  21 HTTP communication<br/>
+     *  22 E-mail<br/>
+     *  23 Algorithm flow<br/>
+     *  24 Third party API<br/>
+     *  1001 Establish correct error_number
+     * 
      */    
-/**
- * Error_log() modified to log necessary debug information by application to its own log (common to the whole host by default).
- * 
- * <b>ERROR NUMBER LIST</b>
- *  0 Unspecified<br/>
- *  1-5 Reserved
- *  6 Speed<br/>
- *  7-9 Reserved<br/>
- *  10 Authentization<br/>
- *  11 MySQL<br/>
- *  12 Domain name<br/>
- *  13 Tampered URL or ID<br/>
- *  14 Improve this functionality<br/>
- *  15 Page was refreshed with the same URL therefore action imposed by URL is ignored<br/>
- *  16 Logging values<br/>
- *  17 Missing input value<br/>
- *  18 Setting of a system value<br/>
- *  19 Redirecting<br/>
- *  20 Facebook API<br/>
- *  21 HTTP communication<br/>
- *  22 E-mail<br/>
- *  23 Algorithm flow<br/>
- *  24 Third party API<br/>
- *  1001 Establish correct error_number
- * 
- * @global float $RUNNING_TIME
- * @global int $ERROR_HACK
- * 
- * @param int $level Error level
- * @param string $message Zpráva k vypsání - při použití error_number bude obsahovat doplňující info
- * @param int $error_number Číslo chyby, dle které lze chybu vyhodnotit .. bude zapsaná v admin návodu apod. - zatím nepoužito
- * @return bool
- * 
- * 
- *
-    * @todo rework to be more compliant with PSR-3 http://www.php-fig.org/psr/psr-3/
-     * Logs with an arbitrary level.
-     *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    //public function log($level, $message, array $context = array());    
 public function log($level, $message, array $context = array()) {//($message, $level = 0, $error_number = 0) {
     //mozna by stalo za to prepsat i jmeno te puvodni, aby se treba i sphpblog psal tam, kde to vidim
     //mohla by být zavedena čtvrtá vstupní proměnná $line=''
@@ -206,13 +191,12 @@ public function log($level, $message, array $context = array()) {//($message, $l
     $username = 'anonymous'; //placeholder
     
     if(!is_string($message)){
-        error_log("wrong message: Backyard->log({$level},{$message})");
+        error_log("wrong message: Backyard->log({$level}," . print_r($message, true) . ")");
     }
-    if($context === array()){
-        $error_number = 0;
-    } else {
-        $error_number = reset($context);//get the value of the first element //@todo do this only if there is just one element otherwise use field named 'error_number'
-    }
+
+    //if context array is set then get the value of the 'error_number' field or the first element
+    $error_number = ($context === array()) ? 0 : (isset($context['error_number']) ? (int) $context['error_number'] : reset($context));
+
 
     $result = true; //it could eventually be reset to false after calling error_log()
     //if ($ERROR_HACK > $this->BackyardConf['logging_level']){//$ERROR_HACK may be set anytime in the code
@@ -248,11 +232,8 @@ public function log($level, $message, array $context = array()) {//($message, $l
             //zaroven by mohlo poslat mail nebo tak neco .. vypis na obrazovku je asi az krajni reseni
         } else {
             $messageType = ($this->BackyardConf['error_log_message_type'] == 0) ? $this->BackyardConf['error_log_message_type'] : 3;
-            if ($this->BackyardConf['log_monthly_rotation']) {
-                $result = error_log($message_prefix . $message . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$this->BackyardConf['logging_file']}." . date("Y-m") . ".log"); //zapisuje do souboru, který rotuje po měsíci
-            } else {
-                $result = error_log($message_prefix . $message . PHP_EOL, $messageType, "{$this->BackyardConf['logging_file']}"); //zapisuje do souboru
-            }
+            $result = ($this->BackyardConf['log_monthly_rotation']) ? error_log($message_prefix . $message . (($messageType != 0) ? (PHP_EOL) : ('')), $messageType, "{$this->BackyardConf['logging_file']}." . date("Y-m") . ".log") //writes into a monthly rotating file
+                        : error_log($message_prefix . $message . PHP_EOL, $messageType, "{$this->BackyardConf['logging_file']}"); //writes into one file
         }
         if ($level == 1 && $this->BackyardConf['mail_for_admin_enabled']) {//mailto admin, 130108
             error_log($message_prefix . $message . PHP_EOL, 1, $this->BackyardConf['mail_for_admin_enabled']);
@@ -289,7 +270,7 @@ public function log($level, $message, array $context = array()) {//($message, $l
      */
     public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = false) {
         //global $backyardConf;
-        $this->BackyardError->log(1, "Die with error {$errorNumber} - {$errorString}");
+        $this->log(1, "Die with error {$errorNumber} - {$errorString}");
         if ($feedbackButtonMarkup) {
             echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - "
                             . (($this->BackyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")
