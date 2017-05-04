@@ -9,15 +9,18 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardArray {
 
-    protected $BackyardError = null;
+    /**
+     *
+     * @var \GodsDev\Backyard\BackyardError BackyardError object
+     */
+    protected $logger;
 
     /**
      * 
-     * @param BackyardError $BackyardError
+     * @param BackyardError $logger
      */
-    public function __construct(
-    BackyardError $BackyardError) {
-        $this->BackyardError = $BackyardError;
+    public function __construct(BackyardError $logger) {
+        $this->logger = $logger;
     }
 
     /**
@@ -46,7 +49,7 @@ class BackyardArray {
      * @param array $haystack
      * @return boolean
      */
-    public function inArrayWildcards($needle, $haystack) {
+    public function inArrayWildcards($needle, array $haystack) {
         foreach ($haystack as $value) {
             if (true === fnmatch($value, $needle)) {
                 return true;
@@ -58,12 +61,13 @@ class BackyardArray {
     /**
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
+     * 
      * @param array $myArray at least two-dimensional
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
      * @return array
      */
-    public function getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected = false) {
+    public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false) {
         if (!is_array($myArray)) {
             return array(); //empty array more consistent than false
         }
@@ -72,7 +76,7 @@ class BackyardArray {
             if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
                 $result[$key] = $row[$columnName];
             } elseif ($columnAlwaysExpected) {
-                $this->BackyardError->log(3, "getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
+                $this->logger->warning("getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
             }
         }
         return $result;
@@ -80,11 +84,12 @@ class BackyardArray {
 
     /**
      * Returns array $myArray without column named in $columnName
+     * 
      * @param array $myArray
      * @param string $columnName
      * @return array
      */
-    public function removeOneColumnFromArray($myArray, $columnName) {
+    public function removeOneColumnFromArray(array $myArray, $columnName) {
         if (!is_array($myArray)) {
             return array(); //empty array more consistent than false
         }
@@ -97,14 +102,21 @@ class BackyardArray {
             }
         }
         return $result;
+
+        //@todo measure if the following pattern wouldn't be faster while having exactly the same results
+//        foreach($myArray as $k => $v) {
+//            unset($myArray[$k][$columnName]);
+//        }        
+        
     }
 
     /**
      * Return $myArray as a one-line string
+     * 
      * @param array $myArray
      * @return string
      */
-    public function dumpArrayAsOneLine($myArray) {
+    public function dumpArrayAsOneLine(array $myArray) {
         return (
                 preg_replace(
                         '/\n/', ' ', preg_replace(
@@ -127,9 +139,9 @@ class BackyardArray {
      * @param bool $columnAlwaysExpected - default true; if false function does not log the missing column in a row as an error
      * @return mixed (array if found, false otherwise)
      */
-    public function arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
+    public function arrayVlookup($searchedValue, array $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
         if (!is_array($searchedArray)) {
-            $this->BackyardError->log(2, "ArrayVlookup: second parameter is not an array");
+            $this->logger->error("ArrayVlookup: second parameter is not an array");
             return false;
         }
 
@@ -145,7 +157,7 @@ class BackyardArray {
                     }
                 }
             } elseif ($columnAlwaysExpected) {
-                $this->BackyardError->log(3, "ArrayVlookup: {$columnName} not in " . print_r($row, true));
+                $this->logger->warning("ArrayVlookup: {$columnName} not in " . print_r($row, true));
             }
         }
         return $allExactMatches ? $allMatchingRows : false;
@@ -164,7 +176,7 @@ class BackyardArray {
      * @param array $array2
      * @return mixed (array|0)
      */
-    public function arrayDiffAssocRecursive($array1, $array2) {
+    public function arrayDiffAssocRecursive(array $array1, array $array2) {
         foreach ($array1 as $key => $value) {
             if (is_array($value)) {
                 if (!(isset($array2[$key]) || array_key_exists($key, $array2))) {
@@ -181,7 +193,7 @@ class BackyardArray {
                 $difference[$key] = $value;
             }
         }
-        return !isset($difference) ? 0 : $difference;
+        return isset($difference) ? $difference : 0;
     }
 
 }
