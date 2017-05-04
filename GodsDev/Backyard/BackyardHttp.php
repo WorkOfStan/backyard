@@ -40,8 +40,7 @@ class BackyardHttp {
      * 
      * @param BackyardError $BackyardError
      */
-    public function __construct(
-    BackyardError $BackyardError) {
+    public function __construct(BackyardError $BackyardError) {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
         //@todo set $this->post etc from $_POST, $_GET and $_SERVER to make the functions below testable in isolation
@@ -146,6 +145,7 @@ class BackyardHttp {
 
     /**
      * gets data from a URL through cURL with optional POST
+     * 
      * @param string $url
      * @param string $useragent default = 'PHP/cURL'
      * @param int $timeout [seconds] default =5
@@ -296,7 +296,7 @@ class BackyardHttp {
         }
 
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        $socketResult = @socket_connect($socket, $address, $port);
+        $socketResult = socket_connect($socket, $address, $port);
         if ($socketResult) {
 
             socket_write($socket, $request, strlen($request));

@@ -67,7 +67,6 @@ class BackyardMysqli extends \mysqli {
         }
 
         if ($this->connect_error) {
-            //@TODO 3 -  test die_graciously            
             $this->BackyardError->dieGraciously('5013', "Connect Error ({$this->connect_errno}) {$this->connect_error} | {$tempErrorString}");
         }
 
@@ -77,12 +76,13 @@ class BackyardMysqli extends \mysqli {
         }
     }
 
-    //120914
-    // http://www.blrf.net/blog/223/code/php/extending-mysqli-class-with-example/
     /**
      * Query method
      * if everything is OK, return the mysqli_result object
      * that is returned from parent query method
+     * 
+     * 120914, inspired by http://www.blrf.net/blog/223/code/php/extending-mysqli-class-with-example/
+     * 
      * @param string $sql SQL to execute
      * @return mysqli_result Object|false
      * @throws DBQueryException

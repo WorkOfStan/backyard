@@ -25,6 +25,7 @@ class BackyardJson {
 
     /**
      * @desc Minify JSON and if JSON is not valid it report it in the my_error_log and outputs a preformatted error500 json string
+     * 
      * @param string $jsonInput
      * @param int $logLevel - optional - default is not to be verbose
      * @return string
@@ -94,6 +95,7 @@ class BackyardJson {
 
     /**
      * @desc Retrieves JSON from $url and puts it into associative array
+     * 
      * @param string $url
      * @return array|bool array if cURL($url) returns JSON else false
      * 
