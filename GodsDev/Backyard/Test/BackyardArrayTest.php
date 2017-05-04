@@ -33,7 +33,6 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::inArrayWildcards
-     * @todo   Implement testInArrayWildcards().
      */
     public function testInArrayWildcards()
     {
@@ -44,17 +43,18 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::getOneColumnFromArray
-     * @todo   Implement testGetOneColumnFromArray().
+     * 
+     * testGetOneColumnFromArrayNotArray not needed as the Argument 1 MUST be of the type array
      */
-    public function testGetOneColumnFromArrayNotArray()
-    {
-        $myArray = 1;
-        $columnName = "b";
-        $columnAlwaysExpected = false;
-        $expected = array();
-        
-        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
-    }
+//    public function testGetOneColumnFromArrayNotArray()
+//    {
+//        $myArray = 1;
+//        $columnName = "b";
+//        $columnAlwaysExpected = false;
+//        $expected = array();
+//        
+//        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
+//    }
     
     public function testGetOneColumnFromArrayMissingRowIgnored()
     {
@@ -89,16 +89,17 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers GodsDev\Backyard\BackyardArray::removeOneColumnFromArray
-     * @todo   Implement testRemoveOneColumnFromArray().
+     * 
+     * testRemoveOneColumnFromArrayNoArray() not needed as the Argument 1 MUST be of the type array
      */
-    public function testRemoveOneColumnFromArrayNoArray()
-    {
-        $myArray = 1;
-        $columnName = "b";
-        $expected = array();
-        
-        $this->assertEquals($expected, $this->object->removeOneColumnFromArray($myArray, $columnName));
-    }
+//    public function testRemoveOneColumnFromArrayNoArray()
+//    {
+//        $myArray = 1;
+//        $columnName = "b";
+//        $expected = array();
+//        
+//        $this->assertEquals($expected, $this->object->removeOneColumnFromArray($myArray, $columnName));
+//    }
     public function testRemoveOneColumnFromArray()
     {
         $myArray = array(
@@ -120,7 +121,6 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::dumpArrayAsOneLine
-     * @todo   Implement testDumpArrayAsOneLine().
      */
     public function testDumpArrayAsOneLine()
     {
@@ -137,7 +137,6 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::arrayVlookup
-     * @todo   Implement testArrayVlookup().
      */
     public function testArrayVlookupNoMatch()
     {
@@ -196,7 +195,6 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers GodsDev\Backyard\BackyardArray::arrayDiffAssocRecursive
-     * @todo   Implement testArrayDiffAssocRecursive().
      */
     public function testArrayDiffAssocRecursiveDifferent()
     {
