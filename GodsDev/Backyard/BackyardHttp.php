@@ -34,15 +34,19 @@ if (!function_exists('apache_request_headers')) {
 
 class BackyardHttp {
 
-    protected $BackyardError = null;
+    /**
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger = null;
 
     /**
      * 
-     * @param BackyardError $BackyardError
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(BackyardError $BackyardError) {
+    public function __construct(\Psr\Log\LoggerInterface $logger) {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-        $this->BackyardError = $BackyardError;
+        $this->logger = $logger;
         //@todo set $this->post etc from $_POST, $_GET and $_SERVER to make the functions below testable in isolation
     }
 
@@ -100,7 +104,7 @@ class BackyardHttp {
         );
         header($http[$num]);
         header("Location: {$url}");
-        $this->BackyardError->log(5, "Redirect to {$url} with {$num} status");
+        $this->logger->log(5, "Redirect to {$url} with {$num} status");
         if ($stopCodeExecution) {
             exit; //default behaviour expects that no code should be interpreted after redirection
         }
@@ -120,7 +124,7 @@ class BackyardHttp {
                 $result = $_GET[$nameOfTheParameter];
             }
         }
-        $this->BackyardError->log((($result) ? (5) : (6)), "Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true), array(16));
+        $this->logger->log((($result) ? (5) : (6)), "Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true), array(16));
         return $result;
     }
 
@@ -155,7 +159,7 @@ class BackyardHttp {
      * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',])
      */
     public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array(), $customRequest = null) {
-        $this->BackyardError->log(5, "backyard getData({$url},{$useragent},{$timeout},{$customHeaders},".(empty($postArray)?'[]':(count($postArray).' fields')).",{$customRequest});", array(16));        
+        $this->logger->log(5, "backyard getData({$url},{$useragent},{$timeout},{$customHeaders},".(empty($postArray)?'[]':(count($postArray).' fields')).",{$customRequest});", array(16));        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
@@ -164,12 +168,12 @@ class BackyardHttp {
         }
         if ($customHeaders) {
             if (!is_string($customHeaders)) {
-                $this->BackyardError->log(2, 'customHeaders string expected, got ' . gettype($customHeaders));
+                $this->logger->log(2, 'customHeaders string expected, got ' . gettype($customHeaders));
             }
             $customArray = explode('|', $customHeaders); //$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
             $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
             if (!$tempOptSer) {
-                $this->BackyardError->log(2, "Custom headers {$customHeaders} FAILED to be set", array(16));
+                $this->logger->log(2, "Custom headers {$customHeaders} FAILED to be set", array(16));
             }
         }
 
@@ -212,12 +216,12 @@ class BackyardHttp {
             $data['message_body'] = substr($response, $header_size);
         }
         if (!$response || (!$data['message_body'] && !in_array($data['HTTP_CODE'], array(301, 302)))) {//redirects may have empty body
-            $this->BackyardError->log(2, "Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}");
+            $this->logger->log(2, "Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}");
             if (count($data) > 1) {
-                $this->BackyardError->log(2, 'data:' . print_r($data, true));
+                $this->logger->log(2, 'data:' . print_r($data, true));
             }
             if ($response) {
-                $this->BackyardError->log(2, 'response: ' . $response);
+                $this->logger->log(2, 'response: ' . $response);
             }
         }
 
@@ -273,24 +277,24 @@ class BackyardHttp {
         $localDNSserver = array('81.31.47.101'); //@TODO - make configurable!
         $url = parse_url($URL_STRING);
         if (!isset($url['scheme'])) {
-            $this->BackyardError->log(4, "No scheme present", array(16)); //debug
+            $this->logger->log(4, "No scheme present", array(16)); //debug
             return 0;
         }
         if ($url['scheme'] != 'http') {
-            $this->BackyardError->log(4, "Scheme: {$url['scheme']} not supported by GetHTTPstatusCode", array(16)); //debug
+            $this->logger->log(4, "Scheme: {$url['scheme']} not supported by GetHTTPstatusCode", array(16)); //debug
             return 0;
         }
         $host = $url['host'];
         $port = (isset($url['port']) ? $url['port'] : 80);
         $path = (isset($url['path']) ? $url['path'] : '/');
-        $this->BackyardError->log(4, "url: " . print_r($url, true), array(16)); //debug
+        $this->logger->log(4, "url: " . print_r($url, true), array(16)); //debug
 
         $request = "HEAD $path HTTP/1.1\r\n"
                 . "Host: $host\r\n"
                 . "Connection: close\r\n"
                 . "\r\n";
 
-        $this->BackyardError->log(5, "IPv4 is " . $address = gethostbyname($host), array(16)); //set & log
+        $this->logger->log(5, "IPv4 is " . $address = gethostbyname($host), array(16)); //set & log
         if (in_array($address, $localDNSserver)) {//gethostbyname returns this IP address on www.alfa.gods.cz if domain name does not exist
             return 'DNS_error';
         }
@@ -302,7 +306,7 @@ class BackyardHttp {
             socket_write($socket, $request, strlen($request));
             $socketRead = socket_read($socket, 1024);
             $response = explode(' ', $socketRead);
-            $this->BackyardError->log(4, "HEAD HTTP response: " . print_r($response, true), array(16)); //debug
+            $this->logger->log(4, "HEAD HTTP response: " . print_r($response, true), array(16)); //debug
             //120427, if the result is not number, maybe the server doesn't understand HEAD, let's try GET
             if (!is_numeric($response[1])) {
                 $request = "GET $path HTTP/1.1\r\n"
@@ -312,9 +316,9 @@ class BackyardHttp {
 
                 socket_write($socket, $request, strlen($request));
                 $response = explode(' ', socket_read($socket, 1024));
-                $this->BackyardError->log(4, "GET HTTP response: " . print_r($response, true), array(16)); //debug
+                $this->logger->log(4, "GET HTTP response: " . print_r($response, true), array(16)); //debug
                 if (!is_numeric($response[1])) {
-                    $this->BackyardError->log(3, "REQUEST = $request RETURNED RESPONSE = {$response[1]} INSTEAD OF HTTP status");
+                    $this->logger->log(3, "REQUEST = $request RETURNED RESPONSE = {$response[1]} INSTEAD OF HTTP status");
                 }
             } elseif ($response[1] > 300 && $response[1] < 400) {
                 $tempPosition = strpos($socketRead, "Location:");
@@ -325,22 +329,22 @@ class BackyardHttp {
         } else {
             $socketLastError = socket_last_error($socket);
             $socketLastErrorString = trim(iconv(mb_detect_encoding(socket_strerror($socketLastError), mb_detect_order(), true), "UTF-8", socket_strerror($socketLastError))); //http://stackoverflow.com/questions/7979567/php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
-            $this->BackyardError->log(3, "socket_connect to $host $path failed with {$socketLastError}: {$socketLastErrorString}"); //debug        
+            $this->logger->log(3, "socket_connect to $host $path failed with {$socketLastError}: {$socketLastErrorString}"); //debug        
         }
 
         socket_close($socket);
-        $this->BackyardError->log(5, "result=" . $result = (isset($response[1]) ? ($response[1]) : ($socketLastErrorString)), array(16)); //set & log 
+        $this->logger->log(5, "result=" . $result = (isset($response[1]) ? ($response[1]) : ($socketLastErrorString)), array(16)); //set & log 
         return $result;
     }
 
     public function getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode/1.1") {
         $url = parse_url($URL_STRING);
         if (!isset($url['scheme'])) {
-            $this->BackyardError->log(4, "No scheme present", array(16)); //debug
+            $this->logger->log(4, "No scheme present", array(16)); //debug
             return 0;
         }
         if ($url['scheme'] != 'http') {
-            $this->BackyardError->log(4, "Scheme: {$url['scheme']} not supported by GetHTTPstatusCode", array(16)); //debug
+            $this->logger->log(4, "Scheme: {$url['scheme']} not supported by GetHTTPstatusCode", array(16)); //debug
             return 0;
         }
 
@@ -364,9 +368,9 @@ class BackyardHttp {
             socket_write($socket, $request, strlen($request));
 
             $response = explode(' ', socket_read($socket, 1024));
-            $this->BackyardError->log(4, "HTTP response: " . print_r($response, true), array(16)); //debug
+            $this->logger->log(4, "HTTP response: " . print_r($response, true), array(16)); //debug
         } else {
-            $this->BackyardError->log(3, "socket_connect to $host $path failed", array(13)); //debug        
+            $this->logger->log(3, "socket_connect to $host $path failed", array(13)); //debug        
         }
 
         socket_close($socket);
