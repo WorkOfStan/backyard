@@ -89,7 +89,13 @@ $logger = $backyard->BackyardError;
 $dbLink = new GodsDev\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
 ```
 
+## class BackyardBriefApiClient
 
+Very simple JSON RESTful API client.
+It just sends JSON and returns what is to be returned with few optional decorators and error logging.
+* `sendJsonLoad` - sends JSON and returns whatever is returned
+* `getJsonArray` - sends JSON and returns array decoded from response JSON
+* `getArrayArray` - encode array to a JSON and returns array decoded from response JSON
 
 
 # About previous versions

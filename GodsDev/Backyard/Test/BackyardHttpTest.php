@@ -123,8 +123,6 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 </head><body>
 <h1>Moved Permanently</h1>
 <p>The document has moved <a href="http://dadastrip.cz/test/">here</a>.</p>
-<hr>
-<address>Apache/2.2.22 (Debian) Server at dadastrip.cz Port 80</address>
 </body></html>
 ',
     'REDIRECT_URL' => 'http://dadastrip.cz/test/',
