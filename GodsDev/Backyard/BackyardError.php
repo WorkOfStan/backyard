@@ -269,7 +269,6 @@ public function log($level, $message, array $context = array()) {//($message, $l
      * @return void (die)
      */
     public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = false) {
-        //global $backyardConf;
         $this->log(1, "Die with error {$errorNumber} - {$errorString}");
         if ($feedbackButtonMarkup) {
             echo("<html><body>" . str_replace(urlencode("%CUSTOM_VALUE%"), urlencode("Error {$errorNumber} - "
