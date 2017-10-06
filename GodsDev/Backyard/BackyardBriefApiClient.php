@@ -69,7 +69,7 @@ class BackyardBriefApiClient {
         $result = curl_exec($ch);
         if ($result) {
             $this->logCommunication($result, 'resp', $communicationId);
-        } else {
+        } elseif (!is_null($this->logger)) {
             $this->logger->error("Curl failed with (" . curl_errno($ch) . ") " . curl_error($ch));
         }
         return $result;
@@ -101,7 +101,7 @@ class BackyardBriefApiClient {
     public function getJsonArray($json) {
         $response = $this->sendJsonLoad($json);
         $result = json_decode($response, true);
-        if (!$result) {
+        if (!$result && !is_null($this->logger)) {
             $this->logger->error("json decode failed for " . substr($response, 0, 100) . " that resulted from " . substr($json, 0, 100));
         }
         return $result;
