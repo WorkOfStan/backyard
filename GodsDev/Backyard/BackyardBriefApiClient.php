@@ -10,7 +10,8 @@ namespace GodsDev\Backyard;
  *
  * @author rejth
  */
-class BackyardBriefApiClient {
+class BackyardBriefApiClient
+{
 
     /**
      *
@@ -36,7 +37,8 @@ class BackyardBriefApiClient {
      * @param mixed $appLogFolder OPTIONAL string without trailing / or if null then the applogs will not be saved at all
      * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommanded
      */
-    public function __construct($apiUrl, $appLogFolder = null, \Psr\Log\LoggerInterface $logger = null) {
+    public function __construct($apiUrl, $appLogFolder = null, \Psr\Log\LoggerInterface $logger = null)
+    {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = $logger;
         $this->apiUrl = $apiUrl;
@@ -47,25 +49,51 @@ class BackyardBriefApiClient {
      * Send a JSON to the API and returns whatever is to return
      * 
      * @param string $json
+     * @param string $httpVerb POST default, or PUT/DELETE/GET
      * @return mixed <b>TRUE</b> on success or <b>FALSE</b> on failure. However, if the <b>CURLOPT_RETURNTRANSFER</b>
      * option is set, it will return
      * the result on success, <b>FALSE</b> on failure.
      */
-    public function sendJsonLoad($json) {
+    public function sendJsonLoad($json, $httpVerb = 'POST')
+    {
         $communicationId = uniqid(date("Y-m-d-His_"));
-        $this->logCommunication($json, 'call', $communicationId);
+        $this->logCommunication($json, $httpVerb, $communicationId);
         $ch = curl_init($this->apiUrl);
         curl_setopt_array($ch, array(
-            CURLOPT_POST => TRUE,
-            CURLOPT_RETURNTRANSFER => TRUE,
-            CURLOPT_HTTPHEADER => array(
-                //'Authorization: '.$authToken,
-                'Content-Type: application/json'
-            ),
+            CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => $json, //json_encode($postData)
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false, //accepts also private SSL certificates //@todo it could be possible to try without that option and if it fails, it may try with this option and inform about it            
+            CURLOPT_SSL_VERIFYHOST => false, //accepts also private SSL certificates //@todo it could be possible to try without that option and if it fails, it may try with this option and inform about it
         ));
+        switch ($httpVerb) {
+            case 'POST':
+                curl_setopt($ch, CURLOPT_POST, true);
+            case 'GET':
+            case 'DELETE':
+                curl_setopt_array($ch, array(
+                    CURLOPT_HTTPHEADER => array(
+                        //'Authorization: '.$authToken,
+                        'Content-Type: application/json'
+                    ),
+                ));
+                if (in_array($httpVerb, array('GET', 'DELETE'))) {
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $httpVerb);
+                }
+                break;
+            case 'PUT':
+                curl_setopt_array($ch, array(
+                    CURLOPT_HTTPHEADER => array(
+                        //'Authorization: '.$authToken,
+                        'Content-Type: application/json',
+                        'Content-Length: ' . strlen($json)
+                    ),
+                    CURLOPT_CUSTOMREQUEST => 'PUT',
+                ));
+                break;
+            default:
+                $this->logger->error("Unknown verb {$httpVerb}");
+                return false;
+        }
         $result = curl_exec($ch);
         if ($result) {
             $this->logCommunication($result, 'resp', $communicationId);
@@ -82,7 +110,8 @@ class BackyardBriefApiClient {
      * @param string $communicationId
      * @return boolean
      */
-    private function logCommunication($message, $filePrefix, $communicationId) {
+    private function logCommunication($message, $filePrefix, $communicationId)
+    {
         if (!$this->appLogFolder) {
             return false;
         }
@@ -98,7 +127,8 @@ class BackyardBriefApiClient {
      * @param string $json
      * @return array
      */
-    public function getJsonArray($json) {
+    public function getJsonArray($json)
+    {
         $response = $this->sendJsonLoad($json);
         $result = json_decode($response, true);
         if (!$result && !is_null($this->logger)) {
@@ -113,7 +143,8 @@ class BackyardBriefApiClient {
      * @param array $arr
      * @return array
      */
-    public function getArrayArray(array $arr) {
+    public function getArrayArray(array $arr)
+    {
         return $this->getJsonArray(json_encode($arr));
     }
 
