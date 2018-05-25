@@ -2,11 +2,13 @@
 
 namespace GodsDev\Backyard;
 
-class BackyardTime {
+class BackyardTime
+{
 
     private $PageTimestamp = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->PageTimestamp = $this->getmicrotime(); //initialisation
     }
 
@@ -17,7 +19,8 @@ class BackyardTime {
      * 
      * @return float
      */
-    public function getmicrotime() {
+    public function getmicrotime()
+    {
         if (version_compare(phpversion(), '5.0.0') == -1) {
             list($usec, $sec) = explode(' ', microtime());
             return ((float) $usec + (float) $sec);
@@ -25,12 +28,13 @@ class BackyardTime {
             return( microtime(true) );
         }
     }
-    
+
     /**
      * 
      * @return float
      */
-    public function getPageTimestamp() {
+    public function getPageTimestamp()
+    {
         return $this->PageTimestamp;
     }
 
@@ -38,7 +42,8 @@ class BackyardTime {
      * 
      * @return float
      */
-    public function getRunningTime() {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
+    public function getRunningTime()
+    {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
         return round($this->getmicrotime() - $this->PageTimestamp, 4);
     }
 
@@ -48,7 +53,8 @@ class BackyardTime {
      * @param string $langStringPageGeneratedIn instead of $backyardLangString['page_generated_in']
      * @return string
      */
-    public function pageGeneratedIn($langStringPageGeneratedIn = '%s') {
+    public function pageGeneratedIn($langStringPageGeneratedIn = '%s')
+    {
         $str = str_replace('%s', round($this->getmicrotime() - $this->PageTimestamp, 4), $langStringPageGeneratedIn);
         //$this->BackyardError->log(6, round($this->getmicrotime() - $this->PageTimestamp, 4), array(6));
         return $str;

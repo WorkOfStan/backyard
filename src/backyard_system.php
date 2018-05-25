@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete and will be removed in next release');
 /**
  * Name: backyard_system.php
  * Project: LIB/Part of Library In Backyard v.2

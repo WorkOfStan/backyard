@@ -2,7 +2,8 @@
 
 namespace GodsDev\Backyard;
 
-class Backyard {
+class Backyard
+{
 
     /**
      *
@@ -62,7 +63,8 @@ class Backyard {
      * 
      * @param array $backyardConfConstruct
      */
-    public function __construct(array $backyardConfConstruct = array()) {
+    public function __construct(array $backyardConfConstruct = array())
+    {
         $this->BackyardTime = new BackyardTime();
         $this->PageTimestamp = $this->BackyardTime->getPageTimestamp(); //Initiation of $page_timestamp SHOULD be the first thing a page will do.
         $this->BackyardConf = $backyardConfConstruct;
@@ -82,7 +84,8 @@ class Backyard {
      * @param string $db
      * @return \GodsDev\Backyard\BackyardMysqli
      */
-    public function newMysqli($host_port, $user, $pass, $db) {
+    public function newMysqli($host_port, $user, $pass, $db)
+    {
         return new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError);
     }
 

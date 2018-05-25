@@ -2,7 +2,7 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use Psr\Log\LoggerInterface;
 
 /* * ****************************************************************************
  * HTTP FUNCTIONS
@@ -17,7 +17,8 @@ if (!function_exists('apache_request_headers')) {
      * 
      * @return array
      */
-    function apache_request_headers() {
+    function apache_request_headers()
+    {
         $out = array();
         foreach ($_SERVER as $key => $value) {
             if (substr($key, 0, 5) == "HTTP_") {
@@ -32,7 +33,8 @@ if (!function_exists('apache_request_headers')) {
 
 }
 
-class BackyardHttp {
+class BackyardHttp
+{
 
     /**
      *
@@ -44,7 +46,8 @@ class BackyardHttp {
      * 
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger) {
+    public function __construct(LoggerInterface $logger)
+    {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = $logger;
         //@todo set $this->post etc from $_POST, $_GET and $_SERVER to make the functions below testable in isolation
@@ -60,7 +63,8 @@ class BackyardHttp {
      * @param string $url
      * @param bool $stopCodeExecution default true
      */
-    public function movePage($num, $url, $stopCodeExecution = true) {
+    public function movePage($num, $url, $stopCodeExecution = true)
+    {
         static $http = array(
             100 => "HTTP/1.1 100 Continue",
             101 => "HTTP/1.1 101 Switching Protocols",
@@ -115,7 +119,8 @@ class BackyardHttp {
      * @param string $nameOfTheParameter
      * @return string or false
      */
-    public function retrieveFromPostThenGet($nameOfTheParameter) {
+    public function retrieveFromPostThenGet($nameOfTheParameter)
+    {
         $result = false; //default value
         if (isset($_POST[$nameOfTheParameter])) {
             $result = $_POST[$nameOfTheParameter];
@@ -134,7 +139,8 @@ class BackyardHttp {
      * @param bool $includeTheQueryPart
      * @return string
      */
-    public function getCurPageURL($includeTheQueryPart = true) {
+    public function getCurPageURL($includeTheQueryPart = true)
+    {
         if ($includeTheQueryPart) {
             $endGame = $_SERVER["REQUEST_URI"]; //including RewriteRule result
         } else {
@@ -158,12 +164,13 @@ class BackyardHttp {
      * @param string $customRequest OPTIONAL fills in CURLOPT_CUSTOMREQUEST
      * @return array ('message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',])
      */
-    public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array(), $customRequest = null) {
-        $this->logger->log(5, "backyard getData({$url},{$useragent},{$timeout},{$customHeaders},".(empty($postArray)?'[]':(count($postArray).' fields')).",{$customRequest});", array(16));        
+    public function getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array(), $customRequest = null)
+    {
+        $this->logger->log(5, "backyard getData({$url},{$useragent},{$timeout},{$customHeaders}," . (empty($postArray) ? '[]' : (count($postArray) . ' fields')) . ",{$customRequest});", array(16));
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-        if(!is_null($customRequest) && is_string($customRequest) && in_array($customRequest, array('GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'))){
+        if (!is_null($customRequest) && is_string($customRequest) && in_array($customRequest, array('GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'))) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
         }
         if ($customHeaders) {
@@ -207,8 +214,6 @@ class BackyardHttp {
         //        $curlError = curl_error($ch);// to prevent some previous curl_error($ch) be reported
         //        my_error_log("Curl error: {$curlError}", 2); //@todo if curl_exec($ch) === false then some operation on $response below are meaningless
         //    }
-
-        
         // http://stackoverflow.com/a/9183272
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $data['HTTP_CODE'] = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); //0 when timeout        
@@ -243,7 +248,7 @@ class BackyardHttp {
             }
         }
         // $retVal contains array("header_name": "header_value")
-        $data['HEADER_FIELDS'] = $retVal;        
+        $data['HEADER_FIELDS'] = $retVal;
         if (isset($retVal['Location'])) {
             $data['REDIRECT_URL'] = $retVal['Location'];
         }
@@ -273,7 +278,8 @@ class BackyardHttp {
      * @param string $URL_STRING
      * @return int|string
      */
-    public function getHTTPstatusCode($URL_STRING) {
+    public function getHTTPstatusCode($URL_STRING)
+    {
         $localDNSserver = array('81.31.47.101'); //@TODO - make configurable!
         $url = parse_url($URL_STRING);
         if (!isset($url['scheme'])) {
@@ -290,9 +296,9 @@ class BackyardHttp {
         $this->logger->log(4, "url: " . print_r($url, true), array(16)); //debug
 
         $request = "HEAD $path HTTP/1.1\r\n"
-                . "Host: $host\r\n"
-                . "Connection: close\r\n"
-                . "\r\n";
+            . "Host: $host\r\n"
+            . "Connection: close\r\n"
+            . "\r\n";
 
         $this->logger->log(5, "IPv4 is " . $address = gethostbyname($host), array(16)); //set & log
         if (in_array($address, $localDNSserver)) {//gethostbyname returns this IP address on www.alfa.gods.cz if domain name does not exist
@@ -310,9 +316,9 @@ class BackyardHttp {
             //120427, if the result is not number, maybe the server doesn't understand HEAD, let's try GET
             if (!is_numeric($response[1])) {
                 $request = "GET $path HTTP/1.1\r\n"
-                        . "Host: $host\r\n"
-                        . "Connection: close\r\n"
-                        . "\r\n";
+                    . "Host: $host\r\n"
+                    . "Connection: close\r\n"
+                    . "\r\n";
 
                 socket_write($socket, $request, strlen($request));
                 $response = explode(' ', socket_read($socket, 1024));
@@ -337,7 +343,8 @@ class BackyardHttp {
         return $result;
     }
 
-    public function getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode/1.1") {
+    public function getHTTPstatusCodeByUA($URL_STRING, $userAgent = "GetStatusCode/1.1")
+    {
         $url = parse_url($URL_STRING);
         if (!isset($url['scheme'])) {
             $this->logger->log(4, "No scheme present", array(16)); //debug
@@ -356,10 +363,10 @@ class BackyardHttp {
         }
 
         $request = "HEAD $path HTTP/1.1\r\n"
-                . "Host: $host\r\n"
-                . "User-agent: $userAgent\r\n"
-                . "Connection: close\r\n"
-                . "\r\n";
+            . "Host: $host\r\n"
+            . "User-agent: $userAgent\r\n"
+            . "Connection: close\r\n"
+            . "\r\n";
 
         $address = gethostbyname($host);
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);

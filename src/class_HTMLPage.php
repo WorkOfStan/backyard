@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete - consider its rewriting');
 /**
  * Name: class_HTMLPage.php
  * Project: LIB/Part of Library In Backyard

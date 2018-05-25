@@ -2,7 +2,7 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use Psr\Log\LoggerInterface;
 use GodsDev\Backyard\BackyardHttp;
 
 /**
@@ -10,15 +10,24 @@ use GodsDev\Backyard\BackyardHttp;
  */
 class BackyardJson {
 
+    /**
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $BackyardError = null;
+    
+    /**
+     *
+     * @var \GodsDev\Backyard\BackyardHttp
+     */
     protected $BackyardHttp = null;
 
     /**
      * 
-     * @param BackyardError $backyardError
+     * @param LoggerInterface $backyardError
      * @param BackyardHttp $backyardHttp
      */
-    public function __construct(BackyardError $backyardError, BackyardHttp $backyardHttp) {
+    public function __construct(LoggerInterface $backyardError, BackyardHttp $backyardHttp) {
         $this->BackyardError = $backyardError;
         $this->BackyardHttp = $backyardHttp;
     }
