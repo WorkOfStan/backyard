@@ -1,5 +1,5 @@
 <?php
-
+error_log(__FILE__ . ' is obsolete - consider its rewriting');
 //@TODO  compare with social.login.php working with MyReport
 /**
  * Name: social.login.php
@@ -239,18 +239,6 @@ function getInternalUserId() {
             my_error_log("No similar authVector", 4);
         }
 
-        /*
-
-
-
-
-
-
-
-
-
-         * 
-         */
         if ($ownerId) {
             //login
             my_error_log("{$authType} login for ownerId={$ownerId}", 5, 10);

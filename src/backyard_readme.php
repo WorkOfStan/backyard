@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete and will be removed in next release');
 /**
  * Purpose: 
  * Library of useful functions

@@ -2,24 +2,26 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use Psr\Log\LoggerInterface;
 
 /**
  * ARRAY FUNCTIONS
  */
-class BackyardArray {
+class BackyardArray
+{
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardError BackyardError object
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * 
-     * @param BackyardError $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(BackyardError $logger) {
+    public function __construct(LoggerInterface $logger)
+    {
         $this->logger = $logger;
     }
 
@@ -49,7 +51,8 @@ class BackyardArray {
      * @param array $haystack
      * @return boolean
      */
-    public function inArrayWildcards($needle, array $haystack) {
+    public function inArrayWildcards($needle, array $haystack)
+    {
         foreach ($haystack as $value) {
             if (true === fnmatch($value, $needle)) {
                 return true;
@@ -67,7 +70,8 @@ class BackyardArray {
      * @param bool $columnAlwaysExpected default false; if true function does log the missing column in a row as an error
      * @return array
      */
-    public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false) {
+    public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false)
+    {
         if (!is_array($myArray)) {
             return array(); //empty array more consistent than false
         }
@@ -89,7 +93,8 @@ class BackyardArray {
      * @param string $columnName
      * @return array
      */
-    public function removeOneColumnFromArray(array $myArray, $columnName) {
+    public function removeOneColumnFromArray(array $myArray, $columnName)
+    {
         if (!is_array($myArray)) {
             return array(); //empty array more consistent than false
         }
@@ -107,7 +112,6 @@ class BackyardArray {
 //        foreach($myArray as $k => $v) {
 //            unset($myArray[$k][$columnName]);
 //        }        
-        
     }
 
     /**
@@ -116,16 +120,17 @@ class BackyardArray {
      * @param array $myArray
      * @return string
      */
-    public function dumpArrayAsOneLine(array $myArray) {
+    public function dumpArrayAsOneLine(array $myArray)
+    {
         return (
-                preg_replace(
-                        '/\n/', ' ', preg_replace(
-                                '/\r/', ' ', preg_replace(
-                                        '/\s\s+/', ' ', print_r($myArray, true)
-                                )
-                        )
+            preg_replace(
+                '/\n/', ' ', preg_replace(
+                    '/\r/', ' ', preg_replace(
+                        '/\s\s+/', ' ', print_r($myArray, true)
+                    )
                 )
-                );
+            )
+            );
     }
 
     /**
@@ -139,7 +144,8 @@ class BackyardArray {
      * @param bool $columnAlwaysExpected - default true; if false function does not log the missing column in a row as an error
      * @return mixed (array if found, false otherwise)
      */
-    public function arrayVlookup($searchedValue, array $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true) {
+    public function arrayVlookup($searchedValue, array $searchedArray, $columnName, $allExactMatches = false, $columnAlwaysExpected = true)
+    {
         if (!is_array($searchedArray)) {
             $this->logger->error("ArrayVlookup: second parameter is not an array");
             return false;
@@ -176,7 +182,8 @@ class BackyardArray {
      * @param array $array2
      * @return mixed (array|0)
      */
-    public function arrayDiffAssocRecursive(array $array1, array $array2) {
+    public function arrayDiffAssocRecursive(array $array1, array $array2)
+    {
         foreach ($array1 as $key => $value) {
             if (is_array($value)) {
                 if (!(isset($array2[$key]) || array_key_exists($key, $array2))) {

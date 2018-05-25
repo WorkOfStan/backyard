@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete and will be removed in next release');
 //backyard 2 compliant
 /**
  * Default configuration for backyard 2

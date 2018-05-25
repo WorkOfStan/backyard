@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete - consider its rewriting');
 /**
  * Name: Emulate
  * Project: LIB/Part of Library In Backyard
