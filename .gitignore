@@ -1,5 +1,5 @@
 # Environment specific configuration
-/deploy/backyard/conf/conf_private.php
+*.local.php
 /src/conf/conf_private.php
 
 # Composer infrastructure

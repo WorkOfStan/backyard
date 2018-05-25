@@ -1,4 +1,5 @@
 <?php
+error_log(__FILE__ . ' is obsolete - consider its rewriting');
 
 //backyard 2 compliant
 /**
