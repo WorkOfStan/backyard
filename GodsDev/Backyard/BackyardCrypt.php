@@ -2,18 +2,23 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use Psr\Log\LoggerInterface;
 
-class BackyardCrypt {
+class BackyardCrypt
+{
 
+    /**
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $BackyardError = null;
 
     /**
      * 
-     * @param BackyardError $BackyardError
+     * @param LoggerInterface $BackyardError
      */
-    public function __construct(
-    BackyardError $BackyardError) {
+    public function __construct(LoggerInterface $BackyardError)
+    {
         $this->BackyardError = $BackyardError;
     }
 
@@ -23,7 +28,8 @@ class BackyardCrypt {
      * @param int $random_id_length
      * @return string
      */
-    public function randomId($random_id_length = 10) {
+    public function randomId($random_id_length = 10)
+    {
         //generate a random id encrypt it and store it in $rnd_id 
         $rnd_id = crypt(uniqid(rand(), 1), uniqid(rand(), 1));
 

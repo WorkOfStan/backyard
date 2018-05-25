@@ -2,7 +2,7 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use GodsDev\Backyard\BackyardError; // not use Psr\Log\LoggerInterface; because method dieGraciously is used
 
 //@TODO create TestBackyardMysqli.php
 
@@ -23,7 +23,8 @@ use GodsDev\Backyard\BackyardError;
  * Sets the connection charset to utf-8 and collation to utf8_general_ci
  * @todo add IPv6 , e.g ::1 as $host_port
  */
-class BackyardMysqli extends \mysqli {
+class BackyardMysqli extends \mysqli
+{
 
     protected $BackyardError = null;
 
@@ -35,7 +36,8 @@ class BackyardMysqli extends \mysqli {
      * @param string $db
      * @param BackyardError $BackyardError
      */
-    public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError) {
+    public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError)
+    {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->BackyardError = $BackyardError;
 
@@ -87,7 +89,8 @@ class BackyardMysqli extends \mysqli {
      * @return mysqli_result Object|false
      * @throws DBQueryException
      */
-    public function query($sql, $ERROR_LOG_OUTPUT = true) { //S.R. upravuji dle functions.php ... make_mysql_query
+    public function query($sql, $ERROR_LOG_OUTPUT = true)
+    {
         //111010 - function is called even before error_log is initialized, therefore it is necessary to mute my_error_log, hence call make_mysql_query($sql,false); 160625 - is it still necessary?
         if ($ERROR_LOG_OUTPUT) {
             $this->BackyardError->log(5, "Start of query {$sql}", array(11));
@@ -129,7 +132,8 @@ class BackyardMysqli extends \mysqli {
      *      one dimensional array - if $justOneRow == true
      *      two dimensional array - if $justOneRow == false
      */
-    public function queryArray($sql, $justOneRow = false) {
+    public function queryArray($sql, $justOneRow = false)
+    {
         $result = false;
         $mysqlQueryResult = $this->query($sql); //$ERROR_LOG_OUTPUT = true by default
         //transforming the query result into an array
@@ -162,11 +166,12 @@ class BackyardMysqli extends \mysqli {
      * @param int $primaryDimensionValue [optional]
      * @return int
      */
-    public function nextIncrement($table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false) {
+    public function nextIncrement($table, $metricDimension, $primaryDimension = false, $primaryDimensionValue = false)
+    {
         $result = 1; //default value
         $query = "SELECT `{$metricDimension}` FROM `{$table}` "
-                . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
-                . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
+            . (($primaryDimension && $metricDimension != $primaryDimension) ? ("WHERE  `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
+            . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
         $mysql_query_array = $this->queryArray($query, true);
         if ($mysql_query_array) {
             $result += (int) $mysql_query_array["$metricDimension"];

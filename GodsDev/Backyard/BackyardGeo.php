@@ -2,33 +2,43 @@
 
 namespace GodsDev\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use Psr\Log\LoggerInterface;
 use GodsDev\Backyard\BackyardMysqli;
 
-class BackyardGeo {
+class BackyardGeo
+{
 
+    /**
+     *
+     * @var array
+     */
     protected $BackyardConf = array();
+    
+    /**
+     *
+     * @var \Psr\Log\LoggerInterface;
+     */
     protected $BackyardError = null;
 
     /**
      * 
-     * @param BackyardError $BackyardError
+     * @param LoggerInterface $BackyardError
      * @param array $backyardConfConstruct
      */
-    public function __construct(
-    BackyardError $BackyardError, array $backyardConfConstruct = array()) {
+    public function __construct(LoggerInterface $BackyardError, array $backyardConfConstruct = array())
+    {
         //@todo do not use $this->BackyardConf but set the class properties right here accordingly; and also provide means to set the values otherwise later
         $this->BackyardConf = array_merge(
-                array(//default values
+            array(//default values
             'geo_rough_distance_limit' => 1, //float //to quickly get rid off too distant POIs; 1 ~ 100km
             'geo_maximum_meters_from_poi' => 2500, //float //distance considered to be overlapping with the device position // 2500 m is considered exact location due to mobile phone GPS caching
             'geo_poi_list_table_name' => 'poi_list', //string //name of table with POI coordinates    
-                ), $backyardConfConstruct);        
+            ), $backyardConfConstruct);
 
         $this->BackyardError = $BackyardError;
     }
 
-    /** ****************************************************************************
+    /**     * ***************************************************************************
      * GEOLOCATION FUNCTIONS
      * 
      * ***** History
@@ -78,7 +88,7 @@ class BackyardGeo {
      * 
      * 
      */
-    
+
     /**
      * 1 ~ 100km
      * @param float $clientLng
@@ -87,7 +97,8 @@ class BackyardGeo {
      * @param float $poiLat
      * @return float
      */
-    public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat) {
+    public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat)
+    {
         $result = abs($clientLng - $poiLng) + abs($clientLat - $poiLat);
         $this->BackyardError->log(5, "client({$clientLng}, {$clientLat}) poi({$poiLng}, {$poiLat}) roughDistance = {$result}");
         return $result;
@@ -105,7 +116,8 @@ class BackyardGeo {
      * @param BackyardMysqli $poiConnection
      * @return array|boolean false if empty
      */
-    public function getClosestPOI($lat, $long, $poiCategory, BackyardMysqli $poiConnection) {
+    public function getClosestPOI($lat, $long, $poiCategory, BackyardMysqli $poiConnection)
+    {
         $this->BackyardError->log(4, "Looking for closest POI: lat={$lat} long={$long}");
         $uom = 'm';
         //current
@@ -136,7 +148,7 @@ class BackyardGeo {
             );
             $roughDistance[$key] = $listOfPOINearbyPreprocessed[$key]['roughDistance'];
         }
-        
+
         $this->BackyardError->log(4, 'Count of rows listOfPOINearbyPreprocessed: ' . count($listOfPOINearbyPreprocessed), array(11));
         array_multisort($roughDistance, SORT_ASC, $listOfPOINearbyPreprocessed);
 
@@ -145,10 +157,10 @@ class BackyardGeo {
         foreach ($listOfPOINearbyPreprocessed as $key => $row) {
             if ($row['roughDistance'] < $this->BackyardConf['geo_rough_distance_limit']) {
                 $distance = $this->calculateDistanceFromLatLong(
-                        $startPoint, array(
+                    $startPoint, array(
                     'latitude' => $row['lat'],
                     'longitude' => $row['lng']
-                        ), $uom
+                    ), $uom
                 );
                 $listOfPOINearbyPreprocessed[$key]['distance'] = $distance;
                 $distanceArray[$key] = $distance;
@@ -159,7 +171,7 @@ class BackyardGeo {
         if (!$listOfPOINearbyProcessed) {
             return false;
         }
-        $this->BackyardError->log(4, 'Count of rows listOfPOINearbyProcessed: ' . count($listOfPOINearbyProcessed), array(11));        
+        $this->BackyardError->log(4, 'Count of rows listOfPOINearbyProcessed: ' . count($listOfPOINearbyProcessed), array(11));
         return array(
             'distance_m' => (int) floor($listOfPOINearbyProcessed[0]['distance']),
             'poi_id' => $listOfPOINearbyProcessed[0]['poi_id'],
@@ -183,7 +195,8 @@ class BackyardGeo {
      * 
      * bacykard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database only those that do not overpass the perpendicular backyardGeo['rough_distance_limit']
      */
-    public function getListOfPOI($poiCategory, BackyardMysqli $poiConnection) {
+    public function getListOfPOI($poiCategory, BackyardMysqli $poiConnection)
+    {
         //global $backyardConf;
         if (is_int($poiCategory)) {
             $poiCategorySecured = $poiCategory;
@@ -208,7 +221,8 @@ class BackyardGeo {
      * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
      * @return float distance
      */
-    public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km') {
+    public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km')
+    {
         //  Uses Haversine formula to calculate the great circle distance
         //  between two points identified by longitude and latitude
         switch (strtolower($uom)) {
@@ -236,8 +250,8 @@ class BackyardGeo {
         $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
         $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
         $a = sin($deltaLatitude / 2) * sin($deltaLatitude / 2) +
-                cos(deg2rad($point1['latitude'])) * cos(deg2rad($point2['latitude'])) *
-                sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
+            cos(deg2rad($point1['latitude'])) * cos(deg2rad($point2['latitude'])) *
+            sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         return $earthMeanRadius * $c;
     }

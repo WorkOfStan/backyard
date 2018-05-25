@@ -2,6 +2,8 @@
 
 namespace GodsDev\Backyard;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Very simple JSON RESTful API client
  * It just sends (by HTTP POST) JSON and returns what is to be returned with few optional decorators and error logging.
@@ -37,7 +39,7 @@ class BackyardBriefApiClient
      * @param mixed $appLogFolder OPTIONAL string without trailing / or if null then the applogs will not be saved at all
      * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommanded
      */
-    public function __construct($apiUrl, $appLogFolder = null, \Psr\Log\LoggerInterface $logger = null)
+    public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = $logger;
