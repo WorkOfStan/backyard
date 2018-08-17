@@ -99,6 +99,7 @@ It just sends JSON and returns what is to be returned with few optional decorato
 
 
 # About previous versions
+*Their code is disabled and therefore secured.*
 
 backyard 1 usage
 -------------------
