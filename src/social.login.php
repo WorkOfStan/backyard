@@ -1,5 +1,6 @@
 <?php
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
+die('LIB2');//security die
 //@TODO 1 - currently works with MyReport - compare with Stakan and make universal afterwards
 /**
  * Name: social.login.php

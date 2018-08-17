@@ -137,20 +137,18 @@ class BackyardHttp
      * Inspired by http://www.webcheatsheet.com/PHP/get_current_page_url.php
      * 
      * @param bool $includeTheQueryPart
-     * @return string
+     * @return string page URL
      */
     public function getCurPageURL($includeTheQueryPart = true)
     {
-        if ($includeTheQueryPart) {
-            $endGame = $_SERVER["REQUEST_URI"]; //including RewriteRule result
-        } else {
-            $endGame = $_SERVER["SCRIPT_NAME"]; //without the query part and RewriteRule result
-        }
-        $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
-        $port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
-        $port = ($port) ? ':' . $_SERVER["SERVER_PORT"] : '';
-        $pageURL = ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"] . $port . $endGame;
-        return $pageURL;
+        return ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") // is HTTPS
+            ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
+            . ((isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443"))) ? ':' . $_SERVER["SERVER_PORT"] : '') // port
+            . (
+            $includeTheQueryPart ? $_SERVER["REQUEST_URI"] //including RewriteRule result
+            : $_SERVER["SCRIPT_NAME"] //without the query part and RewriteRule result
+            ) //endGame
+        ;
     }
 
     /**

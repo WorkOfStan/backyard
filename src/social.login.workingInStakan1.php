@@ -1,5 +1,6 @@
 <?php
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
+die('LIB2');//security die
 //@TODO  compare with social.login.php working with MyReport
 /**
  * Name: social.login.php
