@@ -13,7 +13,7 @@ class BackyardGeo
      * @var array
      */
     protected $BackyardConf = array();
-    
+
     /**
      *
      * @var \Psr\Log\LoggerInterface;

@@ -122,8 +122,6 @@ require_once __DIR__ . '/lib/backyard/deploy/functions.php';
 backyard 2 usage
 -------------------
 
-All backyard functions are named as backyard_camelCase 
-
 The array $backyardDatabase (see above) SHOULD be created ONLY IF there is a table \`system\` (or different name stated in $backyardDatabase['system_table_name']) with fields containing backyard system info.
 
 Usage:

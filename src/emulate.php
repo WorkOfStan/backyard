@@ -1,5 +1,6 @@
 <?php
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
+die('LIB2');//security die
 /**
  * Name: Emulate
  * Project: LIB/Part of Library In Backyard

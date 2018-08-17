@@ -1,5 +1,6 @@
 <?php
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
+die('LIB2');//security die
 /**
  * Name: class_HTMLPage.php
  * Project: LIB/Part of Library In Backyard

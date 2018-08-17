@@ -8,14 +8,15 @@ use GodsDev\Backyard\BackyardHttp;
 /**
  * JSON FUNCTIONS
  */
-class BackyardJson {
+class BackyardJson
+{
 
     /**
      *
      * @var \Psr\Log\LoggerInterface
      */
     protected $BackyardError = null;
-    
+
     /**
      *
      * @var \GodsDev\Backyard\BackyardHttp
@@ -27,7 +28,8 @@ class BackyardJson {
      * @param LoggerInterface $backyardError
      * @param BackyardHttp $backyardHttp
      */
-    public function __construct(LoggerInterface $backyardError, BackyardHttp $backyardHttp) {
+    public function __construct(LoggerInterface $backyardError, BackyardHttp $backyardHttp)
+    {
         $this->BackyardError = $backyardError;
         $this->BackyardHttp = $backyardHttp;
     }
@@ -39,7 +41,8 @@ class BackyardJson {
      * @param int $logLevel - optional - default is not to be verbose
      * @return string
      */
-    public function minifyJSON($jsonInput, $logLevel = 5) {
+    public function minifyJSON($jsonInput, $logLevel = 5)
+    {
         $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
         if ($jsonOutput == 'null') {
             $this->BackyardError->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
@@ -60,10 +63,11 @@ class BackyardJson {
      * 
      * @todo - add posibility to return HTTP status codes other than 200  
      */
-    public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5) {
+    public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5)
+    {
         header("Content-type: application/json");
         $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
-        if($minifiedJson === '{"status": "500", "error": "Internal error"}'){ //error output from minifyJSON
+        if ($minifiedJson === '{"status": "500", "error": "Internal error"}') { //error output from minifyJSON
             header("HTTP/1.1 500 Internal Server Error", true, 500);
         }
         echo($minifiedJson);
@@ -84,7 +88,8 @@ class BackyardJson {
      * @param   integer $options Bitmask of JSON decode options. (>=5.4) 
      * @return  array or null is returned if the json cannot be decoded or if the encoded data is deeper than the recursion limit. 
      */
-    public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0) {
+    public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0)
+    {
         // search and remove comments like /* */ and //
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
 
@@ -109,7 +114,8 @@ class BackyardJson {
      * @return array|bool array if cURL($url) returns JSON else false
      * 
      */
-    public function getJsonAsArray($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array()) {
+    public function getJsonAsArray($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array())
+    {
         $result = $this->BackyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
         $json = $result['message_body'];
         if (!$json) {
