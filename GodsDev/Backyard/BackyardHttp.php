@@ -141,8 +141,8 @@ class BackyardHttp
      */
     public function getCurPageURL($includeTheQueryPart = true)
     {
-        return ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") // is HTTPS
-            ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
+        $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+        return ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
             . ((isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443"))) ? ':' . $_SERVER["SERVER_PORT"] : '') // port
             . (
             $includeTheQueryPart ? $_SERVER["REQUEST_URI"] //including RewriteRule result
