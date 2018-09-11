@@ -48,6 +48,15 @@ class BackyardBriefApiClient
     }
 
     /**
+     * 
+     * @return string
+     */
+    private function getCommunicationId()
+    {
+        return uniqid(date("Y-m-d-His_"));
+    }
+
+    /**
      * Send a JSON to the API and returns whatever is to return
      * 
      * @param string $json
@@ -58,7 +67,7 @@ class BackyardBriefApiClient
      */
     public function sendJsonLoad($json, $httpVerb = 'POST')
     {
-        $communicationId = uniqid(date("Y-m-d-His_"));
+        $communicationId = $this->getCommunicationId();
         $this->logCommunication($json, $httpVerb, $communicationId);
         $ch = curl_init($this->apiUrl);
         curl_setopt_array($ch, array(
@@ -117,10 +126,7 @@ class BackyardBriefApiClient
         if (!$this->appLogFolder) {
             return false;
         }
-        if (!$communicationId) {
-            $communicationId = uniqid(date("Y-m-d-His_"));
-        }
-        return error_log($message, 3, "{$this->appLogFolder}/{$filePrefix}-{$communicationId}.json");
+        return error_log($message, 3, "{$this->appLogFolder}/{$filePrefix}-" . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json");
     }
 
     /**
