@@ -33,7 +33,6 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardCrypt::randomId
-     * @todo   Implement testRandomId().
      */
     public function testRandomId()
     {
@@ -43,6 +42,9 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($expected, $orig);
     }
     
+    /**
+     * @covers GodsDev\Backyard\BackyardCrypt::randomId
+     */
     public function testRandomIdDefault10()
     {
         $orig = $this->object->randomId();
@@ -51,6 +53,9 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, strlen($orig));
     }
 
+    /**
+     * @covers GodsDev\Backyard\BackyardCrypt::randomId
+     */
     public function testRandomIdLength32()
     {
         $orig = $this->object->randomId(32);
@@ -59,6 +64,9 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, strlen($orig));
     }
 
+    /**
+     * @covers GodsDev\Backyard\BackyardCrypt::randomId
+     */
     public function testRandomIdLength1024()
     {
         $orig = $this->object->randomId(1024);

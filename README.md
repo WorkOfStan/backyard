@@ -7,7 +7,7 @@ Library In Backyard
 
 
 ## Requirements ##
-* [PHP 5.3.0 or higher](http://www.php.net/)
+* [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
 
 ## Installation ##
 

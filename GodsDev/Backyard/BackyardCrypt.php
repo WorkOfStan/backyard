@@ -11,42 +11,43 @@ class BackyardCrypt
      *
      * @var \Psr\Log\LoggerInterface
      */
-    protected $BackyardError = null;
+    protected $logger = null;
 
     /**
      * 
-     * @param LoggerInterface $BackyardError
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $BackyardError)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->BackyardError = $BackyardError;
+        $this->logger = $logger;
     }
 
     /**
-     * returns the custom length unique id; default is 10
-     * http://phpgoogle.blogspot.com/2007/08/four-ways-to-generate-unique-id-by-php.html
-     * @param int $random_id_length
+     * Returns the custom length unique id; default is 10
+     * Based on http://phpgoogle.blogspot.com/2007/08/four-ways-to-generate-unique-id-by-php.html
+     *
+     * @param int $randomIdLength
      * @return string
      */
-    public function randomId($random_id_length = 10)
+    public function randomId($randomIdLength = 10)
     {
-        //generate a random id encrypt it and store it in $rnd_id 
-        $rnd_id = crypt(uniqid(rand(), 1), uniqid(rand(), 1));
+        //generate a random id encrypt it and store it in $rndId 
+        $rndId = crypt(uniqid(rand(), 1), uniqid(rand(), 1));
 
         //to remove any slashes that might have come 
-        $rnd_id = strip_tags(stripslashes($rnd_id));
+        $rndId = strip_tags(stripslashes($rndId));
 
         //Removing any . or / and reversing the string 
-        $rnd_id = strrev(str_replace("/", "", str_replace(".", "", $rnd_id)));
+        $rndId = strrev(str_replace("/", "", str_replace(".", "", $rndId)));
 
-        if (strlen($rnd_id) < $random_id_length) {
-            $rnd_id = $rnd_id . $this->randomId($random_id_length - strlen($rnd_id));
+        if (strlen($rndId) < $randomIdLength) {
+            $rndId = $rndId . $this->randomId($randomIdLength - strlen($rndId));
         }
 
-        //finally I take the first 10 characters from the $rnd_id 
-        $rnd_id = substr($rnd_id, 0, $random_id_length);
-        $this->BackyardError->log(5, "Random id is " . $rnd_id, array(16));
-        return $rnd_id;
+        //finally I take the first 10 characters from the $rndId 
+        $rndId = substr($rndId, 0, $randomIdLength);
+        $this->logger->log(5, "Random id is " . $rndId, array(16));
+        return $rndId;
     }
 
 }

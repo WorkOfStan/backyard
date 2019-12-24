@@ -48,6 +48,16 @@ class BackyardBriefApiClient
     }
 
     /**
+     * Each call returns string starting with timestamp and ending with unique identifier based on the current time in microseconds.
+     * 
+     * @return string
+     */
+    private function getCommunicationId()
+    {
+        return uniqid(date("Y-m-d-His_"));
+    }
+
+    /**
      * Send a JSON to the API and returns whatever is to return
      * 
      * @param string $json
@@ -55,10 +65,12 @@ class BackyardBriefApiClient
      * @return mixed <b>TRUE</b> on success or <b>FALSE</b> on failure. However, if the <b>CURLOPT_RETURNTRANSFER</b>
      * option is set, it will return
      * the result on success, <b>FALSE</b> on failure.
+     * 
+     * TODO: use BackyardHttp/getData incl. logging instead of another code inside sendJsonLoad method
      */
     public function sendJsonLoad($json, $httpVerb = 'POST')
     {
-        $communicationId = uniqid(date("Y-m-d-His_"));
+        $communicationId = $this->getCommunicationId();
         $this->logCommunication($json, $httpVerb, $communicationId);
         $ch = curl_init($this->apiUrl);
         curl_setopt_array($ch, array(
@@ -110,17 +122,14 @@ class BackyardBriefApiClient
      * @param string $message
      * @param string $filePrefix
      * @param string $communicationId
-     * @return boolean
+     * @return bool <p>Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.</p>
      */
     private function logCommunication($message, $filePrefix, $communicationId)
     {
         if (!$this->appLogFolder) {
             return false;
         }
-        if (!$communicationId) {
-            $communicationId = uniqid(date("Y-m-d-His_"));
-        }
-        return error_log($message, 3, "{$this->appLogFolder}/{$filePrefix}-{$communicationId}.json");
+        return error_log($message, 3, "{$this->appLogFolder}/{$filePrefix}-" . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json");
     }
 
     /**
