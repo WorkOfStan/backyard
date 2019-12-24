@@ -48,6 +48,7 @@ class BackyardBriefApiClient
     }
 
     /**
+     * Each call returns string starting with timestamp and ending with unique identifier based on the current time in microseconds.
      * 
      * @return string
      */
@@ -64,6 +65,8 @@ class BackyardBriefApiClient
      * @return mixed <b>TRUE</b> on success or <b>FALSE</b> on failure. However, if the <b>CURLOPT_RETURNTRANSFER</b>
      * option is set, it will return
      * the result on success, <b>FALSE</b> on failure.
+     * 
+     * TODO: use BackyardHttp/getData incl. logging instead of another code inside sendJsonLoad method
      */
     public function sendJsonLoad($json, $httpVerb = 'POST')
     {
@@ -119,7 +122,7 @@ class BackyardBriefApiClient
      * @param string $message
      * @param string $filePrefix
      * @param string $communicationId
-     * @return boolean
+     * @return bool <p>Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.</p>
      */
     private function logCommunication($message, $filePrefix, $communicationId)
     {
