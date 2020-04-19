@@ -84,6 +84,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     'HTTP_CODE' => 200,
     'message_body' => '=== HTTP headers ===<br/>
 <b>User-Agent:</b> PHP/phpunit-testing <br/>
+<b>X-Forwarded-For:</b>::ffff:93.99.12.18<br/>
 <b>Host:</b> dadastrip.cz <br/>
 <b>Accept:</b> */* <br/>
 <b>x-wap-profile:</b> http://no.web.com/ <br/>
