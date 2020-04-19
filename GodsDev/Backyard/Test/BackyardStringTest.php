@@ -1,6 +1,6 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace GodsDev\Backyard\Test;
 
 use GodsDev\Backyard\BackyardString;
 use GodsDev\Backyard\BackyardError;
@@ -40,9 +40,9 @@ class BackyardStringTest extends \PHPUnit_Framework_TestCase
     public function testStripDiacritics()
     {
         $this->assertEquals('scr', $this->object->stripDiacritics('ščř'));
-        $this->assertEquals('Prilis zlutoucky kun upel dabelske ody.', $this->object->stripDiacritics('Příliš žluťoučký kůň úpěl ďábelské ódy.'));        
-        $this->assertEquals('PRILIS ZLUTOUCKY KUN UPEL DABELSKE ODY.', $this->object->stripDiacritics('PŘÍLIŠ ŽLUŤOUČKÝ KŮŇ ÚPĚL ĎÁBELSKÉ ÓDY.'));                
-        $this->assertEquals('Blizkost', $this->object->stripDiacritics('Blízkost'));                        
+        $this->assertEquals('Prilis zlutoucky kun upel dabelske ody.', $this->object->stripDiacritics('Příliš žluťoučký kůň úpěl ďábelské ódy.'));
+        $this->assertEquals('PRILIS ZLUTOUCKY KUN UPEL DABELSKE ODY.', $this->object->stripDiacritics('PŘÍLIŠ ŽLUŤOUČKÝ KŮŇ ÚPĚL ĎÁBELSKÉ ÓDY.'));
+        $this->assertEquals('Blizkost', $this->object->stripDiacritics('Blízkost'));
     }
 
 }
