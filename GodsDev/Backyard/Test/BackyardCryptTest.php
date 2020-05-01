@@ -1,4 +1,5 @@
 <?php
+
 namespace GodsDev\Backyard\Test;
 
 use GodsDev\Backyard\BackyardCrypt;
@@ -9,6 +10,7 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var BackyardCrypt
      */
@@ -29,6 +31,7 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        
     }
 
     /**
@@ -38,10 +41,10 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
     {
         $orig = $this->object->randomId();
         $expected = $this->object->randomId();
-        
+
         $this->assertNotEquals($expected, $orig);
     }
-    
+
     /**
      * @covers GodsDev\Backyard\BackyardCrypt::randomId
      */
@@ -49,7 +52,7 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
     {
         $orig = $this->object->randomId();
         $expected = 10;
-        
+
         $this->assertEquals($expected, strlen($orig));
     }
 
@@ -60,7 +63,7 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
     {
         $orig = $this->object->randomId(32);
         $expected = 32;
-        
+
         $this->assertEquals($expected, strlen($orig));
     }
 
@@ -74,5 +77,5 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
         //error_log($orig);
         $this->assertEquals($expected, strlen($orig));
     }
-    
+
 }
