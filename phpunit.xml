@@ -6,9 +6,9 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     stopOnFailure="false">
-    <testsuites> 
-        <testsuite name="Application Test Suite"> 
-            <directory>./GodsDev/Backyard/Test/</directory> 
-        </testsuite> 
-    </testsuites> 
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory>./GodsDev/Test/</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>

@@ -1,4 +1,5 @@
 <?php
+
 namespace GodsDev\Backyard\Test;
 
 use GodsDev\Backyard\BackyardArray;
@@ -9,6 +10,7 @@ use GodsDev\Backyard\BackyardError;
  */
 class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var BackyardArray
      */
@@ -29,6 +31,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        
     }
 
     /**
@@ -38,7 +41,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
     {
         $orig = array('*krapplack.de');
         $this->assertTrue($this->object->inArrayWildcards('www.krapplack.de', $orig));
-        $this->assertFalse($this->object->inArrayWildcards('www.qrapplack.de', $orig));        
+        $this->assertFalse($this->object->inArrayWildcards('www.qrapplack.de', $orig));
     }
 
     /**
@@ -55,7 +58,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 //        
 //        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
 //    }
-    
+
     public function testGetOneColumnFromArrayMissingRowIgnored()
     {
         $myArray = array(
@@ -63,11 +66,11 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
-            );
+        );
         $columnName = "b";
         $columnAlwaysExpected = false;
         $expected = array("al" => "2", "ham" => "20", "a" => "2000");
-        
+
         $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
     }
 
@@ -78,15 +81,15 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
-            );
+        );
         $columnName = "b";
         $columnAlwaysExpected = true;
         $expected = array("al" => "2", "ham" => "20", "a" => "2000");
-        
+
         $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
         //@todo automatically check that missing "br" got logged
     }
-    
+
     /**
      * @covers GodsDev\Backyard\BackyardArray::removeOneColumnFromArray
      * 
@@ -107,15 +110,15 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
-            );
+        );
         $columnName = "b";
         $expected = array(
             "al" => array("a" => "1", "c" => "3",),
             "ham" => array("a" => "10", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "c" => "3000",),
-            );
-        
+        );
+
         $this->assertEquals($expected, $this->object->removeOneColumnFromArray($myArray, $columnName));
     }
 
@@ -129,9 +132,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
-            );
+        );
         $expected = 'Array ( [al] => Array ( [a] => 1 [b] => 2 [c] => 3 ) [ham] => Array ( [a] => 10 [b] => 20 [c] => 30 ) [br] => Array ( [a] => 100 [c] => 300 ) [a] => Array ( [a] => 1000 [b] => 2000 [c] => 3000 ) ) ';
-        
+
         $this->assertEquals($expected, $this->object->dumpArrayAsOneLine($myArray));
     }
 
@@ -145,16 +148,16 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-            );
+        );
         $searchedValue = "2000";
         $columnName = "b";
         $allExactMatches = false;
         $columnAlwaysExpected = false;
         $expected = false;
-        
+
         $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
     }
-    
+
     public function testArrayVlookupFirstMatch()
     {
         $searchedArray = array(
@@ -162,13 +165,13 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-            );
+        );
         $searchedValue = "20";
         $columnName = "b";
         $allExactMatches = false;
         $columnAlwaysExpected = false;
         $expected = array("a" => "10", "b" => "20", "c" => "30",);
-        
+
         $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
     }
 
@@ -179,20 +182,19 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-            );
+        );
         $searchedValue = "20";
         $columnName = "b";
         $allExactMatches = true;
         $columnAlwaysExpected = false;
         $expected = array(
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),            
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
         );
-        
+
         $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
     }
-    
-    
+
     /**
      * @covers GodsDev\Backyard\BackyardArray::arrayDiffAssocRecursive
      */
@@ -213,7 +215,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         );
         $array2 = array(
             "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),            
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
         );
         $expected = array(
             "al" => array("a" => "1", "b" => "2", "c" => "3",),
@@ -226,11 +228,11 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
                 )
             ),
         );
-        
+
         $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array2));
     }
-    
-    public function testArrayDiffAssocRecursiveSame() 
+
+    public function testArrayDiffAssocRecursiveSame()
     {
         $array1 = array(
             "al" => array("a" => "1", "b" => "2", "c" => "3",),
