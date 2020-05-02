@@ -27,5 +27,10 @@
         "psr-4": {
             "GodsDev\\Backyard\\": "GodsDev/Backyard/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GodsDev\\Backyard\\Test\\": "GodsDev/Test/"
+        }
     }
 }
