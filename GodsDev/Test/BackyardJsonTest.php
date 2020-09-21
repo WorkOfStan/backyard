@@ -33,7 +33,7 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
 
     /**
@@ -99,5 +99,4 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->object->getJsonAsArray($url));
     }
-
 }

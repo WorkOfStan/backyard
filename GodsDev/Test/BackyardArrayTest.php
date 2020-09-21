@@ -22,7 +22,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new BackyardArray(new BackyardError);
+        $this->object = new BackyardArray(new BackyardError());
     }
 
     /**
@@ -31,7 +31,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
 
     /**
@@ -46,7 +46,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::getOneColumnFromArray
-     * 
+     *
      * testGetOneColumnFromArrayNotArray not needed as the Argument 1 MUST be of the type array
      */
 //    public function testGetOneColumnFromArrayNotArray()
@@ -55,8 +55,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 //        $columnName = "b";
 //        $columnAlwaysExpected = false;
 //        $expected = array();
-//        
-//        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
+//
+//        $this->assertEquals($expected,
+//                            $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
 //    }
 
     public function testGetOneColumnFromArrayMissingRowIgnored()
@@ -71,7 +72,10 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         $columnAlwaysExpected = false;
         $expected = array("al" => "2", "ham" => "20", "a" => "2000");
 
-        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
+        $this->assertEquals(
+            $expected,
+            $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected)
+        );
     }
 
     public function testGetOneColumnFromArrayMissingRowLogged()
@@ -86,13 +90,20 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         $columnAlwaysExpected = true;
         $expected = array("al" => "2", "ham" => "20", "a" => "2000");
 
-        $this->assertEquals($expected, $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
+        $this->assertEquals(
+            $expected,
+            $this->object->getOneColumnFromArray(
+                $myArray,
+                $columnName,
+                $columnAlwaysExpected
+            )
+        );
         //@todo automatically check that missing "br" got logged
     }
 
     /**
      * @covers GodsDev\Backyard\BackyardArray::removeOneColumnFromArray
-     * 
+     *
      * testRemoveOneColumnFromArrayNoArray() not needed as the Argument 1 MUST be of the type array
      */
 //    public function testRemoveOneColumnFromArrayNoArray()
@@ -100,7 +111,7 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 //        $myArray = 1;
 //        $columnName = "b";
 //        $expected = array();
-//        
+//
 //        $this->assertEquals($expected, $this->object->removeOneColumnFromArray($myArray, $columnName));
 //    }
     public function testRemoveOneColumnFromArray()
@@ -133,7 +144,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "br" => array("a" => "100", "c" => "300",),
             "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
         );
-        $expected = 'Array ( [al] => Array ( [a] => 1 [b] => 2 [c] => 3 ) [ham] => Array ( [a] => 10 [b] => 20 [c] => 30 ) [br] => Array ( [a] => 100 [c] => 300 ) [a] => Array ( [a] => 1000 [b] => 2000 [c] => 3000 ) ) ';
+        $expected = 'Array ( [al] => Array ( [a] => 1 [b] => 2 [c] => 3 ) '
+            . '[ham] => Array ( [a] => 10 [b] => 20 [c] => 30 ) [br] => Array ( [a] => 100 [c] => 300 ) '
+            . '[a] => Array ( [a] => 1000 [b] => 2000 [c] => 3000 ) ) ';
 
         $this->assertEquals($expected, $this->object->dumpArrayAsOneLine($myArray));
     }
@@ -155,7 +168,16 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         $columnAlwaysExpected = false;
         $expected = false;
 
-        $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
     }
 
     public function testArrayVlookupFirstMatch()
@@ -172,7 +194,16 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         $columnAlwaysExpected = false;
         $expected = array("a" => "10", "b" => "20", "c" => "30",);
 
-        $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
     }
 
     public function testArrayVlookupAllMatches()
@@ -192,7 +223,16 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
             "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
         );
 
-        $this->assertEquals($expected, $this->object->arrayVlookup($searchedValue, $searchedArray, $columnName, $allExactMatches, $columnAlwaysExpected));
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
     }
 
     /**
@@ -251,5 +291,4 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array1));
     }
-
 }

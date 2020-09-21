@@ -30,7 +30,7 @@ class BackyardTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
 
     public function testBackyardJsonMinifyJson()
@@ -41,5 +41,4 @@ class BackyardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->object->Json->minifyJSON($orig));
     }
-
 }

@@ -1,17 +1,18 @@
 <?php
+// phpcs:ignoreFile
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
-die('LIB2');//security die
+die('LIB2'); //security die
 /**
  * Name: Emulate
  * Project: LIB/Part of Library In Backyard
- * 
- * * 
- * Purpose: 
+ *
+ * *
+ * Purpose:
  * UI for Content-proxy for spoofing HTTP headers
  * May be called through HTTP API. Uses emulator.php in iFrame.
- * 
- * 
- * * 
+ *
+ *
+ * *
  * History //@TODO (update $VERSION['emulate'])
  * 2012-04-12, v.0.1 - vývoj
  * 2012-04-16, v.0.2 - custom Headers added
@@ -19,8 +20,8 @@ die('LIB2');//security die
  * 2012-04-30, v.0.4 - enable force content-type
  * 2014-07-17, v.0.5 - added to backyard 2
  *
- * * 
- * TODO  
+ * *
+ * TODO
  * @TODO - doplnit příklad
  * @TODO - Umožnit jít přímo na URL
  * @TODO - custom headers nastavitelné jen v expert mode (tedy default hidden)
@@ -28,7 +29,7 @@ die('LIB2');//security die
  * @TODO add possibility to copy the target URL into clipboard
  * @TODO User-agent from db
  * @TODO - odpoutat emulator do samostatného okna: $pageInstance->addToBody("<td><a href='#' onclick='window.open(\"http://www.alfa.gods.cz/lib/emulator.php?url=".  urlencode($value)."&useragent=".  urlencode($row['User-agent'])."\", \"emulatorwindow\",\"location=1,status=0,scrollbars=1, width=240,height=320\");'>$value</a></td>");
- * 
+ *
  * @TODO - sladit naming
  * ****************************
  * 			1. Naming conventions
@@ -47,7 +48,7 @@ die('LIB2');//security die
   //Xhe’s got id from the beginning: $_SESSION["id"] = User::$himself->getId();
  * *******************************
  */
-// 
+//
 
 /**
  * Load Scripts & init
@@ -96,10 +97,10 @@ $pageInstance->addToBody('            <input type="submit" name="submit" value="
 $pageInstance->addToBody('        </form><br/>' . PHP_EOL);
 if ($currentURL != "") {
     my_error_log("targetSrc=" . ($targetSrc = 'emulator.php?url=' .
-            urlencode($currentURL) . (($currentOriginalMarkup != '') ? '&original=' . urlencode($currentOriginalMarkup) : '') .
-            (($currentForceContentType != '') ? '&forcect=' . urlencode($currentForceContentType) : '') .
-            (($currentUserAgent != '') ? '&useragent=' . urlencode($currentUserAgent) : '') .
-            (($currentCustomHeaders != '') ? ('&custom=' . urlencode($currentCustomHeaders)) : (''))), 3, 16);
+        urlencode($currentURL) . (($currentOriginalMarkup != '') ? '&original=' . urlencode($currentOriginalMarkup) : '') .
+        (($currentForceContentType != '') ? '&forcect=' . urlencode($currentForceContentType) : '') .
+        (($currentUserAgent != '') ? '&useragent=' . urlencode($currentUserAgent) : '') .
+        (($currentCustomHeaders != '') ? ('&custom=' . urlencode($currentCustomHeaders)) : (''))), 3, 16);
     $pageInstance->addToBody('<iframe height="' . $currentHeight . '" width="' . $currentWidth . '" src="' . $targetSrc . '" ></iframe><br/>' . PHP_EOL);
 }
 $pageInstance->addToBody('<br/>Hint:<br/>*Copy the URL to remember the emulation.' . PHP_EOL);

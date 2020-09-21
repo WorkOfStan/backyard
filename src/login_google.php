@@ -1,45 +1,47 @@
 <?php
+// phpcs:ignoreFile
 error_log(__FILE__ . ' is obsolete and will be removed in next release');
-die('LIB2');//security die
+die('LIB2'); //security die
 /**
  * Name: login_google.php
  * Project: LIB/Part of Library In Backyard
- * 
- * * 
- * Purpose: 
+ *
+ * *
+ * Purpose:
  * Social login do Google(+)
- * 
- * 
- * * 
+ *
+ *
+ * *
  * History
  * 2013-05-03, v.1 - compression of debugging
  * 2014-04-06, v.2 - updated to work with backyard 2 and https://github.com/google/google-api-php-client/
  *
- * * TODO  
- * 
- * 
+ * * TODO
+ *
+ *
  */
 //$ERROR_HACK=5;
 //$myErrorLogMessageType=0;
 if (!function_exists('removeqsvar')) {
 
 //In http://stackoverflow.com/questions/1251582/beautiful-way-to-remove-get-variables-with-php see http://stackoverflow.com/a/1251650
-    function removeqsvar($url, $varname) {
+    function removeqsvar($url, $varname)
+    {
 //    return preg_replace('/([?&])'.$varname.'=[^&]+(&|$)/','$1',$url);
         //$result = preg_replace('/([?&])'.$varname.'=[^&]+(&|$)/','$1',$url);
         $result = preg_replace("/&{2,}/", "&", preg_replace('/([?&])' . $varname . '=[^&]+(&|$)/', '$1', $url));
         //@TODO -   aby odstranilo i proměnnou neurčenou, tedy ?var= nebo i jen ?var
         //$newURL = parse_url($result);
-        //if(empty($newURL['query']) && substr($result, -1) == '?')$result=substr_replace($result ,"",-1);//@TODO - určitě by šlo optimalizovat (aby nezůstal otazník na konci)    
+        //if(empty($newURL['query']) && substr($result, -1) == '?')$result=substr_replace($result ,"",-1);//@TODO - určitě by šlo optimalizovat (aby nezůstal otazník na konci)
         //$result = unparse_url($newURL);
         return $result;
     }
-
 }
 
 if (!function_exists('unparse_url')) {
 
-    function unparse_url($parsed_url) { //http://www.php.net/manual/en/function.parse-url.php#106731
+    function unparse_url($parsed_url)
+    { //http://www.php.net/manual/en/function.parse-url.php#106731
         $scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
         $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
         $port = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
@@ -51,38 +53,36 @@ if (!function_exists('unparse_url')) {
         $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
         return "$scheme$user$pass$host$port$path$query$fragment";
     }
-
 }
 
 if (!function_exists('addqsvar')) {
 
-    function addqsvar($url, $varname, $value = '') {
-        //$result = $url; 
+    function addqsvar($url, $varname, $value = '')
+    {
+        //$result = $url;
         $newURL = parse_url($url);
         if (empty($newURL['query'])) { //@TODO - aby zohlednňovalo i fragment .. http://cz2.php.net/manual/en/function.parse-url.php
             //$result = "{$result}?{$varname}={$value}";
             $newURL['query'] = "{$varname}={$value}";
         } else {
             //$result = "{$result}&{$varname}={$value}";
-            $newURL['query'].="&{$varname}={$value}";
+            $newURL['query'] .= "&{$varname}={$value}";
         }
-        return unparse_url($newURL); //1209200022    
+        return unparse_url($newURL); //1209200022
     }
-
 }
 
 
 if (!isset($apiCredentials['google'])) {
     my_error_log('Google app credentials missing', 1);
 } else {
-
     $apiCredentials['google']['auth'] = false;
 
     /**
-     *  Google Login API 
+     *  Google Login API
      */
     my_error_log("Google API starts", 6, 6);
-//$Google_authUrl=true;
+    //$Google_authUrl=true;
 // https://code.google.com/p/google-api-php-client/source/browse/trunk/examples/plus/index.php
 // google-api-php-client is expected to be in lib folder and all scripts should run from the "root" folder
 // available now from https://github.com/google/google-api-php-client.git
@@ -95,31 +95,31 @@ if (!isset($apiCredentials['google'])) {
     if (session_id() == '') {
         session_start(); //@TODO - odladit konflikt více session: As of PHP 4.3.3, calling session_start() after the session was previously started will result in an error of level E_NOTICE. Also, the second session start will simply be ignored.
     }
-//if(isset($_REQUEST['glloginproceed']))movePage(302, removeqsvar(removeqsvar(curPageURL(true), 'code'),'glloginproceed'));
+    //if(isset($_REQUEST['glloginproceed']))movePage(302, removeqsvar(removeqsvar(curPageURL(true), 'code'),'glloginproceed'));
 //my_error_log('Session_id='.session_id(),5,16);
-//my_error_log("apiCredentials: ".(print_r($apiCredentials,true)),5);  
+//my_error_log("apiCredentials: ".(print_r($apiCredentials,true)),5);
     $apiCredentials['google']['redirectUri'] = removeqsvar($apiCredentials['google']['redirectUri'], 'code'); // http://www.violato.net/blog/php/125-fatal-error-uncaught-exception-apiauthexception-with-message-error-fetching-oauth2-access-token-message-invalidrequest
 //        $apiCredentials['google']['redirectUri'] = addqsvar($apiCredentials['google']['redirectUri'], 'glloginproceed','1');//value 1 je jedno
     my_error_log("apiCredentials: " . backyard_dumpArrayAsOneLine($apiCredentials), 5, 24);
 
     $client = new Google_Client();
-//$client = new apiClient();
+    //$client = new apiClient();
     $client->setApplicationName($apiCredentials['google']['applicationName']); //@TODO 3 - kde se to vyskytuje? Mělo by být language dependant //http://javadoc.google-api-java-client.googlecode.com/hg/1.0.10-alpha/com/google/api/client/googleapis/GoogleHeaders.html  :  Sets the "User-Agent" header for the given application name of the form "[company-id]-[app-name]-[app-version]" into the given HTTP headers.
 // Visit https://code.google.com/apis/console to generate your
 // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
     $client->setClientId($apiCredentials['google']['clientId']);
     $client->setClientSecret($apiCredentials['google']['clientSecret']);
     $client->setRedirectUri($apiCredentials['google']['redirectUri']); //Chyba:redirect_uri_mismatch: The redirect URI in the request: http://dadastrip.cz/test did not match a registered redirect URI ... pokud není ve vyjmenovaných
-//$client->setRedirectUri(removeqsvar($apiCredentials['google']['redirectUri'],'code'));// http://www.violato.net/blog/php/125-fatal-error-uncaught-exception-apiauthexception-with-message-error-fetching-oauth2-access-token-message-invalidrequest //Chyba:redirect_uri_mismatch: The redirect URI in the request: http://dadastrip.cz/test did not match a registered redirect URI ... pokud není ve vyjmenovaných 
+//$client->setRedirectUri(removeqsvar($apiCredentials['google']['redirectUri'],'code'));// http://www.violato.net/blog/php/125-fatal-error-uncaught-exception-apiauthexception-with-message-error-fetching-oauth2-access-token-message-invalidrequest //Chyba:redirect_uri_mismatch: The redirect URI in the request: http://dadastrip.cz/test did not match a registered redirect URI ... pokud není ve vyjmenovaných
     $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me'));      // Important! //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
 //@TODO -140406 - při volání z localhost:8080 si app vyžádala Offline access - což je špatně!
 // $client->setScopes(array('userinfo.email', 'plus.me'));
 //$client->setDeveloperKey($apiCredentials['google']['serverDeveloperApiKey']);
     my_error_log("Google client set", 6, 6);
-//$plus = new Google_PlusService($client);
+    //$plus = new Google_PlusService($client);
     $plus = new Google_Service_Plus($client);
     my_error_log('$plus = new', 6, 6);
-//$oauth2 = new apiOauth2Service($client); //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email  
+    //$oauth2 = new apiOauth2Service($client); //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
     $oauth2 = new Google_Service_Oauth2($client);
     //$client->authenticate($_GET['code']);//// Authenticate the user, $_GET['code'] is used internally:
     my_error_log('$oauth2 = new', 6, 6);
@@ -168,7 +168,7 @@ if (!isset($apiCredentials['google'])) {
         $googleUserProfile['user'] = $oauth2->userinfo->get(); //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
         // These fields are currently filtered through the PHP sanitize filters.
         // See http://www.php.net/manual/en/filter.filters.sanitize.php
-        $googleUserProfile['email'] = filter_var($googleUserProfile['user']['email'], FILTER_SANITIZE_EMAIL);  //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email  
+        $googleUserProfile['email'] = filter_var($googleUserProfile['user']['email'], FILTER_SANITIZE_EMAIL);  //http://stackoverflow.com/questions/8706288/using-google-api-for-php-need-to-get-the-users-email
         if (isset($googleUserProfile['me'])) {
             $googleUserProfile['url'] = filter_var($googleUserProfile['me']['url'], FILTER_VALIDATE_URL);
             $googleUserProfile['img'] = filter_var($googleUserProfile['me']['image']['url'], FILTER_VALIDATE_URL);
@@ -208,7 +208,7 @@ if (!isset($apiCredentials['google'])) {
         $apiCredentials['google']['loginUrl'] = $client->createAuthUrl();
     }
 
-//}//if !$user
+    //}//if !$user
 //if(!isset($Google_authUrl))$Google_authUrl=false;//tj. false = jsem zalogovan
 
     /*

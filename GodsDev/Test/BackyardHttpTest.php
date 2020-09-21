@@ -33,9 +33,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
-
 //    /**
 //     * @covers GodsDev\Backyard\BackyardHttp::movePage
 //     * @todo   Implement testMovePage().
@@ -97,7 +96,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         );
 
         $result = $this->object->getData($url, $useragent, $timeout, $customHeaders, $postArray);
-        $result['message_body'] = preg_replace('/^.+\n/', '', preg_replace('/^.+\n/', '', $result['message_body'])); //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
+        //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
+        $result['message_body'] = preg_replace('/^.+\n/', '', preg_replace('/^.+\n/', '', $result['message_body']));
 //        $this->assertEquals($expected, $result);
         $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE']);
 
@@ -106,7 +106,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         $tempResult = explode('<br/>', preg_replace('/\s+/', '', $result['message_body']));
         asort($tempResult);
         $this->assertEquals(
-            implode('|', $tempExpected), implode('|', $tempResult)
+            implode('|', $tempExpected),
+            implode('|', $tempResult)
         );
 
         //   $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
@@ -131,17 +132,25 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
             'REDIRECT_URL' => 'http://dadastrip.cz/test/',
             'CONTENT_TYPE' => 'text/html; charset=iso-8859-1'
         );
-        $result = $this->object->getData($url, $useragent = 'PHP/cURL', $timeout = 5, $customHeaders = false, $postArray = array());
+        $result = $this->object->getData(
+            $url,
+            $useragent = 'PHP/cURL',
+            $timeout = 5,
+            $customHeaders = false,
+            $postArray = array()
+        );
 //     error_log('Exp:' . print_r($expected,true));
 //     error_log('Res:' . print_r($result,true));
         //$this->assertEquals($expected, $result);
 //        error_log(preg_replace('/\s+/', '', $result['message_body']));
         $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE']);
-        $this->assertEquals(preg_replace('/\s+/', '', $expected['message_body']), preg_replace('/\s+/', '', $result['message_body']));
+        $this->assertEquals(
+            preg_replace('/\s+/', '', $expected['message_body']),
+            preg_replace('/\s+/', '', $result['message_body'])
+        );
         $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
         $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
     }
-
     //@todo - make test if the method remains in Backyard
 //    /**
 //     * @covers GodsDev\Backyard\BackyardHttp::getHTTPstatusCode
@@ -151,7 +160,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    {
 //        $url = '{"status": "123", "text": "abc"}';
 //        $expected = '{"status":"123","text":"abc"}';
-//        
+//
 //        $this->assertEquals($expected, $this->object->getHTTPstatusCode($url));
 //    }
 //
@@ -164,7 +173,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //        $url = '{"status": "123", "text": "abc"}';
 //        $userAgent = 'sth';
 //        $expected = '{"status":"123","text":"abc"}';
-//        
+//
 //        $this->assertEquals($expected, $this->object->getHTTPstatusCodeByUA($url, $userAgent));
 //    }
 }

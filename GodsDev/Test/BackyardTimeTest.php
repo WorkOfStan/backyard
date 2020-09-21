@@ -22,7 +22,7 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new BackyardTime(new BackyardError);
+        $this->object = new BackyardTime();
     }
 
     /**
@@ -31,7 +31,7 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
 
     /**
@@ -51,7 +51,7 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
     {
         $expected = '0.0';
 
-        $this->assertEquals($expected, substr($this->object->getRunningTime(), 0, 3));
+        $this->assertEquals($expected, substr((string) $this->object->getRunningTime(), 0, 3));
     }
 
     /**
@@ -70,7 +70,9 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
         $langStringPageGeneratedIn = "Page Generated in %s";
         $expected = 'Page Generated in 0';
 
-        $this->assertEquals($expected, substr($this->object->pageGeneratedIn($langStringPageGeneratedIn), 0, strlen($expected)));
+        $this->assertEquals(
+            $expected,
+            substr($this->object->pageGeneratedIn($langStringPageGeneratedIn), 0, strlen($expected))
+        );
     }
-
 }
