@@ -1,0 +1,16 @@
+parameters:
+    level: max
+    excludes_analyse:
+      - ../../src/*.php
+    scanDirectories:
+      - ../../GodsDev/Backyard
+    ignoreErrors:
+      -
+        message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
+        path: /github/workspace/GodsDev/Backyard/BackyardBriefApiClient.php 
+      - '#Property GodsDev\\Backyard\\Backyard[a-zA-Z]+::\$BackyardError has unknown class Psr\\Log\\LoggerInterface as its type.#'
+      - '#Property GodsDev\\Backyard\\Backyard[a-zA-Z]+::\$logger has unknown class Psr\\Log\\LoggerInterface as its type.#'
+      - '#Parameter \$logger of method GodsDev\\Backyard\\Backyard[a-zA-Z0-9]+::__construct\(\) has invalid typehint type Psr\\Log\\LoggerInterface.#'
+      - '#Call to method [a-z]+\(\) on an unknown class Psr\\Log\\LoggerInterface.#'
+      - '#Reflection error: Psr\\Log\\AbstractLogger not found.#'
+      - '#Reflection error: PHPUnit_Framework_TestCase not found.#'

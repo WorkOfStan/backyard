@@ -1,12 +1,13 @@
 <?php
+// phpcs:ignoreFile
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
-die('LIB2');//security die
+die('LIB2'); //security die
 /**
  * Name: class_HTMLPage.php
  * Project: LIB/Part of Library In Backyard
- * 
  *
- * Purpose: 
+ *
+ * Purpose:
  * class HTMLPage
  *
  *
@@ -15,25 +16,25 @@ die('LIB2');//security die
  * header
  * footer
  * body
- * 
- * 
- * 
+ *
+ *
+ *
  * public methods
  * __construct($TITLE="GODS rules",$CONTENT_TYPE="text/html")
  * startPage(){//Vypise Content-type HTTP header a header HTML stránky
  * endPage(){//Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
  * addToBody($add){////append k $this->body
- * 
- * 
+ *
+ *
  * History
  * 2011-08-07, version 0.0, pro SMS game
  * 2011-08-13, version 0.1, součást prototypu pro GODS, použití je ovšem obecnější, zatím podporuje pouze Content-type: text/html
- * 2011-08-28, version 0.2, text/vnd.wap.wml   
+ * 2011-08-28, version 0.2, text/vnd.wap.wml
  * 2011-09-04, version 0.3, /jq is in the root directory, not in the upper directory
  * 2011-09-28, version 0.4, jQuery may not be loaded
  * 2011-09-29, version 0.4.1, style may not be loaded
  * 2012-08-07, version 0.5, LOAD_JQUERYMOBILE added
- * 2012-08-27, version 0.5.1, beforeViewport string added 
+ * 2012-08-27, version 0.5.1, beforeViewport string added
  * 2012-10-23, version 0.6, version of jqm may be changed; name of css may be changed; removed http from linked URIs to be adaptible to https root; addToHeader added
  * 2012-11-05, v.0.6.1, elseif($LOAD_JQ == '1.8.2') added
  * 2012-11-06, v.0.6.2, style.css je na konci po jqueryui.css
@@ -43,37 +44,49 @@ die('LIB2');//security die
  * 2013-10-06, v.0.9, method currentBodyOutput added
  * 2014-07-30, v.0.9.1, link jQ 1.6.2,1.8.2,1.11.1 to CDN
  *
- *  
+ *
  * @TODO - sladit
  *   Naming convention:
  *   class, method, function NameExample
  *   $EXAMPLE_OF_A_VARIABLE
  *   sql_field
- *   CSS_CLASS     
- * 
- *  
+ *   CSS_CLASS
+ *
+ *
  * TODO
  * @TODO LOAD_JQUERYMOBILE verzi jquery sjednotit s JQ, 120807
  * @TODO more flexibility where jQ is loaded from
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
 /**
  * Creates HTML/WML page
  * __construct($TITLE='GODS rules', $CONTENT_TYPE='text/html', $LOAD_JQ=1, $LOAD_STYLE=1, $LOAD_JQUERYMOBILE=0, $beforeViewport='', $manifestCache='')
- * 
+ *
  * Methods:
  * addToBody
  * addToHeader
  * startPage - outputs page header
  * endPage - outputs body
  */
-class HTMLPage {
+class HTMLPage
+{
 
-    public $contentType = 'text/html', $header = '', $footer = '', $body = '';
-    protected $title, $headerWasOutputed, $style;
+    public $contentType = 'text/html';
+
+    public $header = '';
+
+    public $footer = '';
+
+    public $body = '';
+
+    protected $title;
+
+    protected $headerWasOutputed;
+
+    protected $style;
 
     /**
      *
@@ -84,16 +97,17 @@ class HTMLPage {
      * @param mixed $LOAD_JQUERYMOBILE [optional]
      * @param string $beforeViewport [optional]
      * @param string $manifestCache [optional]
-     * 
+     *
      * If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
-     * 
+     *
      */
-    public function __construct($TITLE = 'GODS rules', $CONTENT_TYPE = 'text/html', $LOAD_JQ = 1, $LOAD_STYLE = 1, $LOAD_JQUERYMOBILE = 0, $beforeViewport = '', $manifestCache = '') {
+    public function __construct($TITLE = 'GODS rules', $CONTENT_TYPE = 'text/html', $LOAD_JQ = 1, $LOAD_STYLE = 1, $LOAD_JQUERYMOBILE = 0, $beforeViewport = '', $manifestCache = '')
+    {
         $this->contentType = $CONTENT_TYPE;
         $this->headerWasOutputed = false;
         switch ($CONTENT_TYPE) {
             case 'text/html'://HTML5 with JQuery
-                if (!empty($manifestCache)){
+                if (!empty($manifestCache)) {
                     $manifestCache = " manifest=\"{$manifestCache}\"";
                 }
                 $this->title = $TITLE;
@@ -103,7 +117,7 @@ class HTMLPage {
                 if ($beforeViewport != '') {
                     $this->header .= $beforeViewport; //@TODO - kontrola validity
                 }
-                //if($LOAD_JQUERYMOBILE == 1 || $LOAD_JQUERYMOBILE == '1.2.0'){            
+                //if($LOAD_JQUERYMOBILE == 1 || $LOAD_JQUERYMOBILE == '1.2.0'){
                 if ($LOAD_JQUERYMOBILE) {
                     $this->header .= '<meta name="viewport" content="width=device-width, initial-scale=1">';
                     if ($LOAD_JQUERYMOBILE == '1.3.1' || $LOAD_JQUERYMOBILE == '1.3.1-local') {
@@ -120,7 +134,7 @@ class HTMLPage {
                     } elseif ($LOAD_JQUERYMOBILE == '1.3.1') {
                         $this->header .= '<link rel="stylesheet" href="//code.jquery.com/mobile/1.3.1/jquery.mobile.structure-1.3.1.min.css" />'; //when using theme
                     } elseif ($LOAD_JQUERYMOBILE == '1.3.1-local') {
-                        $this->header .= '<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.min.css" />'; //when using theme                    
+                        $this->header .= '<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.min.css" />'; //when using theme
                     } else {
                         my_error_log("LOAD_JQUERYMOBILE={$LOAD_JQUERYMOBILE} - undefined", 2);
                     }
@@ -178,7 +192,8 @@ class HTMLPage {
         }
     }
 
-    public function startPage() {//Vypise Content-type HTTP header a header HTML stránky
+    public function startPage()
+    {//Vypise Content-type HTTP header a header HTML stránky
         if ($this->contentType == 'text/html') {
             header("Content-type: text/html; charset=utf-8");
         } else {
@@ -205,33 +220,36 @@ class HTMLPage {
                 break;
         } //default was already solved in constructor
 
-        echo ($this->header);
+        echo($this->header);
         $this->headerWasOutputed = true;
     }
 
-    public function outputCurrentBody() {//Vypise dosavadní tělo
-        echo ($this->body);
+    public function outputCurrentBody()
+    {//Vypise dosavadní tělo
+        echo($this->body);
         @ob_flush(); //'@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
-        flush(); // http://php.vrana.cz/vysypani-vystupu.php      
+        flush(); // http://php.vrana.cz/vysypani-vystupu.php
         $this->body = '';
     }
 
-    public function endPage() {//Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
-        echo ($this->body . $this->footer);
+    public function endPage()
+    {//Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
+        echo($this->body . $this->footer);
         @ob_flush(); //'@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
-        flush(); // http://php.vrana.cz/vysypani-vystupu.php      
+        flush(); // http://php.vrana.cz/vysypani-vystupu.php
     }
 
-    public function addToBody($add) {//append k $this->body 
+    public function addToBody($add)
+    {//append k $this->body
         $this->body .= $add;
     }
 
-    public function addToHeader($add) {//append k $this->body 
+    public function addToHeader($add)
+    {//append k $this->body
         if ($this->headerWasOutputed) {
             my_error_log("Header was already out. Following cannot be added: {$add}", 2);
         } else {
             $this->header .= $add;
         }
     }
-
 }

@@ -1,33 +1,34 @@
 <?php
+// phpcs:ignoreFile
 error_log(__FILE__ . ' is obsolete - consider its rewriting');
-die('LIB2');//security die
+die('LIB2'); //security die
 //@TODO  compare with social.login.php working with MyReport
 /**
  * Name: social.login.php
  * Project: LIB/Part of Library In Backyard
- * 
- * * 
- * Purpose: 
+ *
+ * *
+ * Purpose:
  * Plugin for social login through server side OAUTH services Facebook, Google+ and potentially others
- * 
+ *
  * * Output tohoto plugin:
  * $googleUserProfile = unset or array
  * $facebookUserProfile = unset or array
- * 
+ *
  * Vstupní volání:
  * require_once 'social.login.php';//@TODO 3 - přesunout do LIB
   $tempResult=socialLoginPseudoConstructor($ownerId, $ownerLanguage);//poslední použití $ownerLanguage
   $ownerId=$tempResult['internal_id'];
   $userLanguage=$tempResult['user_language'];
   .. s tím, že $ownerId, $ownerLanguage nebo $userLanguage jsou proměnné bez vazby na jmenný prostor social.login.php
- * 
+ *
  * Prerekvizity:
  * login_google.php
  * login_facebook.php
  * $apiCredentials v conf.php
  * $availableLanguages
  *     global $dbname,$tableNameOwners;
- * 
+ *
  *  tabulka $dbname kde $tableNameOwners je například `stakan_owners`
   CREATE TABLE IF NOT EXISTS `stakan_owners` (
   `owner_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -51,9 +52,9 @@ die('LIB2');//security die
   //@TODO 2 - zatím natvrdo nastaveno type_id=2 .. později inteligentě rozhazovat dle zdrojů
 
 
- * 
- * 
- * * 
+ *
+ *
+ * *
  * History
  * 2013-03-26, v.0.0.1, first draft from another project (Stakan)
  * 2013-03-26, v.0.0.2, function pseudoConstructor and made ready for MyReport
@@ -64,59 +65,66 @@ die('LIB2');//security die
  * 2013-12-08, v.0.3, from stakan1 put into backyard
  * 2014-04-15, v.1.S.0, social.login Stakan přibližujeme k MyReport
  *
- * * 
- * TODO  
+ * *
+ * TODO
  * @TODO 2 - sjednotit stakan1/social.login a myreport/social.login a přesunout do LIB (a na GITHUB jako samostatný projekt)
- * 
+ *
  * ** Description
  * 130510: cookie muís vymazat logout tlačítko, např. onclick='document.cookie=\"logintimestamp=\";informAboutEid(68);'
- * 
+ *
  */
-if (!defined('__BACKYARDROOT__')){
+if (!defined('__BACKYARDROOT__')) {
     die('backyard must be initialized beforehand');
-//require_once ("../lib/functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");//@TODO - jinak, aby univerzálně
+    //require_once ("../lib/functions.php"); //require the basic LIB library; all other LIB components to be included by require_once (__ROOT__."/lib/XXX.php");//@TODO - jinak, aby univerzálně
 }
 
-if (!isset($apiCredentials)){
+if (!isset($apiCredentials)) {
     die('apiCredentials must be preinitialized');
-//require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
+    //require_once ("conf.php");//configures $apiCredentials //@TODO - specify here what must be configured there
 }
 
 /* * *****************************************************************************
  *  Social login  //@TODO 3 - standardize this into LIB
  */
-if (!isset($_REQUEST['fbloginproceed']))
-    require_once (__BACKYARDROOT__ . "/login_google.php"); //@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
-if (!isset($_GET['code']) || isset($_GET['state']))
-    require_once (__BACKYARDROOT__ . "/login_facebook.php"); //@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
-if ($apiCredentials['facebook']['auth'])
-    my_error_log("$facebookUserProfile: " . backyard_dumpArrayAsOneLine($facebookUserProfile), 5, 16); //debug
-if ($apiCredentials['google']['auth'])
-    my_error_log("$googleUserProfile: " . backyard_dumpArrayAsOneLine($googleUserProfile), 5, 16);    //debug
+if (!isset($_REQUEST['fbloginproceed'])) {
+    require_once(__BACKYARDROOT__ . "/login_google.php");
+} //@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta ke google-library
+if (!isset($_GET['code']) || isset($_GET['state'])) {
+    require_once(__BACKYARDROOT__ . "/login_facebook.php");
+} //@TODO 2 .. social.login pak bude v LIB, tak cesta bude ten samý adresář, ovšem conf.php v LIB bude cesta k facebook-library
+if ($apiCredentials['facebook']['auth']) {
+    my_error_log("$facebookUserProfile: " . backyard_dumpArrayAsOneLine($facebookUserProfile), 5, 16);
+} //debug
+if ($apiCredentials['google']['auth']) {
+    my_error_log("$googleUserProfile: " . backyard_dumpArrayAsOneLine($googleUserProfile), 5, 16);
+}    //debug
 /**
- *  /Social login 
+ *  /Social login
  * Output tohoto plugin:
  * $googleUserProfile = unset or array
  * $facebookUserProfile = unset or array
  */
 
-function socialLoginPseudoConstructor($internalId, $userLanguage) {
+function socialLoginPseudoConstructor($internalId, $userLanguage)
+{
     if (!($internalId && $userLanguage)) {
         $tempResult = getInternalUserId(); //je to jediné volání této fce
-        if (!$internalId)
-            $internalId = $tempResult['user_id']; //pokud nebylo správně hack_owner_id, tak $ownerId z databáze dle social login
-        if (!$userLanguage)
-            $userLanguage = $tempResult['user_language']; //_REQUEST['owner_language'] overrides what is set in the database    
-    } //else keep $ownerId && $ownerLanguage previously defined    
+        if (!$internalId) {
+            $internalId = $tempResult['user_id'];
+        } //pokud nebylo správně hack_owner_id, tak $ownerId z databáze dle social login
+        if (!$userLanguage) {
+            $userLanguage = $tempResult['user_language'];
+        } //_REQUEST['owner_language'] overrides what is set in the database
+    } //else keep $ownerId && $ownerLanguage previously defined
     $userLanguage = getInternalUserLanguage($userLanguage, $internalId); //je to jediné volání této fce//@TODO 2 - stejně arbitrárně pojmenované jako ve výkoném kódu require_once 'social.login.php'; ... asi volat zároveň
     return array('user_language' => $userLanguage, 'internal_id' => $internalId);
 }
-
 /* * *****************************************************************************
- *  Setting user language 
+ *  Setting user language
  */
 
-function getInternalUserLanguage($ownerLanguage, $ownerId) {
+function getInternalUserLanguage($ownerLanguage, $ownerId)
+{
     global $availableLanguages, $availableLanguageFallback, $facebookUserProfile, //@TODO 2 - nehodí to chybu pokud $fb nebo $gl nebude definován??
     //$dbname,
     $tableNameOwners,
@@ -147,7 +155,7 @@ function getInternalUserLanguage($ownerLanguage, $ownerId) {
         }
     }
     my_error_log("After fb user_profile: userLanguage = {$userLanguage}", 5, 16);
-//debug//print_r(Language::getBestMatch(array('en', 'cs')));exit;
+    //debug//print_r(Language::getBestMatch(array('en', 'cs')));exit;
     if (!$userLanguage) {//or use info in browser
         $tempLocale = Language::getBestMatch($availableLanguages);
         $userLanguage = (is_null($tempLocale)) ? $availableLanguageFallback : $tempLocale;
@@ -159,9 +167,10 @@ function getInternalUserLanguage($ownerLanguage, $ownerId) {
 
 //ponechat tam//include_once "lang_{$userLanguage}.php";//@TODO 4 - action=fb_login může změnit jazyk, pokud má uživatel jiný jazyk ve stakan než v fb; tak část může být jiným jazykem, protože v action fb_login renegociuji jayzk, ale až tam
 /**
- *  /Setting user language 
+ *  /Setting user language
  */
-function getInternalUserId() {
+function getInternalUserId()
+{
     global $apiCredentials, $facebookUserProfile, $googleUserProfile; //@TODO 2 - nehodí to chybu pokud $fb nebo $gl nebude definován??
     $authId = false;
     //$userLanguage = '';
@@ -172,7 +181,7 @@ function getInternalUserId() {
         $authName = $facebookUserProfile['name'];
         $authMail = $facebookUserProfile['email'];
         $authId = $facebookUserProfile['id'];
-        //@TODO 2 - vylepšit security 
+        //@TODO 2 - vylepšit security
     } elseif ($apiCredentials['google']['auth']) {
         $authType = 'gl';
         $authName = $googleUserProfile['name']; //['me']['displayName'];
@@ -185,7 +194,7 @@ function getInternalUserId() {
         //return( externalLogin($authType, $authId, $authName, $authMail) );
 
         global $availableLanguages, $userLanguage,
-        //$dbname, 
+        //$dbname,
         $tableNameOwners, $ownerId;
         global $backyardDatabase;
         //@TODO 2 - bacha na to, že při změně jména či mailu ve fb se nezaloguje --- změnit na na pozadí a přes fb_id
@@ -196,8 +205,9 @@ function getInternalUserId() {
             'name' => $authName, 'mail' => $authMail);
         $authString = serialize($authVector);
         //TADY DAT SOFISTIKOVANEJSI LOGIKU
-        if (!isset($ownerId))
-            $ownerId = false; //@TODO 2 - aby nespoléhalo na $ownerId global
+        if (!isset($ownerId)) {
+            $ownerId = false;
+        } //@TODO 2 - aby nespoléhalo na $ownerId global
         $query = "SELECT * FROM `{$backyardDatabase['dbname']}`.`$tableNameOwners` WHERE (`owner_login` LIKE '%{$authType}%' AND `owner_login` LIKE '%{$authId}%') OR `owner_login` LIKE '%{$authMail}%'"; //výběr na hrubo
         $mysqlQueryResultArrayMoreLines = backyard_mysqlQueryArray($query);
         //@TODO - skonci pokud prazdny
@@ -230,8 +240,8 @@ function getInternalUserId() {
                         $ownerId = $mysqlQueryResultArrayMoreLines[$keyLogin]['owner_id'];
                         my_error_log("Use type={$authType} id={$authId} mail={$authMail} to login as type={$valueLoginVector['auth_type']} id={$valueLoginVector['auth_id']} mail={$valueLoginVector['mail']}", 3, 13);
                         //@TODO 2 - add this identity=authVector to this account, tj. vytvořit víceúrovňové login vectory
-                        //@TODO 3 - až poté, co to z mailu uživatel odsouhlasí??                
-                        break 2; //exit both foreach                
+                        //@TODO 3 - až poté, co to z mailu uživatel odsouhlasí??
+                        break 2; //exit both foreach
                     }
                 }
             }
@@ -249,7 +259,7 @@ function getInternalUserId() {
             if (strtotime('now') - strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access']) > 15 * 60) {//@TODO 2 - ověřit, zda počítá správně více jak 15 minut
                 my_error_log("ownerId={$ownerId} revisited", 5);
                 $query = "UPDATE `{$backyardDatabase['dbname']}`.`$tableNameOwners` SET `last_access` = CURRENT_TIMESTAMP, `olson_timezone` = '{$timezone}' WHERE `$tableNameOwners`.`owner_id` = {$ownerId};";
-                $tempUpdateQueryResult = backyard_mysql_query($query) or backyard_dieGraciously('E137', "{$query}"); // End script with a specific error message if mysql query fails                     
+                $tempUpdateQueryResult = backyard_mysql_query($query) or backyard_dieGraciously('E137', "{$query}"); // End script with a specific error message if mysql query fails
             } else {//debug
                 my_error_log("ownerId={$ownerId} sessioning from " . date("Y-m-d H:i:s", strtotime($mysqlQueryResultArrayMoreLines[$keyLogin]['last_access'])) . " till " . date("Y-m-d H:i:s", strtotime('now')), 5);
             }
@@ -257,11 +267,11 @@ function getInternalUserId() {
             //create
             $ownerId = findFirstAvailableIdInRelevantTable($tableNameOwners, $ownerId, 'owner_id');
             $query = "INSERT INTO `{$backyardDatabase['dbname']}`.`$tableNameOwners` "
-                    . "(`owner_id`, `owner_name`, `owner_email`, `owner_signature`, `owner_login`, `owner_notification`, `created`, `type_id`, `olson_timezone`) " //@TODO 4 - owner_language nastavit dle prvního přístupu, ať se uživateli nemění dle použitého browseru - ale $userLanguage ještě není nastaven, tak by se muselo promísit zalogování a nastavení jazyka
-                    . "VALUES ({$ownerId}, '{$authName}', '{$authMail}', '{$authName}', '{$authString}' , '3', CURRENT_TIMESTAMP, 2, '{$timezone}');";
+                . "(`owner_id`, `owner_name`, `owner_email`, `owner_signature`, `owner_login`, `owner_notification`, `created`, `type_id`, `olson_timezone`) " //@TODO 4 - owner_language nastavit dle prvního přístupu, ať se uživateli nemění dle použitého browseru - ale $userLanguage ještě není nastaven, tak by se muselo promísit zalogování a nastavení jazyka
+                . "VALUES ({$ownerId}, '{$authName}', '{$authMail}', '{$authName}', '{$authString}' , '3', CURRENT_TIMESTAMP, 2, '{$timezone}');";
             ////@TODO 3 - default je zapnout notifikace - k udělání jejich rozšířenou denní verzi//130409 - default notifikací je denní summary=3
             //@TODO 2 - zatím natvrdo nastaveno type_id=2 .. později inteligentě rozhazovat dle zdrojů
-            $mysql_query_result = backyard_mysql_query($query) or backyard_dieGraciously('E131', "{$query}"); // End script with a specific error message if mysql query fails                     
+            $mysql_query_result = backyard_mysql_query($query) or backyard_dieGraciously('E131', "{$query}"); // End script with a specific error message if mysql query fails
 
             my_error_log("{$authType} create {$authVector['name']} {$authVector['mail']}", 4, 10);
         }
@@ -272,7 +282,7 @@ function getInternalUserId() {
             if (($userLanguage != $mysqlQueryResultArray['owner_language']) && (in_array($mysqlQueryResultArray['owner_language'], $availableLanguages))) {
                 $userLanguage = $mysqlQueryResultArray['owner_language'];
                 my_error_log("After {$authType}_login renegotiation: userLanguage = {$userLanguage}", 5, 16);
-                //include_once "lang_{$userLanguage}.php";//@TODO 4 - action=fb_login může změnit jazyk, pokud má uživatel jiný jazyk ve stakan než v fb; tak část může být jiným jazykem, protože v action fb_login renegociuji jayzk, ale až tam            
+                //include_once "lang_{$userLanguage}.php";//@TODO 4 - action=fb_login může změnit jazyk, pokud má uživatel jiný jazyk ve stakan než v fb; tak část může být jiným jazykem, protože v action fb_login renegociuji jayzk, ale až tam
                 //@TODO 2 - nemá být include_lang až pozdeji?
                 //!!include_once lang v externalLogin neudělá globální proměnnou!
             } //if there is nonsense in owner_language field, $userLanguage remains empty (and is filled in later, e.g. After ownerId: userLanguage =; After fb user_profile: userLanguage = en ; the same result is fed into language option in settings)
@@ -344,44 +354,54 @@ function getInternalUserId() {
 // http://www.dzone.com/snippets/detect-user-preferred-language
 //+ Jonas Raoni Soares Silva
 //@ http://jsfromhell.com
-class Language {
+class Language
+{
 
     private static $language = null;
 
-    public static function get() {
+    public static function get()
+    {
         new Language;
         return self::$language;
     }
 
-    public static function getBestMatch($langs = array()) {
-        foreach ($langs as $n => $v)
+    public static function getBestMatch($langs = array())
+    {
+        foreach ($langs as $n => $v) {
             $langs[$n] = strtolower($v);
+        }
         $r = array();
         foreach (self::get() as $l => $v) {
             ($s = strtok($l, '-')) != $l && $r[$s] = 0;
-            if (in_array($l, $langs))
+            if (in_array($l, $langs)) {
                 return $l;
+            }
         }
-        foreach ($r as $l => $v)
-            if (in_array($l, $langs))
+        foreach ($r as $l => $v) {
+            if (in_array($l, $langs)) {
                 return $l;
+            }
+        }
         return null;
     }
 
-    private function __construct() {
-        if (self::$language !== null)
+    private function __construct()
+    {
+        if (self::$language !== null) {
             return;
+        }
         if (($list = strtolower((isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]) ? ($_SERVER["HTTP_ACCEPT_LANGUAGE"]) : (''))))) {//120908, když chybí
             if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) {
                 self::$language = array_combine($list[1], $list[2]);
-                foreach (self::$language as $n => $v)
+                foreach (self::$language as $n => $v) {
                     self::$language[$n] = +$v ? +$v : 1;
+                }
                 arsort(self::$language);
             }
-        } else
+        } else {
             self::$language = array();
+        }
     }
-
 }
 
 //print_r(Language::get()); //languages ordered by preference
@@ -390,22 +410,22 @@ class Language {
 if (!function_exists('findFirstAvailableIdInRelevantTable')) {
     my_error_log('defining findFirstAvailableIdInRelevantTable conditionally', 3); //@TODO 2 - anebo move jako obecnou funkci do functions??
 
-    function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric) {
+    function findFirstAvailableIdInRelevantTable($table, $ownerId, $relevantMetric)
+    {
         global
         //$dbname
         $backyardDatabase
         ;
         $result = 1; //default value
         $query = "SELECT `{$relevantMetric}` FROM  `{$backyardDatabase['dbname']}`.`{$table}` "
-                . (($relevantMetric == 'owner_id') ? ("") : ("WHERE  `owner_id` ={$ownerId} "))
-                . " ORDER BY `{$relevantMetric}` DESC LIMIT 0 , 1;";
+            . (($relevantMetric == 'owner_id') ? ("") : ("WHERE  `owner_id` ={$ownerId} "))
+            . " ORDER BY `{$relevantMetric}` DESC LIMIT 0 , 1;";
         $mysql_query_result = backyard_mysql_query($query) or backyard_dieGraciously('E106', "$query"); // End script with a specific error message if mysql query fails
-        //transforming the query result into an array            
+        //transforming the query result into an array
         if (mysql_num_rows($mysql_query_result) > 0) {
             $one_row = mysql_fetch_array($mysql_query_result, MYSQL_ASSOC);
             $result += $one_row["$relevantMetric"];
         }
         return $result;
     }
-
 }

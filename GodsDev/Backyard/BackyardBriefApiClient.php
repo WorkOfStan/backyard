@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Very simple JSON RESTful API client
  * It just sends (by HTTP POST) JSON and returns what is to be returned with few optional decorators and error logging.
- * 
+ *
  * @todo Probably should be refactored using backyard json and http
  *
  * @author rejth
@@ -17,7 +17,7 @@ class BackyardBriefApiClient
 
     /**
      *
-     * @var \Psr\Log\LoggerInterface 
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -34,9 +34,9 @@ class BackyardBriefApiClient
     private $appLogFolder;
 
     /**
-     * 
+     *
      * @param string $apiUrl
-     * @param mixed $appLogFolder OPTIONAL string without trailing / or if null then the applogs will not be saved at all
+     * @param mixed $appLogFolder OPTIONAL string without trailing / or if null => the applogs will not be saved at all
      * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommended
      */
     public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
@@ -48,8 +48,9 @@ class BackyardBriefApiClient
     }
 
     /**
-     * Each call returns string starting with timestamp and ending with unique identifier based on the current time in microseconds.
-     * 
+     * Each call returns string starting with timestamp
+     * and ending with unique identifier based on the current time in microseconds.
+     *
      * @return string
      */
     private function getCommunicationId()
@@ -59,13 +60,13 @@ class BackyardBriefApiClient
 
     /**
      * Send a JSON to the API and returns whatever is to return
-     * 
+     *
      * @param string $json
      * @param string $httpVerb POST default, or PUT/DELETE/GET
      * @return mixed <b>TRUE</b> on success or <b>FALSE</b> on failure. However, if the <b>CURLOPT_RETURNTRANSFER</b>
      * option is set, it will return
      * the result on success, <b>FALSE</b> on failure.
-     * 
+     *
      * TODO: use BackyardHttp/getData incl. logging instead of another code inside sendJsonLoad method
      */
     public function sendJsonLoad($json, $httpVerb = 'POST')
@@ -77,11 +78,14 @@ class BackyardBriefApiClient
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => $json, //json_encode($postData)
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false, //accepts also private SSL certificates //@todo it could be possible to try without that option and if it fails, it may try with this option and inform about it
+            //accepts also private SSL certificates
+            //@todo try without that option and if it fails, it may try with this option and inform about it
+            CURLOPT_SSL_VERIFYHOST => false,
         ));
         switch ($httpVerb) {
             case 'POST':
                 curl_setopt($ch, CURLOPT_POST, true);
+            // no break
             case 'GET':
             case 'DELETE':
                 curl_setopt_array($ch, array(
@@ -118,23 +122,28 @@ class BackyardBriefApiClient
     }
 
     /**
-     * 
+     *
      * @param string $message
      * @param string $filePrefix
      * @param string $communicationId
-     * @return bool <p>Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.</p>
+     * @return bool Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.
      */
     private function logCommunication($message, $filePrefix, $communicationId)
     {
         if (!$this->appLogFolder) {
             return false;
         }
-        return error_log($message, 3, "{$this->appLogFolder}/{$filePrefix}-" . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json");
+        return error_log(
+            $message,
+            3,
+            "{$this->appLogFolder}/{$filePrefix}-"
+            . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json"
+        );
     }
 
     /**
      * Sends JSON and return array decoded from the received JSON response
-     * 
+     *
      * @param string $json
      * @return array
      */
@@ -143,14 +152,15 @@ class BackyardBriefApiClient
         $response = $this->sendJsonLoad($json);
         $result = json_decode($response, true);
         if (!$result && !is_null($this->logger)) {
-            $this->logger->error("json decode failed for " . substr($response, 0, 100) . " that resulted from " . substr($json, 0, 100));
+            $this->logger->error("json decode failed for " . substr($response, 0, 100)
+                . " that resulted from " . substr($json, 0, 100));
         }
         return $result;
     }
 
     /**
      * Translates array to JSON, send it to API and return array decoded from the received JSON response
-     * 
+     *
      * @param array $arr
      * @return array
      */
@@ -158,5 +168,4 @@ class BackyardBriefApiClient
     {
         return $this->getJsonArray(json_encode($arr));
     }
-
 }

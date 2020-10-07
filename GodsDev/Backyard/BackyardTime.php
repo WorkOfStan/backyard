@@ -13,10 +13,10 @@ class BackyardTime
     }
 
     /**
-     * Initiation of $page_timestamp must be the first thing a page will do 
+     * Initiation of $page_timestamp must be the first thing a page will do
      * Store "time" for benchmarking.
      * Inspired by sb_functions.php in sphpblog
-     * 
+     *
      * @return float
      */
     public function getmicrotime()
@@ -25,12 +25,12 @@ class BackyardTime
             list($usec, $sec) = explode(' ', microtime());
             return ((float) $usec + (float) $sec);
         } else {
-            return( microtime(true) );
+            return(microtime(true));
         }
     }
 
     /**
-     * 
+     *
      * @return float
      */
     public function getPageTimestamp()
@@ -39,11 +39,12 @@ class BackyardTime
     }
 
     /**
-     * 
+     * Note: 111105, because $RUNNING_TIME got updated only when my_error_log makes a row
+     *
      * @return float
      */
     public function getRunningTime()
-    {//111105, because $RUNNING_TIME got updated only when my_error_log makes a row
+    {
         return round($this->getmicrotime() - $this->PageTimestamp, 4);
     }
 
@@ -55,18 +56,20 @@ class BackyardTime
      */
     public function pageGeneratedIn($langStringPageGeneratedIn = '%s')
     {
-        $str = str_replace('%s', round($this->getmicrotime() - $this->PageTimestamp, 4), $langStringPageGeneratedIn);
-        //$this->BackyardError->log(6, round($this->getmicrotime() - $this->PageTimestamp, 4), array(6));
-        return $str;
+        return str_replace(
+            '%s',
+            (string) round($this->getmicrotime() - $this->PageTimestamp, 4),
+            $langStringPageGeneratedIn
+        );
     }
-
 }
 
 /**
  * Random seed initiation for mt_rand()
  */
 /**
- * // Note: As of PHP 4.2.0, there is no need to seed the random number generator with srand() or mt_srand() as this is now done automatically.
+ * // Note: As of PHP 4.2.0, there is no need to seed the random number generator with srand() or mt_srand()
+ * as this is now done automatically.
  * // www.su.cz má PHP 4.1.2 so: seed with microseconds
   function make_seed() {
   list($usec, $sec) = explode(' ', microtime());

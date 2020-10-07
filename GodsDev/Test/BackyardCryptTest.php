@@ -31,7 +31,7 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        // no action
     }
 
     /**
@@ -77,5 +77,4 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
         //error_log($orig);
         $this->assertEquals($expected, strlen($orig));
     }
-
 }
