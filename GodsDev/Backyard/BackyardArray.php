@@ -47,8 +47,8 @@ class BackyardArray
      * echo backyard_inArrayWildcards($needle, $haystack); # outputs "true" *
      *
      * @param string $needle
-     * @param array $haystack
-     * @return boolean
+     * @param array<string> $haystack
+     * @return bool
      */
     public function inArrayWildcards($needle, array $haystack)
     {
@@ -64,15 +64,15 @@ class BackyardArray
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
      *
-     * @param array $myArray at least two-dimensional
+     * @param array<array> $myArray at least two-dimensional
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; true => function logs the missing column in a row as an error
-     * @return array
+     * @return array<mixed>
      */
     public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false)
     {
         if (!is_array($myArray)) {
-            return array(); //empty array more consistent than false
+            return array(); // empty array more consistent than false
         }
         $result = array();
         foreach ($myArray as $key => $row) {
@@ -88,9 +88,9 @@ class BackyardArray
     /**
      * Returns array $myArray without column named in $columnName
      *
-     * @param array $myArray
+     * @param array<array> $myArray
      * @param string $columnName
-     * @return array
+     * @return array<array>
      */
     public function removeOneColumnFromArray(array $myArray, $columnName)
     {
@@ -116,26 +116,24 @@ class BackyardArray
     /**
      * Return $myArray as a one-line string
      *
-     * @param array $myArray
+     * @param array<mixed> $myArray
      * @return string
      */
     public function dumpArrayAsOneLine(array $myArray)
     {
-        return (
-            preg_replace(
-                '/\n/',
+        return (string) preg_replace(
+            '/\n/',
+            ' ',
+            (string) preg_replace(
+                '/\r/',
                 ' ',
-                preg_replace(
-                    '/\r/',
+                (string) preg_replace(
+                    '/\s\s+/',
                     ' ',
-                    preg_replace(
-                        '/\s\s+/',
-                        ' ',
-                        print_r($myArray, true)
-                    )
+                    print_r($myArray, true)
                 )
             )
-            );
+        );
     }
 
     /**
@@ -143,11 +141,11 @@ class BackyardArray
      * Useful for at least 2-dimensional arrays
      *
      * @param mixed $searchedValue
-     * @param array $searchedArray
+     * @param array<array> $searchedArray
      * @param string $columnName
      * @param bool $allExactMatches - default false; if true function returns array with all exact matches
      * @param bool $columnAlwaysExpected - default true; false: the missing column in a row isn't logged as an error
-     * @return mixed (array if found, false otherwise)
+     * @return array<mixed>|false (array if found, false otherwise)
      */
     public function arrayVlookup(
         $searchedValue,
@@ -161,7 +159,7 @@ class BackyardArray
             return false;
         }
 
-        $allMatchingRows = array(); //used only if $allExactMatches === true
+        $allMatchingRows = array(); // used only if $allExactMatches === true
 
         foreach ($searchedArray as $key => $row) {
             if (isset($row[$columnName]) || array_key_exists($columnName, $row)) {
@@ -186,9 +184,9 @@ class BackyardArray
       Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com),
       (sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
      *
-     * @param array $array1
-     * @param array $array2
-     * @return mixed (array|0)
+     * @param array<mixed> $array1
+     * @param array<mixed> $array2
+     * @return array<mixed>|int (array|0)
      */
     public function arrayDiffAssocRecursive(array $array1, array $array2)
     {

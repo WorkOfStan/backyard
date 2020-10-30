@@ -1,15 +1,6 @@
-name: PHP Composer
+name: PHP Composer + PHPUnit
 
-on:
-  push:
-    branches:
-      - master
-      - develop
-  pull_request:
-    branches:
-      - master
-      - develop
-
+on: [push, pull_request]
 jobs:
   build:
 
@@ -21,8 +12,18 @@ jobs:
     - name: Validate composer.json and composer.lock
       run: composer validate
 
+    - name: Install no-dev dependencies
+      run: composer update --no-dev --prefer-dist --no-progress
+
     - name: Install dependencies
       run: composer update --prefer-dist --no-progress
+
+    - name: PHPUnit (php-actions)
+      uses: php-actions/phpunit@v5
+      with:
+        # PHP included in ubunut-latest does not support iconv //TRANSLIT flag as iconv implementation is unknown
+        # therefore PHPUnit group iconvtranslit should be excluded
+        configuration: phpunit.xml
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md

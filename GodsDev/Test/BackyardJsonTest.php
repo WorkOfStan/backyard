@@ -38,19 +38,20 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardJson::minifyJSON
-     * @todo   Implement testMinifyJSON().
      */
     public function testMinifyJSON()
     {
-        $orig = '{"status": "1233", "text": "abc"}';
-        $expected = '{"status":"1233","text":"abc"}';
+        $orig = '{"status": "1232", "text": "abc"}';
+        $expected = '{"status":"1232","text":"abc"}';
 
         $this->assertEquals($expected, $this->object->minifyJSON($orig));
     }
 
     /**
      * @covers GodsDev\Backyard\BackyardJson::minifyJSON
-     * @todo   Implement testMinifyJSON().
+     *
+     * Logs something like: [30-Oct-2020 14:09:36] [fatal] [16] [/tmp/vendor/bin/phpunit] [anonymous@-] [0] [-]
+     *     ERROR IN JSON: "status": "1233", "text": "abc"}
      */
     public function testMinifyJSONInvalid()
     {
@@ -75,7 +76,6 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardJson::jsonCleanDecode
-     * @todo   Implement testJsonCleanDecode().
      */
     public function testJsonCleanDecode()
     {
@@ -90,7 +90,6 @@ class BackyardJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardJson::getJsonAsArray
-     * @todo   Implement testGetJsonAsArray().
      */
     public function testGetJsonAsArray()
     {

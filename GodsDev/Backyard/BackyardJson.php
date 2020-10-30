@@ -20,7 +20,7 @@ class BackyardJson
      *
      * @var BackyardHttp
      */
-    protected $BackyardHttp;
+    protected $backyardHttp;
 
     /**
      *
@@ -30,7 +30,7 @@ class BackyardJson
     public function __construct(LoggerInterface $logger, BackyardHttp $backyardHttp)
     {
         $this->logger = $logger;
-        $this->BackyardHttp = $backyardHttp;
+        $this->backyardHttp = $backyardHttp;
     }
 
     /**
@@ -43,14 +43,13 @@ class BackyardJson
      */
     public function minifyJSON($jsonInput, $logLevel = 5)
     {
-        $jsonOutput = json_encode(json_decode($jsonInput)); //optimalizace pro výstup
-        if ($jsonOutput == 'null') {
+        $jsonOutput = json_encode(json_decode($jsonInput)); // optimalizace pro výstup
+        if ($jsonOutput == 'null' || $jsonOutput === false || !is_string($jsonOutput)) {
             $this->logger->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
-            $jsonOutput = '{"status": "500", "error": "Internal error"}'; //error output
-        } else {
-            $this->logger->log($logLevel, "JSON input: {$jsonInput}", array(16));
-            $this->logger->log($logLevel, "JSON output: {$jsonOutput}", array(16));
+            return '{"status": "500", "error": "Internal error"}'; //error output
         }
+        $this->logger->log($logLevel, "JSON input: {$jsonInput}", array(16));
+        $this->logger->log($logLevel, "JSON output: {$jsonOutput}", array(16));
         return $jsonOutput;
     }
 
@@ -86,24 +85,28 @@ class BackyardJson
      * @param   bool    $assoc   When true, returned objects will be converted into associative arrays.
      * @param   int     $depth   User specified recursion depth. (>=5.3)
      * @param   int     $options Bitmask of JSON decode options. (>=5.4)
-     * @return  mixed array or null is returned if the json cannot be decoded
+     * @return  array<mixed>|false array or false is returned if the json cannot be decoded
      *                              or if the encoded data is deeper than the recursion limit.
      */
     public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0)
     {
         // search and remove comments like /* */ and //
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
+        if (is_null($json)) {
+            $this->logger->log(5, "Invalid JSON: " . $json2decode);
+            return false; // invalid JSON
+        }
 
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
+        if (version_compare((string) phpversion(), '5.4.0', '>=')) {
             $json = json_decode($json, $assoc, $depth, $options);
-        } elseif (version_compare(phpversion(), '5.3.0', '>=')) {
+        } elseif (version_compare((string) phpversion(), '5.3.0', '>=')) {
             $json = json_decode($json, $assoc, $depth);
         } else {
             $json = json_decode($json, $assoc);
         }
         if (is_null($json)) {
             $this->logger->log(5, "Invalid JSON: " . $json2decode);
-            return false; //invalid JSON
+            return false; // invalid JSON
         }
         return $json;
     }
@@ -114,9 +117,9 @@ class BackyardJson
      * @param string $url
      * @param string $useragent OPTIONAL
      * @param int $timeout OPTIONAL
-     * @param bool $customHeaders OPTIONAL
-     * @param array $postArray OPTIONAL
-     * @return mixed array|bool array if cURL($url) returns JSON else false
+     * @param string|false $customHeaders OPTIONAL
+     * @param array<mixed> $postArray OPTIONAL
+     * @return array<mixed>|false array if cURL($url) returns JSON else false
      */
     public function getJsonAsArray(
         $url,
@@ -125,10 +128,10 @@ class BackyardJson
         $customHeaders = false,
         array $postArray = array()
     ) {
-        $result = $this->BackyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
+        $result = $this->backyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
         $json = $result['message_body'];
-        if (!$json) {
-            $this->logger->log(2, "No content on {$url}");
+        if (!$json || !is_string($json)) {
+            $this->logger->log(2, "No valid content on {$url}");
             return false;
         }
         $jsonArray = $this->jsonCleanDecode($json, true);

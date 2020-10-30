@@ -36,7 +36,6 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardTime::getmicrotime
-     * @todo   Implement testGetmicrotime().
      */
     public function testGetmicrotime()
     {
@@ -45,7 +44,6 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardTime::getRunningTime
-     * @todo   Implement testGetRunningTime().
      */
     public function testGetRunningTime()
     {
@@ -56,7 +54,6 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardTime::pageGeneratedIn
-     * @todo   Implement testPageGeneratedIn().
      */
     public function testPageGeneratedInDefault()
     {

@@ -10,9 +10,9 @@ class BackyardGeo
 
     /**
      *
-     * @var array
+     * @var array<mixed>
      */
-    protected $BackyardConf = array();
+    protected $backyardConf = array();
 
     /**
      *
@@ -23,13 +23,13 @@ class BackyardGeo
     /**
      *
      * @param LoggerInterface $logger
-     * @param array $backyardConfConstruct
+     * @param array<array> $backyardConfConstruct
      */
     public function __construct(LoggerInterface $logger, array $backyardConfConstruct = array())
     {
         //@todo do not use $this->BackyardConf but set the class properties right here accordingly;
         //@todo also provide means to set the values otherwise later
-        $this->BackyardConf = array_merge(
+        $this->backyardConf = array_merge(
             array(//default values
                 //to quickly get rid off too distant POIs; 1 ~ 100km
                 'geo_rough_distance_limit' => 1, //float
@@ -131,7 +131,7 @@ class BackyardGeo
      * @param mixed $poiCategory (integer|string with comma separated integers)
      *                           according to table set in $backyardConf['geo_poi_list_table_name']
      * @param BackyardMysqli $poiConnection
-     * @return array|bool false if empty
+     * @return array<mixed>|false false if empty
      */
     public function getClosestPOI($lat, $long, $poiCategory, BackyardMysqli $poiConnection)
     {
@@ -177,7 +177,7 @@ class BackyardGeo
         $distanceArray = array();
         $listOfPOINearbyProcessed = array();
         foreach ($listOfPOINearbyPreprocessed as $key => $row) {
-            if ($row['roughDistance'] < $this->BackyardConf['geo_rough_distance_limit']) {
+            if ($row['roughDistance'] < $this->backyardConf['geo_rough_distance_limit']) {
                 $distance = $this->calculateDistanceFromLatLong(
                     $startPoint,
                     array(
@@ -217,22 +217,18 @@ class BackyardGeo
      * Returns the list of POI from the requested category(-ies)
      * @todo - limit by lat/lng not to return all POIs
      *
-     * @param mixed $poiCategory (may be integer or string with comma separated integers)
+     * @param int|string $poiCategory (may be integer or string with comma separated integers)
      * @param BackyardMysqli $poiConnection
-     * @return mixed array|false
+     * @return array<array>|false
      *
      * bacykard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database
      * only those that do not overpass the perpendicular backyardGeo['rough_distance_limit']
      */
     public function getListOfPOI($poiCategory, BackyardMysqli $poiConnection)
     {
-        if (is_int($poiCategory)) {
-            $poiCategorySecured = $poiCategory;
-        } else {
-            $poiCategorySecured = preg_replace("/[^0-9,]/", '', $poiCategory);
-        }
-        $query = "SELECT * FROM `{$this->BackyardConf['geo_poi_list_table_name']}`"
-            . " WHERE `category` IN ( " . $poiCategorySecured . " )";
+        $poiCategorySecured = is_int($poiCategory) ? $poiCategory : preg_replace("/[^0-9,]/", '', $poiCategory);
+        $query = "SELECT * FROM `{$this->backyardConf['geo_poi_list_table_name']}`"
+            . " WHERE `category` IN ( " . (string) $poiCategorySecured . " )";
         $listOfPOINearby = $poiConnection->queryArray($query);
         if (!$listOfPOINearby) {
             $this->logger->log(2, 'No result for query ' . $query, array(11));
@@ -245,8 +241,8 @@ class BackyardGeo
     /**
      * @desc Calculates distnace between $point1 and $point2 denominated in $uom (unit of measurement)
      * http://forums.phpfreaks.com/topic/150365-counting-distance-between-2-gps-points/
-     * @param array $point1 ['latitude','longitude']
-     * @param array $point2 ['latitude','longitude']
+     * @param array<float> $point1 ['latitude','longitude']
+     * @param array<float> $point2 ['latitude','longitude']
      * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
      * @return float distance
      * @throws \Exception If unknown unit of measurement is used

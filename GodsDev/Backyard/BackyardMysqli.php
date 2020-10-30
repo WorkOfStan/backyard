@@ -20,7 +20,7 @@ class BackyardMysqli extends \mysqli
      *
      * @var BackyardError
      */
-    protected $BackyardError = null;
+    protected $logger = null;
 
     /**
      * \mysqli wrapper with logger
@@ -38,7 +38,7 @@ class BackyardMysqli extends \mysqli
     public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-        $this->BackyardError = $BackyardError;
+        $this->logger = $BackyardError;
 
         $temp = explode(":", $host_port);
 
@@ -59,16 +59,16 @@ class BackyardMysqli extends \mysqli
                 $host = "127.0.0.1"; //localhost uses just the default port
             }
             $tempErrorString = "Connecting to $host, $user, pass, $db, $port";
-            $this->BackyardError->log(5, $tempErrorString); //debug
+            $this->logger->log(5, $tempErrorString); //debug
             parent::__construct($host, $user, $pass, $db, $port);
         } else {
             $tempErrorString = "Connecting to $host, $user, pass, $db";
-            $this->BackyardError->log(5, $tempErrorString); //debug
+            $this->logger->log(5, $tempErrorString); //debug
             parent::__construct($host, $user, $pass, $db);
         }
 
         if ($this->connect_error) {
-            $this->BackyardError->dieGraciously(
+            $this->logger->dieGraciously(
                 '5013',
                 "Connect Error ({$this->connect_errno}) {$this->connect_error} | {$tempErrorString}"
             );
@@ -76,7 +76,7 @@ class BackyardMysqli extends \mysqli
 
         //change character set to utf8
         if (!$this->set_charset("utf8")) {
-            $this->BackyardError->log(2, sprintf("Error loading character set utf8: %s\n", $this->error));
+            $this->logger->log(2, sprintf("Error loading character set utf8: %s\n", $this->error));
         }
     }
 
@@ -91,28 +91,28 @@ class BackyardMysqli extends \mysqli
      * @param int $errorLogOutput optional default=1 turn-off=0
      *   It is int in order to be compatible with
      *   parameter $resultmode (int) of method mysqli::query()
-     * @return mixed \mysqli_result|false
+     * @return bool|\mysqli_result \mysqli_result|false
      */
     public function query($sql, $errorLogOutput = 1)
     {
         $ERROR_LOG_OUTPUT = (bool) $errorLogOutput;
         if ($ERROR_LOG_OUTPUT) {
-            $this->BackyardError->log(5, "Start of query {$sql}", array(11));
+            $this->logger->log(5, "Start of query {$sql}", array(11));
         }
         if (empty($sql) || !is_string($sql)) {
             if ($ERROR_LOG_OUTPUT) {
-                $this->BackyardError->log(1, "No mysql_query_string set. End of query", array(11)); //debug
+                $this->logger->log(1, "No mysql_query_string set. End of query", array(11)); //debug
             }
             return false;
         }
         $result = parent::query($sql);
         if ($this->errno != 0) {
             if ($ERROR_LOG_OUTPUT) {
-                $this->BackyardError->log(1, "{$this->errno} : {$this->error} /with query: {$sql}", array(11));
+                $this->logger->log(1, "{$this->errno} : {$this->error} /with query: {$sql}", array(11));
             }
         }
         if ($ERROR_LOG_OUTPUT) {
-            $this->BackyardError->log(6, "End of query {$sql}", array(11));
+            $this->logger->log(6, "End of query {$sql}", array(11));
         }
         return $result;
     }
@@ -124,8 +124,8 @@ class BackyardMysqli extends \mysqli
      * temporary note: Replaces customMySQLQuery()
      *
      * @param string $sql
-     * @param boolean $justOneRow (default = false)
-     * @return mixed
+     * @param bool $justOneRow (default = false)
+     * @return array<mixed>|false
      *      false - if no results
      *      one dimensional array - if $justOneRow == true
      *      two dimensional array - if $justOneRow == false
@@ -136,7 +136,7 @@ class BackyardMysqli extends \mysqli
         $mysqlQueryResult = $this->query($sql); //$ERROR_LOG_OUTPUT = true by default
         //transforming the query result into an array
         if ($mysqlQueryResult == false || $mysqlQueryResult->num_rows == 0) {
-            $this->BackyardError->log(5, "Query returned no results", array(16));
+            $this->logger->log(5, "Query returned no results", array(16));
         } else {
             $result = array();
             while ($one_row = $mysqlQueryResult->fetch_assoc()) {
