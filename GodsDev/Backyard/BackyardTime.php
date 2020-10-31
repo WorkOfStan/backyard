@@ -5,11 +5,12 @@ namespace GodsDev\Backyard;
 class BackyardTime
 {
 
-    private $PageTimestamp = null;
+    /** @var float|null */
+    private $pageTimestamp = null;
 
     public function __construct()
     {
-        $this->PageTimestamp = $this->getmicrotime(); //initialisation
+        $this->pageTimestamp = $this->getmicrotime(); // initialisation
     }
 
     /**
@@ -21,12 +22,11 @@ class BackyardTime
      */
     public function getmicrotime()
     {
-        if (version_compare(phpversion(), '5.0.0') == -1) {
+        if (version_compare((string) phpversion(), '5.0.0') == -1) {
             list($usec, $sec) = explode(' ', microtime());
             return ((float) $usec + (float) $sec);
-        } else {
-            return(microtime(true));
         }
+        return microtime(true);
     }
 
     /**
@@ -35,7 +35,10 @@ class BackyardTime
      */
     public function getPageTimestamp()
     {
-        return $this->PageTimestamp;
+        if (is_null($this->pageTimestamp)) {
+            $this->pageTimestamp = $this->getmicrotime(); // initialisation, so that it can't return null
+        }
+        return $this->pageTimestamp;
     }
 
     /**
@@ -45,7 +48,7 @@ class BackyardTime
      */
     public function getRunningTime()
     {
-        return round($this->getmicrotime() - $this->PageTimestamp, 4);
+        return round($this->getmicrotime() - $this->pageTimestamp, 4);
     }
 
     /**
@@ -58,7 +61,7 @@ class BackyardTime
     {
         return str_replace(
             '%s',
-            (string) round($this->getmicrotime() - $this->PageTimestamp, 4),
+            (string) round($this->getmicrotime() - $this->pageTimestamp, 4),
             $langStringPageGeneratedIn
         );
     }

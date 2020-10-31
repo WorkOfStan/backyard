@@ -60,6 +60,12 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 //                            $this->object->getOneColumnFromArray($myArray, $columnName, $columnAlwaysExpected));
 //    }
 
+    /**
+     * @covers GodsDev\Backyard\BackyardArray::getOneColumnFromArray
+     *
+     * Logs something like: Warning: -2020 14:09:35] [warning] [0] [/tmp/vendor/bin/phpunit] [anonymous@-] [0] [-]
+     *     getOneColumnFromArray: b not in Array
+     */
     public function testGetOneColumnFromArrayMissingRowIgnored()
     {
         $myArray = array(

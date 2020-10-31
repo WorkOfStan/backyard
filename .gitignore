@@ -9,3 +9,6 @@
 # IDE
 /nbproject
 /.idea
+
+# Temporary files
+/.php_cs.cache

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ruleset name="super-linter">
+    <description>The default coding standard for usage with GitHub Super-Linter. It just includes PSR12.</description>
+    <rule ref="PSR12" />
+    <rule ref="PSR12.Properties.ConstantVisibility.NotFound">
+        <!-- still MUST be compatible with PHP/5.6 -->
+        <exclude-pattern>GodsDev/Backyard/BackyardHttp.php</exclude-pattern>
+    </rule>
+</ruleset>

@@ -73,7 +73,6 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers GodsDev\Backyard\BackyardHttp::getData
-     * @todo   Implement testGetData().
      */
     public function testGetDataContent()
     {
