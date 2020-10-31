@@ -23,7 +23,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require godsdev/backyard:^3.0
+composer require godsdev/backyard:^3.2.10
 ```
 
 Finally, be sure to include the autoloader:
