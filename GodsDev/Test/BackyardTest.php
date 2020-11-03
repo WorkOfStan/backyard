@@ -21,6 +21,7 @@ class BackyardTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        error_reporting(E_ALL); // incl E_NOTICE
         $this->object = new Backyard(array('logging_level' => 4));
     }
 
