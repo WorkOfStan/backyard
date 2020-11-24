@@ -21,7 +21,8 @@ jobs:
     - name: PHPUnit (php-actions)
       uses: php-actions/phpunit@v5
       with:
-        # PHP included in ubunut-latest does not support iconv //TRANSLIT flag as iconv implementation is unknown
+        # PHP included in ubuntu-latest does not support iconv //TRANSLIT flag as iconv implementation is unknown
+        # https://github.com/actions/virtual-environments/blob/ubuntu18/20201026.1/images/linux/Ubuntu1804-README.md
         # therefore PHPUnit group iconvtranslit should be excluded
         configuration: phpunit.xml
 
