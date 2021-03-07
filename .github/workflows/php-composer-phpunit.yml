@@ -26,10 +26,10 @@ jobs:
       run: composer validate
 
     - name: Install no-dev dependencies
-      run: composer update --no-dev --prefer-dist --no-progress --no-suggest
+      run: composer update --no-dev --prefer-dist --no-progress
 
     - name: Install dependencies
-      run: composer update --prefer-dist --no-progress --no-suggest
+      run: composer update --prefer-dist --no-progress
 
     - name: "PHPUnit tests"
       run: "vendor/bin/phpunit"

@@ -41,7 +41,7 @@ jobs:
 
       # composer to provide context for PHPStan
       - name: Install dependencies
-        run: composer update --prefer-dist --no-progress --no-suggest
+        run: "composer update --prefer-dist --no-progress --ignore-platform-req=php"
 
       ################################
       # Run Linter against code base #
