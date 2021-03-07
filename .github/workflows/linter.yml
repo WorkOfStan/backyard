@@ -39,6 +39,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      # composer to provide context for PHPStan
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-suggest
+
       ################################
       # Run Linter against code base #
       ################################
