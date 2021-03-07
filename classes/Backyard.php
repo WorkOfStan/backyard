@@ -1,6 +1,6 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace WorkOfStan\Backyard;
 
 class Backyard
 {
@@ -13,43 +13,43 @@ class Backyard
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardArray BackyardArray object
+     * @var \WorkOfStan\Backyard\BackyardArray BackyardArray object
      */
     public $BackyardArray;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardCrypt BackyardCrypt object
+     * @var \WorkOfStan\Backyard\BackyardCrypt BackyardCrypt object
      */
     public $Crypt;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardError BackyardError object
+     * @var \WorkOfStan\Backyard\BackyardError BackyardError object
      */
     public $BackyardError;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardGeo BackyardGeo object
+     * @var \WorkOfStan\Backyard\BackyardGeo BackyardGeo object
      */
     public $Geo;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardHttp BackyardHttp object
+     * @var \WorkOfStan\Backyard\BackyardHttp BackyardHttp object
      */
     public $Http;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardJson BackyardJson object
+     * @var \WorkOfStan\Backyard\BackyardJson BackyardJson object
      */
     public $Json;
 
     /**
      *
-     * @var \GodsDev\Backyard\BackyardTime BackyardTime object
+     * @var \WorkOfStan\Backyard\BackyardTime BackyardTime object
      */
     public $BackyardTime;
 
@@ -83,7 +83,7 @@ class Backyard
      * @param string $user
      * @param string $pass
      * @param string $db
-     * @return \GodsDev\Backyard\BackyardMysqli
+     * @return \WorkOfStan\Backyard\BackyardMysqli
      */
     public function newMysqli($host_port, $user, $pass, $db)
     {

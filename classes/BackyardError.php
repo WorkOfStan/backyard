@@ -1,8 +1,8 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace WorkOfStan\Backyard;
 
-use GodsDev\Backyard\BackyardTime;
+use WorkOfStan\Backyard\BackyardTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 

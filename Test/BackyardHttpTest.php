@@ -1,9 +1,9 @@
 <?php
 
-namespace GodsDev\Backyard\Test;
+namespace WorkOfStan\Backyard\Test;
 
-use GodsDev\Backyard\BackyardHttp;
-use GodsDev\Backyard\BackyardError;
+use WorkOfStan\Backyard\BackyardHttp;
+use WorkOfStan\Backyard\BackyardError;
 
 //@todo - put into separate group as it needs access to internet
 
@@ -37,7 +37,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         // no action
     }
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::movePage
+//     * @covers WorkOfStan\Backyard\BackyardHttp::movePage
 //     * @todo   Implement testMovePage().
 //     */
 //    public function testMovePage()
@@ -49,7 +49,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::retrieveFromPostThenGet
+//     * @covers WorkOfStan\Backyard\BackyardHttp::retrieveFromPostThenGet
 //     * @todo   Implement testRetrieveFromPostThenGet().
 //     */
 //    public function testRetrieveFromPostThenGet()
@@ -61,7 +61,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getCurPageURL
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getCurPageURL
 //     * @todo   Implement testGetCurPageURL().
 //     */
 //    public function testGetCurPageURL()
@@ -73,7 +73,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 
     /**
-     * @covers GodsDev\Backyard\BackyardHttp::getData
+     * @covers WorkOfStan\Backyard\BackyardHttp::getData
      */
     public function testGetDataContent()
     {
@@ -152,7 +152,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     }
     //@todo - make test if the method remains in Backyard
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getHTTPstatusCode
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getHTTPstatusCode
 //     * @todo   Implement testGetHTTPstatusCode().
 //     */
 //    public function testGetHTTPstatusCode()
@@ -164,7 +164,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getHTTPstatusCodeByUA
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getHTTPstatusCodeByUA
 //     * @todo   Implement testGetHTTPstatusCodeByUA().
 //     */
 //    public function testGetHTTPstatusCodeByUA()

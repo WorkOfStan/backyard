@@ -1,15 +1,15 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace WorkOfStan\Backyard;
 
-use GodsDev\Backyard\BackyardError;
+use WorkOfStan\Backyard\BackyardError;
 
 /* * ****************************************************************************
  * Database (MySQL) FUNCTIONS
  *
  * TODO create TestBackyardMysqli.php
  * TODO compare admins vs user for throw new \Exception vs dieGraciously and if migrated to Exception:
- * use Psr\Log\LoggerInterface instad of GodsDev\Backyard\BackyardError
+ * use Psr\Log\LoggerInterface instad of WorkOfStan\Backyard\BackyardError
  *
  */
 

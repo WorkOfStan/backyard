@@ -106,7 +106,7 @@ function decode_wml_entity($string)
 }
 
 /**
- * MOVED TO GodsDev\Backyard\BackyardString::stripDiacritics
+ * MOVED TO WorkOfStan\Backyard\BackyardString::stripDiacritics
  * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
  *
  * @param string $string

@@ -1,11 +1,11 @@
 {
-    "name": "godsdev/backyard",
+    "name": "workofstan/backyard",
     "description": "Library of useful functions and classes",
     "type": "library",
-    "homepage": "https://github.com/GodsDev/backyard",
+    "homepage": "https://github.com/WorkOfStan/backyard",
     "support": {
-        "issues": "https://github.com/GodsDev/backyard/issues",
-        "source": "https://github.com/GodsDev/backyard"
+        "issues": "https://github.com/WorkOfStan/backyard/issues",
+        "source": "https://github.com/WorkOfStan/backyard"
     },
     "license": "MIT",
     "authors": [
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "GodsDev\\Backyard\\": "GodsDev/Backyard/"
+            "WorkOfStan\\Backyard\\": "classes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GodsDev\\Backyard\\Test\\": "GodsDev/Test/"
+            "WorkOfStan\\Backyard\\Test\\": "Test/"
         }
     }
 }
