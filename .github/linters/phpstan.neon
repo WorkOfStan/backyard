@@ -7,8 +7,10 @@ parameters:
     ignoreErrors:
       -
         message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
-        path: /github/workspace/classes/BackyardBriefApiClient.php 
-      - '#Error: Class xmysqli not found.#'
+        path: ../../classes/BackyardBriefApiClient.php 
+      - 
+        message: '#Error: Class mysqli not found.#'
+        path: ../../classes/BackyardMysqli.php
     #  - '#Property WorkOfStan\\Backyard\\Backyard[a-zA-Z]+::\$BackyardError has unknown class Psr\\Log\\LoggerInterface as its type.#'
     #  - '#Property WorkOfStan\\Backyard\\Backyard[a-zA-Z]+::\$logger has unknown class Psr\\Log\\LoggerInterface as its type.#'
     #  - '#Parameter \$logger of method WorkOfStan\\Backyard\\Backyard[a-zA-Z0-9]+::__construct\(\) has invalid typehint type Psr\\Log\\LoggerInterface.#'
