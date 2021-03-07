@@ -9,4 +9,5 @@ RedirectMatch 404 sql\/
 # RedirectMatch 404 Test
 # RedirectMatch 404 log
 RedirectMatch 404 /VERSION$
+RedirectMatch 404 phpstan.neon.dist
 </IfModule>

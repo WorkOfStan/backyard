@@ -1,0 +1,13 @@
+parameters:
+    level: 5
+    excludePaths:
+        analyse:
+          - vendor
+        analyseAndScan:
+          - src/*.php
+    scanDirectories:
+      - classes
+    ignoreErrors:
+      -
+        message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
+        path: classes/BackyardBriefApiClient.php 

@@ -1,9 +1,9 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace WorkOfStan\Backyard;
 
 use Psr\Log\LoggerInterface;
-use GodsDev\Backyard\BackyardMysqli;
+use WorkOfStan\Backyard\BackyardMysqli;
 
 class BackyardGeo
 {

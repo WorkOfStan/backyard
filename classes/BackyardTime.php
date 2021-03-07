@@ -1,6 +1,6 @@
 <?php
 
-namespace GodsDev\Backyard;
+namespace WorkOfStan\Backyard;
 
 class BackyardTime
 {
