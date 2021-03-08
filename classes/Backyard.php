@@ -7,7 +7,7 @@ class Backyard
 
     /**
      *
-     * @var array
+     * @var array<mixed> int,string,bool,array
      */
     protected $BackyardConf = array();
 
@@ -61,7 +61,7 @@ class Backyard
 
     /**
      *
-     * @param array $backyardConfConstruct
+     * @param array<mixed> $backyardConfConstruct contains int,string,bool,array
      */
     public function __construct(array $backyardConfConstruct = array())
     {

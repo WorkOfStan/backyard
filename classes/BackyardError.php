@@ -10,8 +10,17 @@ class BackyardError extends AbstractLogger implements LoggerInterface
 {
 
 // phpcs:disable Generic.Files.LineLength
+
+    /**
+     *
+     * @var array<mixed> int,string,bool,array
+     */
     protected $backyardConf = array();
 
+    /**
+     *
+     * @var BackyardTime
+     */
     protected $backyardTime;
 
     /**
@@ -213,11 +222,13 @@ class BackyardError extends AbstractLogger implements LoggerInterface
 
         if (
             (
-            $level <= max(array(
-                $this->backyardConf['logging_level'],
-                $this->backyardConf['error_hack_from_get'], //set potentially as GET parameter
-                $ERROR_HACK, //set as variable in the application script
-            ))
+                $level <= max(
+                    array(
+                        $this->backyardConf['logging_level'],
+                        $this->backyardConf['error_hack_from_get'], //set potentially as GET parameter
+                        $ERROR_HACK, //set as variable in the application script
+                    )
+                )
             ) //to log 0=unknown/default 1=fatal 2=error 3=warning 4=info 5=debug 6=speed according to $level
             || (($error_number == "6") && ($this->backyardConf['logging_level_page_speed'] <= $this->backyardConf['logging_level'])) //speed logovat vždy když je ukázaná, resp. dle nastavení $logging_level_page_speed
         ) {

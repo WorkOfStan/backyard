@@ -4,10 +4,23 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+        php-version: ['5.3', '5.6', '7.3', '7.4']
 
     steps:
-    - uses: actions/checkout@v2
+    - name: "Checkout"        
+      uses: actions/checkout@v2
+
+    - name: "Install PHP ${{ matrix.php-version }} Test on ${{ matrix.operating-system }}"
+      uses: "shivammathur/setup-php@v2"
+      with:
+        php-version: "${{ matrix.php-version }}"
+        tools: composer:v2, phpunit
+        # tools: composer:v2, phpunit
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -18,13 +31,15 @@ jobs:
     - name: Install dependencies
       run: composer update --prefer-dist --no-progress
 
-    - name: PHPUnit (php-actions)
-      uses: php-actions/phpunit@v5
-      with:
-        # PHP included in ubuntu-latest does not support iconv //TRANSLIT flag as iconv implementation is unknown
-        # https://github.com/actions/virtual-environments/blob/ubuntu18/20201026.1/images/linux/Ubuntu1804-README.md
-        # therefore PHPUnit group iconvtranslit should be excluded
-        configuration: phpunit.xml
+    - name: "PHPUnit tests"
+      run: "vendor/bin/phpunit"
+    #- name: PHPUnit (php-actions)
+    #  uses: php-actions/phpunit@v5
+    #  with:
+    #    # PHP included in ubuntu-latest does not support iconv //TRANSLIT flag as iconv implementation is unknown
+    #    # https://github.com/actions/virtual-environments/blob/ubuntu18/20201026.1/images/linux/Ubuntu1804-README.md
+    #    # therefore PHPUnit group iconvtranslit should be excluded
+    #    configuration: phpunit.xml
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
