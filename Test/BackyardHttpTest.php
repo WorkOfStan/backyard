@@ -21,6 +21,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -31,6 +33,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
+     *
+     * @return void
      */
     protected function tearDown()
     {
@@ -74,6 +78,8 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
+     *
+     * @return void
      */
     public function testGetDataContent()
     {
@@ -118,6 +124,9 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetDataRedirect()
     {
         //@todo incl. recursion (if there is)

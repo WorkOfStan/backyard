@@ -91,7 +91,10 @@ class BackyardMysqli extends \mysqli
      * @param int $errorLogOutput optional default=1 turn-off=0
      *   It is int in order to be compatible with
      *   parameter $resultmode (int) of method mysqli::query()
-     * @return \mysqli_result|false
+     * @return bool|\mysqli_result<object>
+     *   <p>Returns <b><code>FALSE</code></b> on failure. For successful <i>SELECT, SHOW, DESCRIBE</i> or <i>EXPLAIN</i>
+     *   queries <b>mysqli_query()</b> will return a mysqli_result object.
+     *   For other successful queries <b>mysqli_query()</b> will return <b><code>TRUE</code></b>.</p>
      */
     public function query($sql, $errorLogOutput = 1)
     {

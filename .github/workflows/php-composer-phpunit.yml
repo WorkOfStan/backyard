@@ -46,3 +46,6 @@ jobs:
 
     # - name: Run test suite
     #   run: composer run-script test
+
+    - name: "PHPStan"
+      run: "vendor/bin/phpstan analyse ."

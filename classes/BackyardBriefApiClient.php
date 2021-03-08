@@ -145,7 +145,7 @@ class BackyardBriefApiClient
      * Sends JSON and return array decoded from the received JSON response
      *
      * @param string $json
-     * @return array
+     * @return array<mixed>
      */
     public function getJsonArray($json)
     {
@@ -161,8 +161,8 @@ class BackyardBriefApiClient
     /**
      * Translates array to JSON, send it to API and return array decoded from the received JSON response
      *
-     * @param array $arr
-     * @return array
+     * @param array<mixed> $arr
+     * @return array<mixed>
      */
     public function getArrayArray(array $arr)
     {

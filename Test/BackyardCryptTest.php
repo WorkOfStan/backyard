@@ -19,6 +19,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -29,6 +31,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
+     *
+     * @return void
      */
     protected function tearDown()
     {
@@ -37,6 +41,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardCrypt::randomId
+     *
+     * @return void
      */
     public function testRandomId()
     {
@@ -48,6 +54,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardCrypt::randomId
+     *
+     * @return void
      */
     public function testRandomIdDefault10()
     {
@@ -59,6 +67,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardCrypt::randomId
+     *
+     * @return void
      */
     public function testRandomIdLength32()
     {
@@ -70,6 +80,8 @@ class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardCrypt::randomId
+     *
+     * @return void
      */
     public function testRandomIdLength1024()
     {
