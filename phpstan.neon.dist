@@ -1,7 +1,5 @@
 parameters:
     level: 6
-    #at to na github ukaze nejake chyby
-    #level: max
     excludePaths:
         analyse:
           - vendor

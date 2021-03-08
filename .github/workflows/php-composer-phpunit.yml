@@ -47,7 +47,7 @@ jobs:
     # - name: Run test suite
     #   run: composer run-script test
 
-    # PHPStan works for PHP/7.1+ so it can't be even be in composer.json
+    # PHPStan works for PHP/7.1+ so it can't even be in composer.json
     - name: "PHPStan"
       if: ${{ matrix.php-version != '5.3' && matrix.php-version != '5.6' }}
       # alternative syntax # if: ${{ matrix.php-version >= '7.1' }}
