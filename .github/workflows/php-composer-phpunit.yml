@@ -47,10 +47,38 @@ jobs:
     # - name: Run test suite
     #   run: composer run-script test
 
+    - name: "PHPStan cond 1"
+      if: ${{ matrix.php-version }} == '5.3'
+      run: echo "==}5.3"
+
+    - name: "PHPStan cond 2"
+      if: ${{ matrix.php-version == '5.3' }}
+      run: echo "==5.3}"
+
+    - name: "PHPStan cond 3"
+      if: ${{ matrix.php-version }} >= '7.1'
+      run: echo "}} >= '7.1'"
+
+    - name: "PHPStan cond 4"
+      if: ${{ matrix.php-version >= '7.1' }}
+      run: echo " >= '7.1'}"
+
+    - name: "PHPStan cond 5"
+      if: ${{ matrix.php-version }} == '5.3' || ${{ matrix.php-version }} == '5.6'
+      run: echo "}== 5.3|5.6"
+
+    - name: "PHPStan cond 5"
+      if: ${{ matrix.php-version == '5.3' }} || ${{ matrix.php-version == '5.6' }}
+      run: echo "== 5.3|5.6}"
+
+
     # PHPStan works for PHP/7.1+ so it can't be even be in composer.json
     - name: "PHPStan"
       if: ${{ matrix.php-version }} != '5.3' && ${{ matrix.php-version }} != '5.6'
       run: |
         composer require --dev phpstan/phpstan:^0.12
         vendor/bin/phpstan analyse --no-interaction --no-progress .
-        composer remove --dev phpstan/phpstan
+        # If removal needed:
+        # composer remove --dev phpstan/phpstan
+
+
