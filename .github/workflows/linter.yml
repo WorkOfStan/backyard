@@ -57,4 +57,6 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_ANSIBLE: false
           VALIDATE_PHP_PSALM: false
+          # PHPStan run in matrix strategy in php-composer-phpunit.yml
+          VALIDATE_PHP_PHPSTAN: false
           VALIDATE_HTML: false

@@ -1,5 +1,5 @@
 parameters:
-    level: 5
+    level: 6
     excludePaths:
         analyse:
           - vendor
@@ -11,4 +11,3 @@ parameters:
       -
         message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
         path: classes/BackyardBriefApiClient.php
-    #  - '#Reflection error: PHPUnit_Framework_TestCase not found.#'

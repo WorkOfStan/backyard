@@ -25,7 +25,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
 
     /**
      *
-     * @param array $backyardConfConstruct
+     * @param array<mixed> $backyardConfConstruct
      * @param BackyardTime $backyardTime
      */
     public function __construct(array $backyardConfConstruct = array(), BackyardTime $backyardTime = null)
@@ -55,7 +55,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * System is unusable.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function emergency($message, array $context = array())
@@ -70,7 +70,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function alert($message, array $context = array())
@@ -84,7 +84,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function critical($message, array $context = array())
@@ -97,7 +97,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * be logged and monitored.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function error($message, array $context = array())
@@ -112,7 +112,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function warning($message, array $context = array())
@@ -124,7 +124,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * Normal but significant events.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function notice($message, array $context = array())
@@ -138,7 +138,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function info($message, array $context = array())
@@ -150,7 +150,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      * Detailed debug information.
      *
      * @param string $message
-     * @param array $context
+     * @param array<int> $context
      * @return bool
      */
     public function debug($message, array $context = array())
@@ -168,7 +168,7 @@ class BackyardError extends AbstractLogger implements LoggerInterface
      *
      * @param int $level Error level
      * @param string $message Message to be logged
-     * @param array $context OPTIONAL To enable error log filtering 'error_number' field expected or the first element element expected containing number of error category
+     * @param array<int> $context OPTIONAL To enable error log filtering 'error_number' field expected or the first element element expected containing number of error category
      *
      * @return bool
      *

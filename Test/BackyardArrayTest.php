@@ -19,6 +19,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -29,6 +31,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
+     *
+     * @return void
      */
     protected function tearDown()
     {
@@ -37,6 +41,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardArray::inArrayWildcards
+     *
+     * @return void
      */
     public function testInArrayWildcards()
     {
@@ -49,6 +55,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      * @covers WorkOfStan\Backyard\BackyardArray::getOneColumnFromArray
      *
      * testGetOneColumnFromArrayNotArray not needed as the Argument 1 MUST be of the type array
+     *
+     * @return void
      */
 //    public function testGetOneColumnFromArrayNotArray()
 //    {
@@ -66,6 +74,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      *
      * Logs something like: Warning: -2020 14:09:35] [warning] [0] [/tmp/vendor/bin/phpunit] [anonymous@-] [0] [-]
      *     getOneColumnFromArray: b not in Array
+     *
+     * @return void
      */
     public function testGetOneColumnFromArrayMissingRowIgnored()
     {
@@ -85,6 +95,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetOneColumnFromArrayMissingRowLogged()
     {
         $myArray = array(
@@ -112,6 +125,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
      * @covers WorkOfStan\Backyard\BackyardArray::removeOneColumnFromArray
      *
      * testRemoveOneColumnFromArrayNoArray() not needed as the Argument 1 MUST be of the type array
+     *
+     * @return void
      */
 //    public function testRemoveOneColumnFromArrayNoArray()
 //    {
@@ -142,6 +157,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardArray::dumpArrayAsOneLine
+     *
+     * @return void
      */
     public function testDumpArrayAsOneLine()
     {
@@ -160,6 +177,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardArray::arrayVlookup
+     *
+     * @return void
      */
     public function testArrayVlookupNoMatch()
     {
@@ -187,6 +206,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testArrayVlookupFirstMatch()
     {
         $searchedArray = array(
@@ -213,6 +235,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testArrayVlookupAllMatches()
     {
         $searchedArray = array(
@@ -244,6 +269,8 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardArray::arrayDiffAssocRecursive
+     *
+     * @return void
      */
     public function testArrayDiffAssocRecursiveDifferent()
     {
@@ -279,6 +306,9 @@ class BackyardArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array2));
     }
 
+    /**
+     * @return void
+     */
     public function testArrayDiffAssocRecursiveSame()
     {
         $array1 = array(

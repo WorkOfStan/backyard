@@ -19,6 +19,8 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -29,6 +31,8 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
+     *
+     * @return void
      */
     protected function tearDown()
     {
@@ -37,6 +41,8 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardTime::getmicrotime
+     *
+     * @return void
      */
     public function testGetmicrotime()
     {
@@ -45,6 +51,8 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardTime::getRunningTime
+     *
+     * @return void
      */
     public function testGetRunningTime()
     {
@@ -55,6 +63,8 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardTime::pageGeneratedIn
+     *
+     * @return void
      */
     public function testPageGeneratedInDefault()
     {
@@ -63,6 +73,9 @@ class BackyardTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, substr($this->object->pageGeneratedIn(), 0, 3));
     }
 
+    /**
+     * @return void
+     */
     public function testPageGeneratedInLangString()
     {
         $langStringPageGeneratedIn = "Page Generated in %s";

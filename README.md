@@ -2,10 +2,10 @@
 
 **Collection of useful functions**
 
-[![Total Downloads](https://img.shields.io/packagist/dt/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
-[![Latest Stable Version](https://img.shields.io/packagist/v/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
-[![Lint Code Base](https://github.com/WorkOfStan/backyard/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/WorkOfStan/backyard/actions?query=workflow%3A%22Lint+Code+Base%22)
-[![PHP Composer + PHPUnit](https://github.com/WorkOfStan/backyard/workflows/PHP%20Composer%20+%20PHPUnit/badge.svg)](https://github.com/WorkOfStan/backyard/actions?query=workflow%3A%22PHP+Composer+%2B+PHPUnit%22)
+[![Total Downloads](https://img.shields.io/packagist/dt/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
+[![Latest Stable Version](https://img.shields.io/packagist/v/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
+[![Lint Code Base](https://github.com/WorkOfStan/backyard/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
+[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/workflows/PHP%20Composer%20+%20PHPUnit/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml)
 
 ## Requirements
 * [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
@@ -23,7 +23,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require godsdev/backyard:^3.2.10
+composer require workofstan/backyard:^3.3.0
 ```
 
 Finally, be sure to include the autoloader:
@@ -34,8 +34,8 @@ require_once '/path/to/your-project/vendor/autoload.php';
 
 ### Download the Release
 
-If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/godsdev/backyard/releases) page lists all stable versions. Download any file
-with the name `backyard-[RELEASE_NAME].zip` for a package including this library and its dependencies.
+If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/WorkOfStan/backyard/releases) page lists all stable versions.
+Download any file with the name `backyard/archive/[TAG].zip` for a package including this library and its dependencies.
 
 Uncompress the zip file you download, and include the autoloader in your project:
 
