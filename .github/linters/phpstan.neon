@@ -1,5 +1,5 @@
 parameters:
-    level: 5
+    level: max
     excludes_analyse:
       - ../../src/*.php
     #Error message "Class mysqli not found." cannot be ignored, use excludes_analyse instead. # TODO fix this
