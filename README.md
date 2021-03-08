@@ -23,7 +23,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require godsdev/backyard:^3.2.10
+composer require workofstan/backyard:^3.3.0
 ```
 
 Finally, be sure to include the autoloader:
@@ -34,7 +34,7 @@ require_once '/path/to/your-project/vendor/autoload.php';
 
 ### Download the Release
 
-If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/godsdev/backyard/releases) page lists all stable versions. Download any file
+If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/WorkOfStan/backyard/releases) page lists all stable versions. Download any file
 with the name `backyard-[RELEASE_NAME].zip` for a package including this library and its dependencies.
 
 Uncompress the zip file you download, and include the autoloader in your project:
