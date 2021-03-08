@@ -47,7 +47,9 @@ jobs:
     # - name: Run test suite
     #   run: composer run-script test
 
-    # PHPStan works for PHP/7.1+
+    # PHPStan works for PHP/7.1+ so it can't be even be in composer.json
     - name: "PHPStan"
       if: ${{ matrix.php-version }} != '5.3' && ${{ matrix.php-version }} != '5.6'
+      run: "composer require --dev phpstan/phpstan:^0.12"
       run: "vendor/bin/phpstan analyse --no-interaction --no-progress ."
+      run: "composer remove --dev phpstan/phpstan"
