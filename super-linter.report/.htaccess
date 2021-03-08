@@ -1,2 +1,3 @@
+# Expected by super-linter
 Order Allow,Deny
 Deny from all
