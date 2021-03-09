@@ -5,6 +5,6 @@
     <rule ref="PSR12" />
     <rule ref="PSR12.Properties.ConstantVisibility.NotFound">
         <!-- still MUST be compatible with PHP/5.6 -->
-        <exclude-pattern>GodsDev/Backyard/BackyardHttp.php</exclude-pattern>
+        <exclude-pattern>classes/BackyardHttp.php</exclude-pattern>
     </rule>
 </ruleset>

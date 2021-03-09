@@ -16,7 +16,7 @@ name: Lint Code Base
 on:
   push:
     branches-ignore:
-      - 'master'
+      - 'main'
 
 ###############
 # Set the Job #
@@ -38,17 +38,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      # composer to provide context for PHPStan
+      #- name: Install dependencies
+      #  run: "composer update --prefer-dist --no-progress --ignore-platform-req=php"
+
       ################################
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
         uses: github/super-linter@master
         env:
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: develop
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.yml
           VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_JSCPD: false
           VALIDATE_ANSIBLE: false
           VALIDATE_PHP_PSALM: false
+          # PHPStan run in matrix strategy in php-composer-phpunit.yml
+          VALIDATE_PHP_PHPSTAN: false
           VALIDATE_HTML: false

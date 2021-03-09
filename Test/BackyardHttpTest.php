@@ -1,9 +1,9 @@
 <?php
 
-namespace GodsDev\Backyard\Test;
+namespace WorkOfStan\Backyard\Test;
 
-use GodsDev\Backyard\BackyardHttp;
-use GodsDev\Backyard\BackyardError;
+use WorkOfStan\Backyard\BackyardHttp;
+use WorkOfStan\Backyard\BackyardError;
 
 //@todo - put into separate group as it needs access to internet
 
@@ -21,22 +21,27 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     protected function setUp()
     {
+        error_reporting(E_ALL); // incl E_NOTICE
         $this->object = new BackyardHttp(new BackyardError(array('logging_level' => 4)));
     }
 
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
+     *
+     * @return void
      */
     protected function tearDown()
     {
         // no action
     }
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::movePage
+//     * @covers WorkOfStan\Backyard\BackyardHttp::movePage
 //     * @todo   Implement testMovePage().
 //     */
 //    public function testMovePage()
@@ -48,7 +53,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::retrieveFromPostThenGet
+//     * @covers WorkOfStan\Backyard\BackyardHttp::retrieveFromPostThenGet
 //     * @todo   Implement testRetrieveFromPostThenGet().
 //     */
 //    public function testRetrieveFromPostThenGet()
@@ -60,7 +65,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getCurPageURL
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getCurPageURL
 //     * @todo   Implement testGetCurPageURL().
 //     */
 //    public function testGetCurPageURL()
@@ -72,7 +77,9 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 
     /**
-     * @covers GodsDev\Backyard\BackyardHttp::getData
+     * @covers WorkOfStan\Backyard\BackyardHttp::getData
+     *
+     * @return void
      */
     public function testGetDataContent()
     {
@@ -117,6 +124,9 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetDataRedirect()
     {
         //@todo incl. recursion (if there is)
@@ -151,7 +161,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
     }
     //@todo - make test if the method remains in Backyard
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getHTTPstatusCode
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getHTTPstatusCode
 //     * @todo   Implement testGetHTTPstatusCode().
 //     */
 //    public function testGetHTTPstatusCode()
@@ -163,7 +173,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //    }
 //
 //    /**
-//     * @covers GodsDev\Backyard\BackyardHttp::getHTTPstatusCodeByUA
+//     * @covers WorkOfStan\Backyard\BackyardHttp::getHTTPstatusCodeByUA
 //     * @todo   Implement testGetHTTPstatusCodeByUA().
 //     */
 //    public function testGetHTTPstatusCodeByUA()

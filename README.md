@@ -2,10 +2,10 @@
 
 **Collection of useful functions**
 
-[![Total Downloads](https://img.shields.io/packagist/dt/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
-[![Latest Stable Version](https://img.shields.io/packagist/v/godsdev/backyard.svg)](https://packagist.org/packages/godsdev/backyard)
-[![Lint Code Base](https://github.com/GodsDev/backyard/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/GodsDev/backyard/actions?query=workflow%3A%22Lint+Code+Base%22)
-[![PHP Composer + PHPUnit](https://github.com/GodsDev/backyard/workflows/PHP%20Composer%20+%20PHPUnit/badge.svg)](https://github.com/GodsDev/backyard/actions?query=workflow%3A%22PHP+Composer+%2B+PHPUnit%22)
+[![Total Downloads](https://img.shields.io/packagist/dt/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
+[![Latest Stable Version](https://img.shields.io/packagist/v/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
+[![Lint Code Base](https://github.com/WorkOfStan/backyard/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
+[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/workflows/PHP%20Composer%20+%20PHPUnit/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml)
 
 ## Requirements
 * [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
@@ -23,7 +23,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require godsdev/backyard:^3.2.10
+composer require workofstan/backyard:^3.3.0
 ```
 
 Finally, be sure to include the autoloader:
@@ -34,8 +34,8 @@ require_once '/path/to/your-project/vendor/autoload.php';
 
 ### Download the Release
 
-If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/godsdev/backyard/releases) page lists all stable versions. Download any file
-with the name `backyard-[RELEASE_NAME].zip` for a package including this library and its dependencies.
+If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/WorkOfStan/backyard/releases) page lists all stable versions.
+Download any file with the name `backyard/archive/[TAG].zip` for a package including this library and its dependencies.
 
 Uncompress the zip file you download, and include the autoloader in your project:
 
@@ -47,12 +47,12 @@ require_once '/path/to/backyard/vendor/autoload.php';
 
 After the autoloader is included you may create the `backyard` object with default configuration:
 ```php
-$backyard = new \GodsDev\Backyard\Backyard();
+$backyard = new \WorkOfStan\Backyard\Backyard();
 ```
 
 Or you may configure it with following options:
 ```php
-$backyard = new \GodsDev\Backyard\Backyard(
+$backyard = new \WorkOfStan\Backyard\Backyard(
     array(//default values
         //logger relevant that SHOULD be configured
         'logging_level'             => 5,       //log up to the level set here, default=5 = debug//logovat az do urovne zde uvedene: 0=unknown/default_call 1=fatal 2=error 3=warning 4=info 5=debug/default_setting 6=speed  //aby se zalogovala alespoň missing db musí být logování nejníže defaultně na 1 //1 as default for writing the missing db at least to the standard ErrorLog
@@ -85,9 +85,9 @@ NB: BackyardMysqli creates no Backyard->Mysqli object (as e.g. Backyard->Json do
 Example of usage:
 
 ```php
-$backyard = new GodsDev\Backyard\Backyard(array('logging_level' => 3));
+$backyard = new WorkOfStan\Backyard\Backyard(array('logging_level' => 3));
 $logger = $backyard->BackyardError;
-$dbLink = new GodsDev\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
+$dbLink = new WorkOfStan\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
 ```
 
 ## class BackyardBriefApiClient
