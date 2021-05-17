@@ -16,7 +16,7 @@ class BackyardGeo
 
     /**
      *
-     * @var \Psr\Log\LoggerInterface;
+     * @var LoggerInterface
      */
     protected $logger = null;
 
@@ -201,7 +201,9 @@ class BackyardGeo
             array(11)
         );
         return array(
-            'distance_m' => (int) floor($listOfPOINearbyProcessed[0]['distance']),
+            'distance_m' => array_key_exists('distance', $listOfPOINearbyProcessed[0]) ?
+            (int) floor($listOfPOINearbyProcessed[0]['distance']) :
+            (int) $this->backyardConf['geo_rough_distance_limit'],
             'poi_id' => $listOfPOINearbyProcessed[0]['poi_id'],
             //@todo category name instead of category id
             'type_address' => $listOfPOINearbyProcessed[0]['category'] . ' ' . $listOfPOINearbyProcessed[0]['adresa'],

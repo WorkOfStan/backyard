@@ -171,6 +171,8 @@ class BackyardHttp
      * @param string $customRequest OPTIONAL fills in CURLOPT_CUSTOMREQUEST
      * @return array<string, mixed> ['message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',]]
      * @throws \Exception if $customHeaders are neither false nor string
+     *
+     * TODO refactor as getDataObject where each getter will use just one type
      */
     public function getData(
         $url,
