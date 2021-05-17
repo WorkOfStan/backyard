@@ -27,7 +27,7 @@ Change of namespace + automatic testing of various PHP versions
 - Github online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
 - show E_NOTICE during PHPUnit tests
 - production release branch renamed from `master` to `main`
-- error-free PHPStan analysis till level 6 
+- error-free PHPStan analysis till level 6
 
 ## [3.2.10] - 2020-10-31
 PHPUnit on GitHub, BackyardHttp::getData throws Exception
@@ -48,7 +48,7 @@ PHPUnit on GitHub, BackyardHttp::getData throws Exception
 
 4) Various typehinting fixed
 * typehint mixed replaced by more specific type combination, e.g. int|string or array|bool
-* value type specified in iterable type array 
+* value type specified in iterable type array
 * Method GodsDev\Backyard\BackyardJson::outputJSON() should return string but returns string|false.
 * Method GodsDev\Backyard\BackyardTime::getPageTimestamp() should return float but returns float|null.
 * Method GodsDev\Backyard\BackyardJson::minifyJSON() should return string but returns string|false.
@@ -71,7 +71,7 @@ Lint all code
 * markdown lint - use ATX style  
 * VALIDATE_HTML: stop validating /example/test_coloursave.html
 
-* array type added in function arguments as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php> 
+* array type added in function arguments as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php>
 
 * BackyardGeo::calculateDistanceFromLatLong - throw new \Exception('Unknown unit of measurement');
 * BackyardMysqli::query doesn't @throws DBQueryException as it writes to log instead
@@ -87,7 +87,7 @@ Lint all code
 
 3) remove X-Forwarded-For header from Test as it contains source IP and hence would be changing unnecessarily
 
-## [3 2.8] - 2020-05-02
+## [3.2.8] - 2020-05-02
 classes Test in separate path so that `/godsdev/mycms/classes/Test/` are not part of `autoload_static.php`
 
 ## [3.2.7] - 2020-04-20
@@ -199,8 +199,8 @@ LIBrary in backyard 2.0.0
 [Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...HEAD
 [3.3.0]: https://github.com/WorkOfStan/backyard/compare/v3.2.10...v3.3.0
 [3.2.10]: https://github.com/WorkOfStan/backyard/compare/v3.2.9...v3.2.10
-[3.2.9]: https://github.com/WorkOfStan/backyard/compare/v3 2.8...v3.2.9
-[3 2.8]: https://github.com/WorkOfStan/backyard/compare/v3.2.7...v3 2.8
+[3.2.9]: https://github.com/WorkOfStan/backyard/compare/v3.2.8...v3.2.9
+[3.2.8]: https://github.com/WorkOfStan/backyard/compare/v3.2.7...v3.2.8
 [3.2.7]: https://github.com/WorkOfStan/backyard/compare/v3.2.6...v3.2.7
 [3.2.6]: https://github.com/WorkOfStan/backyard/compare/v3.2.5...v3.2.6
 [3.2.5]: https://github.com/WorkOfStan/backyard/compare/v3.2.4...v3.2.5
@@ -222,4 +222,4 @@ LIBrary in backyard 2.0.0
 [2.0.2]: https://github.com/WorkOfStan/backyard/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/WorkOfStan/backyard/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/WorkOfStan/backyard/compare/v1.0...v2.0.0
-[1.0]: https://github.com/WorkOfStan/backyard/compare/v...v1.0
+[1.0]: https://github.com/WorkOfStan/backyard/releases/tag/v1.0
