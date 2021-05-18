@@ -4,8 +4,8 @@
 
 [![Total Downloads](https://img.shields.io/packagist/dt/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
 [![Latest Stable Version](https://img.shields.io/packagist/v/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
-[![Lint Code Base](https://github.com/WorkOfStan/backyard/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
-[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/workflows/PHP%20Composer%20+%20PHPUnit/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml)
+[![Lint Code Base](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
+[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml)
 
 ## Requirements
 * [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
