@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
 
 ### `Security` in case of vulnerabilities
+- CHANGELOG.md or .sh unreachable through web server
 
 ## [3.3.0] - 2021-03-09
 Change of namespace + automatic testing of various PHP versions
