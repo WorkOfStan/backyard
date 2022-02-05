@@ -346,6 +346,11 @@ class BackyardHttp
         }
         $host = $url['host'];
         $port = (isset($url['port']) ? $url['port'] : 80);
+        /**
+         * @phpstan-ignore-next-line
+         * Offset 'path' on array{scheme: 'http', host: string, path: string, port?: int, user?: string, pass?: string,
+         *   query?: string, fragment?: string} in isset() always exists and is not nullable.
+         */
         $path = (isset($url['path']) ? $url['path'] : '/');
         $this->logger->log(self::LOG_LEVEL, "url: " . print_r($url, true), array(16));
 

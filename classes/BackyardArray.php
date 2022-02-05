@@ -64,7 +64,7 @@ class BackyardArray
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
      *
-     * @param array<array> $myArray at least two-dimensional
+     * @param array<array<mixed>> $myArray at least two-dimensional
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; true => function logs the missing column in a row as an error
      * @return array<mixed>
@@ -88,9 +88,9 @@ class BackyardArray
     /**
      * Returns array $myArray without column named in $columnName
      *
-     * @param array<array> $myArray
+     * @param array<array<mixed>> $myArray
      * @param string $columnName
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function removeOneColumnFromArray(array $myArray, $columnName)
     {
@@ -141,7 +141,7 @@ class BackyardArray
      * Useful for at least 2-dimensional arrays
      *
      * @param mixed $searchedValue
-     * @param array<array> $searchedArray
+     * @param array<array<mixed>> $searchedArray
      * @param string $columnName
      * @param bool $allExactMatches - default false; if true function returns array with all exact matches
      * @param bool $columnAlwaysExpected - default true; false: the missing column in a row isn't logged as an error

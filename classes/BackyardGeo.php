@@ -23,7 +23,7 @@ class BackyardGeo
     /**
      *
      * @param LoggerInterface $logger
-     * @param array<array> $backyardConfConstruct
+     * @param array<array<mixed>> $backyardConfConstruct
      */
     public function __construct(LoggerInterface $logger, array $backyardConfConstruct = array())
     {
@@ -221,7 +221,7 @@ class BackyardGeo
      *
      * @param int|string $poiCategory (may be integer or string with comma separated integers)
      * @param BackyardMysqli $poiConnection
-     * @return array<array>|false
+     * @return array<array<mixed>>|false
      *
      * bacykard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database
      * only those that do not overpass the perpendicular backyardGeo['rough_distance_limit']
