@@ -87,7 +87,7 @@ Lint all code
 * BackyardError::dieGraciously - fix default argument #3 value
 * BackyardJson::$backyardError and BackyardGeo::$BackyardError renamed to $logger
 
-2) php-composer-validate.yml - Automatically on github check composer validate and composer update
+2) php-composer-validate.yml - Automatically on GitHub check composer validate and composer update
 
 3) remove X-Forwarded-For header from Test as it contains source IP and hence would be changing unnecessarily
 
