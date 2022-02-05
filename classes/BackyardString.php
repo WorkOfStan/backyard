@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 
 class BackyardString
 {
-
     /**
      *
      * @var \Psr\Log\LoggerInterface

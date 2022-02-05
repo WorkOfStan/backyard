@@ -15,7 +15,6 @@ use WorkOfStan\Backyard\BackyardError;
 
 class BackyardMysqli extends \mysqli
 {
-
     /**
      *
      * @var BackyardError

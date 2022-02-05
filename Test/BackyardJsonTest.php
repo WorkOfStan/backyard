@@ -11,7 +11,6 @@ use WorkOfStan\Backyard\BackyardHttp;
  */
 class BackyardJsonTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var BackyardJson
      */

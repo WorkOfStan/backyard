@@ -10,7 +10,6 @@ use WorkOfStan\Backyard\BackyardError;
  */
 class BackyardCryptTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var BackyardCrypt
      */

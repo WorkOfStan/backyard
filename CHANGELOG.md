@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Removed` for now removed features
 
-### `Fixed` for any bug fixes
+### `Fixed` for any bugfixes
 - BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
 
 ### `Security` in case of vulnerabilities
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Change of namespace + automatic testing of various PHP versions
 
 - Change of namespace to the new GitHub account maintaining the repository
-- Github online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
+- GitHub online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
 - show E_NOTICE during PHPUnit tests
 - production release branch renamed from `master` to `main`
 - error-free PHPStan analysis till level 6
@@ -72,8 +72,8 @@ Lint all code
   - exclude old src/ code
   - level max
 * not using Ansible: getting rid of [WARN ] No Ansible base directory found at:[/github/workspace/ansible]
-* markdown lint - use ATX style  
-* VALIDATE_HTML: stop validating /example/test_coloursave.html
+* Markdown lint - use ATX style  
+* VALIDATE_HTML: stop validating </example/test_coloursave.html>
 
 * array type added in function arguments as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php>
 
@@ -172,13 +172,13 @@ getJsonAsArray extended, fix getOneColumnFromArray, PSR-3 logger methods
 - BackyardGeo better logging, BackyardCrypt salt introduced, BackyardHttpTest.php more robust
 
 ## [3.0.1] - 2016-07-06
-Sub-class lazy loading removed.
+Subclass lazy loading removed.
 - So that Library in Backyard is compatible with PHP > 5.3.0 and object $Backyard->Http->method(); works everywhere.
 
 ## [3.0.0] - 2016-07-03
 PSR-4 compliant Class
 
-Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Sub-classes are lazy loaded. PHPunit testing is working for sub-classes with no major external needs (BackyardArray, Crypt, Http, Json, BackardTime).
+Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Subclasses are lazy loaded. PHPunit testing is working for subclasses with no major external needs (BackyardArray, Crypt, Http, Json, BackardTime).
 Invoke by:
 use GodsDev\Backyard\Backyard;
 $this->Backyard = new Backyard($backyardConf); //$backyardConf is array with delta to default values

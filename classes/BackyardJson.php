@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
  */
 class BackyardJson
 {
-
     /**
      *
      * @var LoggerInterface

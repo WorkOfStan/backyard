@@ -4,7 +4,6 @@ namespace WorkOfStan\Backyard;
 
 class Backyard
 {
-
     /**
      *
      * @var array<mixed> int,string,bool,array

@@ -7,7 +7,6 @@ use WorkOfStan\Backyard\BackyardMysqli;
 
 class BackyardGeo
 {
-
     /**
      *
      * @var array<mixed>
