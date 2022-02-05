@@ -1,0 +1,187 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string\\|null given\\.$#"
+			count: 1
+			path: Test/BackyardHttpTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
+			count: 1
+			path: Test/BackyardHttpTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, array\\|string\\|null given\\.$#"
+			count: 2
+			path: Test/BackyardHttpTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, mixed given\\.$#"
+			count: 2
+			path: Test/BackyardHttpTest.php
+
+		-
+			message: "#^Method WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:getJsonArray\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$ch of function curl_errno expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$ch of function curl_error expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$ch of function curl_exec expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$ch of function curl_setopt expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$ch of function curl_setopt_array expects resource, resource\\|false given\\.$#"
+			count: 3
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of method WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:getJsonArray\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$message of method WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:logCommunication\\(\\) expects string, string\\|true given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$appLogFolder \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$logger \\(Psr\\\\Log\\\\LoggerInterface\\) does not accept Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
+			count: 1
+			path: classes/BackyardBriefApiClient.php
+
+		-
+			message: "#^Cannot access offset int on mixed\\.$#"
+			count: 1
+			path: classes/BackyardError.php
+
+		-
+			message: "#^Parameter \\#2 \\$message_type of function error_log expects int, mixed given\\.$#"
+			count: 2
+			path: classes/BackyardError.php
+
+		-
+			message: "#^Parameter \\#3 \\$destination of function error_log expects string, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardError.php
+
+		-
+			message: "#^Part \\$this\\-\\>backyardConf\\['logging_file'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: classes/BackyardError.php
+
+		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 2
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Method WorkOfStan\\\\Backyard\\\\BackyardGeo\\:\\:getListOfPOI\\(\\) should return array\\<array\\>\\|false but returns array\\|false\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Parameter \\#1 \\$poiCategory of method WorkOfStan\\\\Backyard\\\\BackyardGeo\\:\\:getListOfPOI\\(\\) expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Parameter \\#2 \\$point2 of method WorkOfStan\\\\Backyard\\\\BackyardGeo\\:\\:calculateDistanceFromLatLong\\(\\) expects array\\<float\\>, array\\<string, mixed\\> given\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Parameter \\#3 \\$poiLng of method WorkOfStan\\\\Backyard\\\\BackyardGeo\\:\\:getRoughDistance\\(\\) expects float, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Parameter \\#4 \\$poiLat of method WorkOfStan\\\\Backyard\\\\BackyardGeo\\:\\:getRoughDistance\\(\\) expects float, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Part \\$this\\-\\>backyardConf\\['geo_poi_list_table_name'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: classes/BackyardGeo.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: classes/BackyardHttp.php
+
+		-
+			message: "#^Parameter \\#2 \\$start of function substr expects int, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardHttp.php
+
+		-
+			message: "#^Parameter \\#3 \\$length of function substr expects int, mixed given\\.$#"
+			count: 1
+			path: classes/BackyardHttp.php
+
+		-
+			message: "#^Method WorkOfStan\\\\Backyard\\\\BackyardJson\\:\\:jsonCleanDecode\\(\\) should return array\\|false but returns mixed\\.$#"
+			count: 1
+			path: classes/BackyardJson.php
+
+		-
+			message: "#^Parameter \\#3 \\$depth of function json_decode expects int\\<1, max\\>, int given\\.$#"
+			count: 2
+			path: classes/BackyardJson.php
+
+		-
+			message: "#^Cannot access property \\$num_rows on \\(iterable\\<object\\>&mysqli_result\\)\\|true\\.$#"
+			count: 1
+			path: classes/BackyardMysqli.php
+
+		-
+			message: "#^Cannot call method close\\(\\) on \\(iterable\\<object\\>&mysqli_result\\)\\|true\\.$#"
+			count: 2
+			path: classes/BackyardMysqli.php
+
+		-
+			message: "#^Cannot call method fetch_assoc\\(\\) on \\(iterable\\<object\\>&mysqli_result\\)\\|true\\.$#"
+			count: 1
+			path: classes/BackyardMysqli.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: classes/BackyardMysqli.php
+

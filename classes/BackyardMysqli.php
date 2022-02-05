@@ -144,14 +144,14 @@ class BackyardMysqli extends \mysqli
             $result = array();
             while ($one_row = $mysqlQueryResult->fetch_assoc()) {
                 if ($justOneRow) {
-                    $mysqlQueryResult->close(); //free result set
-                    return $one_row; //returns one dimensional array
+                    $mysqlQueryResult->close(); // free result set
+                    return $one_row; // returns one dimensional array
                 }
                 $result[] = $one_row;
             }
         }
         if ($mysqlQueryResult != false) {
-            $mysqlQueryResult->close(); //free result set
+            $mysqlQueryResult->close(); // free result set
         }
         return $result; //returns two dimensional array or false
     }

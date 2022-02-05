@@ -23,7 +23,7 @@ class BackyardGeo
     /**
      *
      * @param LoggerInterface $logger
-     * @param array<array<mixed>> $backyardConfConstruct
+     * @param array<mixed> $backyardConfConstruct
      */
     public function __construct(LoggerInterface $logger, array $backyardConfConstruct = array())
     {

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - dependabot.yml
 - array<mixed> iterable type hint to accommodate PHPStan level=6
 - phpstan.sh and phpstan-remove.sh for local testing
+- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (TODO fix these later) to hold new code to a higher standard
 
 ### `Changed` for changes in existing functionality
 - Limit the GitHub action job running time
