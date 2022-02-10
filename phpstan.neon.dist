@@ -1,5 +1,8 @@
+includes:
+      - phpstan-baseline.neon
+
 parameters:
-    level: 6
+    level: max
     excludePaths:
         analyse:
           - vendor
@@ -11,3 +14,6 @@ parameters:
       -
         message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
         path: classes/BackyardBriefApiClient.php
+      -
+        message: '#Else branch is unreachable because ternary operator condition is always true.#'
+        path: classes/BackyardGeo.php

@@ -23,7 +23,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require workofstan/backyard:^3.3.0
+composer require workofstan/backyard:^3.3.1
 ```
 
 Finally, be sure to include the autoloader:
@@ -165,10 +165,10 @@ Expected structure of geo related tables is in sql/poi.sql .
     - Some examples:
         - variable, method, function, elementId – camelCase
         - class name – UpperCamelCase
-        - url – hyphened-text
+        - URL – hyphened-text
         - file, database_column, database_table – underscored_text
         - constant – BIG_LETTERS
 2. Comments
     - Primary language of comments is English.
     - Deprecated or obsolete code blocks are commented with prefix of the letter “x”. I may add reason for making the code obsolete as in the following:
-    - //Xhe’s got id from the beginning: $_SESSION["id"] = User::$himself->getId();
+    - //Xhe’s got ID from the beginning: $_SESSION["id"] = User::$himself->getId();

@@ -25,8 +25,9 @@ CREATE TABLE IF NOT EXISTS `poi_list` (
   KEY `lat` (`lat`),
   KEY `long` (`long`),
   KEY `category` (`category`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=88 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=88;
 
 
 -- Display both by
--- SELECT * FROM `poi_list` JOIN `poi_category` ON `poi_list`.`category` = `poi_category`.id
+-- SELECT * FROM `poi_list` JOIN `poi_category` 
+-- ON `poi_list`.`category` = `poi_category`.id

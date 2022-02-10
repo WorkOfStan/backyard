@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 
 class BackyardCrypt
 {
-
     /**
      *
      * @var \Psr\Log\LoggerInterface

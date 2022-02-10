@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 
 class BackyardError extends AbstractLogger implements LoggerInterface
 {
-
 // phpcs:disable Generic.Files.LineLength
 
     /**

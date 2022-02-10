@@ -5,26 +5,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### `Added` for new features
-- dependabot.yml
 
 ### `Changed` for changes in existing functionality
-- Limit the GitHub action job running time
 
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
 
-### `Fixed` for any bug fixes
-- BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
+### `Fixed` for any bugfixes
 
 ### `Security` in case of vulnerabilities
+
+## [3.3.1] - 2022-02-10
+
+- PHPStan level=9
+
+### Added
+- dependabot.yml
+- array<mixed> iterable type hint to accommodate PHPStan level=6
+- phpstan.sh and phpstan-remove.sh for local testing
+- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (TODO fix these later) to hold new code to a higher standard
+- added cache for online PHPStan testing and using pre-built tool PHPStan
+
+### Changed
+- Limit the GitHub action job running time
+- Allow psr/log ^3.0 (relevant for PHP/8 version)
+- Bump michaelw90/PHP-Lint to overtrue/phplint@4.1.0
+
+### Fixed
+- BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
+- use super-linter main branch instead of master
+- PHPCS newlines, textlint terminology
+- spaces in /github/workspace/sql/poi.sql found by sqlfluff (TODO sqlfluff Explore sql/poi.sql unparsable fail)
+
+### Security
+- CHANGELOG.md or .sh unreachable through web server
 
 ## [3.3.0] - 2021-03-09
 Change of namespace + automatic testing of various PHP versions
 
 - Change of namespace to the new GitHub account maintaining the repository
-- Github online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
+- GitHub online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
 - show E_NOTICE during PHPUnit tests
 - production release branch renamed from `master` to `main`
 - error-free PHPStan analysis till level 6
@@ -68,8 +91,8 @@ Lint all code
   - exclude old src/ code
   - level max
 * not using Ansible: getting rid of [WARN ] No Ansible base directory found at:[/github/workspace/ansible]
-* markdown lint - use ATX style  
-* VALIDATE_HTML: stop validating /example/test_coloursave.html
+* Markdown lint - use ATX style  
+* VALIDATE_HTML: stop validating </example/test_coloursave.html>
 
 * array type added in function arguments as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php>
 
@@ -83,7 +106,7 @@ Lint all code
 * BackyardError::dieGraciously - fix default argument #3 value
 * BackyardJson::$backyardError and BackyardGeo::$BackyardError renamed to $logger
 
-2) php-composer-validate.yml - Automatically on github check composer validate and composer update
+2) php-composer-validate.yml - Automatically on GitHub check composer validate and composer update
 
 3) remove X-Forwarded-For header from Test as it contains source IP and hence would be changing unnecessarily
 
@@ -168,13 +191,13 @@ getJsonAsArray extended, fix getOneColumnFromArray, PSR-3 logger methods
 - BackyardGeo better logging, BackyardCrypt salt introduced, BackyardHttpTest.php more robust
 
 ## [3.0.1] - 2016-07-06
-Sub-class lazy loading removed.
+Subclass lazy loading removed.
 - So that Library in Backyard is compatible with PHP > 5.3.0 and object $Backyard->Http->method(); works everywhere.
 
 ## [3.0.0] - 2016-07-03
 PSR-4 compliant Class
 
-Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Sub-classes are lazy loaded. PHPunit testing is working for sub-classes with no major external needs (BackyardArray, Crypt, Http, Json, BackardTime).
+Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Subclasses are lazy loaded. PHPunit testing is working for subclasses with no major external needs (BackyardArray, Crypt, Http, Json, BackardTime).
 Invoke by:
 use GodsDev\Backyard\Backyard;
 $this->Backyard = new Backyard($backyardConf); //$backyardConf is array with delta to default values
@@ -196,7 +219,8 @@ LIBrary in backyard 2.0.0
 ## [1.0] - 2014-09-21
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/WorkOfStan/backyard/compare/v3.2.10...v3.3.0
 [3.2.10]: https://github.com/WorkOfStan/backyard/compare/v3.2.9...v3.2.10
 [3.2.9]: https://github.com/WorkOfStan/backyard/compare/v3.2.8...v3.2.9

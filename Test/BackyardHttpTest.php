@@ -12,7 +12,6 @@ use WorkOfStan\Backyard\BackyardError;
  */
 class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var BackyardHttp
      */

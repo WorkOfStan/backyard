@@ -4,7 +4,6 @@ namespace WorkOfStan\Backyard;
 
 class BackyardTime
 {
-
     /** @var float|null */
     private $pageTimestamp = null;
 

@@ -10,7 +10,6 @@ use WorkOfStan\Backyard\BackyardError;
  */
 class BackyardArrayTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var BackyardArray
      */

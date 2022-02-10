@@ -10,7 +10,6 @@ use WorkOfStan\Backyard\BackyardError;
  */
 class BackyardTimeTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var BackyardTime
      */

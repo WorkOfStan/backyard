@@ -9,7 +9,6 @@ use WorkOfStan\Backyard\Backyard;
  */
 class BackyardTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Backyard
      */
