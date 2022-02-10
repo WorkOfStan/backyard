@@ -5,23 +5,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### `Added` for new features
-- dependabot.yml
-- array<mixed> iterable type hint to accommodate PHPStan level=6
-- phpstan.sh and phpstan-remove.sh for local testing
-- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (TODO fix these later) to hold new code to a higher standard
 
 ### `Changed` for changes in existing functionality
-- Limit the GitHub action job running time
 
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
 
 ### `Fixed` for any bugfixes
-- BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
 
 ### `Security` in case of vulnerabilities
+
+## [3.3.1] - 2022-02-10
+
+- PHPStan level=9
+
+### Added
+- dependabot.yml
+- array<mixed> iterable type hint to accommodate PHPStan level=6
+- phpstan.sh and phpstan-remove.sh for local testing
+- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (TODO fix these later) to hold new code to a higher standard
+- added cache for online PHPStan testing and using pre-built tool PHPStan
+
+### Changed
+- Limit the GitHub action job running time
+- Allow psr/log ^3.0 (relevant for PHP/8 version)
+- Bump michaelw90/PHP-Lint to overtrue/phplint@4.1.0
+
+### Fixed
+- BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
+- use super-linter main branch instead of master
+- PHPCS newlines, textlint terminology
+- spaces in /github/workspace/sql/poi.sql found by sqlfluff (TODO sqlfluff Explore sql/poi.sql unparsable fail)
+
+### Security
 - CHANGELOG.md or .sh unreachable through web server
 
 ## [3.3.0] - 2021-03-09
@@ -200,7 +219,8 @@ LIBrary in backyard 2.0.0
 ## [1.0] - 2014-09-21
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/WorkOfStan/backyard/compare/v3.2.10...v3.3.0
 [3.2.10]: https://github.com/WorkOfStan/backyard/compare/v3.2.9...v3.2.10
 [3.2.9]: https://github.com/WorkOfStan/backyard/compare/v3.2.8...v3.2.9
