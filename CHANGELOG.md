@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [3.3.2] - 2022-02-12
+### Added
+- PSR-4 compliant class HTMLPage instead of legacy LIB2 class_HTMLPage.php
+
 ## [3.3.1] - 2022-02-10
 
 - PHPStan level=9
@@ -219,7 +223,9 @@ LIBrary in backyard 2.0.0
 ## [1.0] - 2014-09-21
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...HEAD
+
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.2...HEAD
+[3.3.2]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/WorkOfStan/backyard/compare/v3.2.10...v3.3.0
 [3.2.10]: https://github.com/WorkOfStan/backyard/compare/v3.2.9...v3.2.10
