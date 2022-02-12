@@ -47,13 +47,11 @@
  * - LOAD_JQUERYMOBILE verzi jquery sjednotit s JQ, 120807
  * - more flexibility where jQ is loaded from
  * - update naming convention to 2022
+ * - consider adding Tracy\Debugger and Tracy\ILogger (PHP>=5.3) instead of error_log
  *
  ***********************************************/
 
 namespace WorkOfStan\Backyard;
-
-use Tracy\Debugger;
-use Tracy\ILogger;
 
 class HTMLPage
 {
@@ -137,7 +135,7 @@ class HTMLPage
                         $this->header .= '<link rel="stylesheet" '
                             . 'href="css/jquery.mobile.structure-1.3.1.min.css" />'; // when using theme
                     } else {
-                        Debugger::log("LOAD_JQUERYMOBILE={$LOAD_JQUERYMOBILE} - undefined", ILogger::ERROR);
+                        error_log("LOAD_JQUERYMOBILE={$LOAD_JQUERYMOBILE} - undefined");
                     }
                 }
                 $this->style = $LOAD_STYLE;
@@ -180,7 +178,7 @@ class HTMLPage
                 break;
 
             default:
-                Debugger::log("Undefined CONTENT_TYPE=$CONTENT_TYPE", ILogger::ERROR);
+                error_log("Undefined CONTENT_TYPE=$CONTENT_TYPE");
         }
     }
 
@@ -207,7 +205,7 @@ class HTMLPage
                         $this->header .= '<link href="' . filter_var($this->style, FILTER_SANITIZE_URL)
                             . '" rel="STYLESHEET" type="text/css" />';
                     } else {
-                        Debugger::log("CSS URI was expected: {$this->style}", ILogger::ERROR);
+                        error_log("CSS URI was expected: {$this->style}");
                     }
                 }
                 $this->header .= '</head><body>';
@@ -307,7 +305,7 @@ class HTMLPage
     public function addToHeader($add)
     {
         if ($this->headerWasOutputed) {
-            Debugger::log("Header was already out. Following cannot be added: {$add}", ILogger::ERROR);
+            error_log("Header was already out. Following cannot be added: {$add}");
         } else {
             $this->header .= $add;
         }
