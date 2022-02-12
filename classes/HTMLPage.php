@@ -13,10 +13,10 @@
  *   body
  *
  * public methods
- *   __construct($TITLE="GODS rules",$CONTENT_TYPE="text/html")
+ *   __construct($TITLE="Backyard rocks",$CONTENT_TYPE="text/html")
  *   startPage(){//Vypise Content-type HTTP header a header HTML stránky
  *   endPage(){//Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
- *   addToBody($add){////append k $this->body
+ *   addToBody($add){//append k $this->body
  *
  *
  * History
