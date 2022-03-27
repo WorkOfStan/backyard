@@ -140,20 +140,20 @@ parameters:
 			count: 1
 			path: classes/BackyardGeo.php
 
-		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 1
-			path: classes/BackyardHttp.php
+		#-
+		#	message: "#^Cannot cast mixed to int\\.$#"
+		#	count: 1
+		#	path: classes/BackyardHttp.php
 
-		-
-			message: "#^Parameter \\#2 \\$start of function substr expects int, mixed given\\.$#"
-			count: 1
-			path: classes/BackyardHttp.php
+		#-
+		#	message: "#^Parameter \\#2 \\$start of function substr expects int, mixed given\\.$#"
+		#	count: 1
+		#	path: classes/BackyardHttp.php
 
-		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, mixed given\\.$#"
-			count: 1
-			path: classes/BackyardHttp.php
+		#-
+		#	message: "#^Parameter \\#3 \\$length of function substr expects int, mixed given\\.$#"
+		#	count: 1
+		#	path: classes/BackyardHttp.php
 
 		-
 			message: "#^Method WorkOfStan\\\\Backyard\\\\BackyardJson\\:\\:jsonCleanDecode\\(\\) should return array\\|false but returns mixed\\.$#"
