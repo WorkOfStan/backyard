@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### `Added` for new features
+- "webmozart/assert": "^1.9.1" added to dev because of BackyardHttpTest
 
 ### `Changed` for changes in existing functionality
+- BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error
 
 ### `Deprecated` for soon-to-be removed features
 
@@ -123,7 +125,7 @@ classes Test in separate path so that `/godsdev/mycms/classes/Test/` are not par
 
 ## [3.2.6] - 2019-12-24
 ### Fixed
-- fix CommunicationId (logging id) generated once both for request and response
+- fix CommunicationId (logging ID) generated once both for request and response
 
 ### Added
 - GodsDev\Backyard\BackyardString::stripDiacritics

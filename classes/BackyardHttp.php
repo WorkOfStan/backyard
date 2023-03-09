@@ -287,7 +287,7 @@ class BackyardHttp
                 if (isset($retVal[$match[1]])) {
                     $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
                 } else {
-                    $retVal[$match[1]] = trim($match[2]);
+                    $retVal[$match[1]] = trim((string) $match[2]);
                 }
             }
         }
