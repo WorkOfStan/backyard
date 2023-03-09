@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### `Added` for new features
-- ThrowablePHPFunctions Replacement for PHP functions that returns false or null instead of the strict type.
+- ThrowablePHPFunctions Replacement for PHP functions that returns false or null instead of the strict type. (Exception without `debug_backtrace()[1]['function']` for PHP<5.6.)
 
 ### `Changed` for changes in existing functionality
 
