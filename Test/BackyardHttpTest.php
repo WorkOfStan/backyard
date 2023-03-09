@@ -3,11 +3,9 @@
 namespace WorkOfStan\Backyard\Test;
 
 use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 use WorkOfStan\Backyard\BackyardHttp;
 use WorkOfStan\Backyard\BackyardError;
-
-use function WorkOfStan\Backyard\ThrowableFunctions\preg_replace;
-use function WorkOfStan\Backyard\ThrowableFunctions\preg_replaceString;
 
 //@todo - put into separate group as it needs access to internet
 
@@ -109,16 +107,16 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
         //also remove X-Forwarded-For header as it also contains source IP
         Assert::string($result['message_body']);
-        $result['message_body'] = preg_replaceString(
+        $result['message_body'] = $this->preg_replaceString(
             '~<b>X-Forwarded-For:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
             '',
-            preg_replaceString('/^.+\n/', '', preg_replaceString('/^.+\n/', '', $result['message_body']))
+            $this->preg_replaceString('/^.+\n/', '', $this->preg_replaceString('/^.+\n/', '', $result['message_body']))
         );
         $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE'], 'HTTP_CODE differ');
 
-        $tempExpected = explode('<br/>', preg_replaceString('/\s+/', '', $expected['message_body']));
+        $tempExpected = explode('<br/>', $this->preg_replaceString('/\s+/', '', $expected['message_body']));
         asort($tempExpected);
-        $tempResult = explode('<br/>', preg_replaceString('/\s+/', '', $result['message_body']));
+        $tempResult = explode('<br/>', $this->preg_replaceString('/\s+/', '', $result['message_body']));
         asort($tempResult);
         $this->assertEquals(
             implode('|', $tempExpected),
@@ -192,4 +190,26 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
 //
 //        $this->assertEquals($expected, $this->object->getHTTPstatusCodeByUA($url, $userAgent));
 //    }
+
+    /**
+     * $subject is expected to be string, so the function returns string
+     *
+     * @param string|string[] $pattern
+     * @param string|string[] $replacement
+     * @param string $subject
+     * @param int $limit
+     * @param int $count
+     * @return string
+     * @throws \Exception
+     * @throws InvalidArgumentException
+     */
+    private function preg_replaceString($pattern, $replacement, $subject, $limit = -1, &$count = null)
+    {
+        $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
+        if (is_null($result)) {
+            throw new \Exception('error (null) preg_replace');
+        }
+        Assert::string($result);
+        return $result;
+    }
 }

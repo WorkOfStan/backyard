@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### `Added` for new features
-- ThrowablePHPFunctions Replacement for PHP functions that returns false or null instead of the strict type. (Backward compatibility: Exception without `debug_backtrace()[1]['function']` as PHP5.3 throws syntax error.)
 
 ### `Changed` for changes in existing functionality
+- BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error
 
 ### `Deprecated` for soon-to-be removed features
 
