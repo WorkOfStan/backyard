@@ -17,3 +17,6 @@ parameters:
       -
         message: '#Else branch is unreachable because ternary operator condition is always true.#'
         path: classes/BackyardGeo.php
+      -
+        message: '#Offset 1 on non-empty-array<int, string> in isset\(\) always exists and is not nullable.#'
+        path: classes/BackyardHttp.php

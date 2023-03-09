@@ -48,7 +48,8 @@ die('LIB2'); //security die
   //Xhe’s got id from the beginning: $_SESSION["id"] = User::$himself->getId();
  * *******************************
  */
-//
+
+use WorkOfStan\Backyard\HTMLPage;
 
 /**
  * Load Scripts & init
@@ -64,7 +65,7 @@ require_once __DIR__ . '/backyard_system.php'; //@TODO - is there a way to use t
 my_error_log("Knihovny pripojeny", 6, 6);
 
 //$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-require_once __BACKYARDROOT__ . "/class_HTMLPage.php"; //* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
+//require_once __BACKYARDROOT__ . "/class_HTMLPage.php"; //* If $CONTENT_TYPE == 'text/html' , be sure to set style.css in the same folder and have /jq/jquery-1.6.2.min.js present
 $pageInstance = new HTMLPage("Emulate", "text/html", 1, 0); //jquery yes, style.css no
 //$pageInstance->addToBody("<b>RED info</b><br/>".PHP_EOL);
 /**

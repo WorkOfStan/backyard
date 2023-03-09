@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### `Added` for new features
+- ThrowablePHPFunctions Replacement for PHP functions that returns false or null instead of the strict type.
 
 ### `Changed` for changes in existing functionality
 
@@ -123,7 +124,7 @@ classes Test in separate path so that `/godsdev/mycms/classes/Test/` are not par
 
 ## [3.2.6] - 2019-12-24
 ### Fixed
-- fix CommunicationId (logging id) generated once both for request and response
+- fix CommunicationId (logging ID) generated once both for request and response
 
 ### Added
 - GodsDev\Backyard\BackyardString::stripDiacritics

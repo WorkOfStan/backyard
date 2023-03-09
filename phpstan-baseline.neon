@@ -1,24 +1,24 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: Test/BackyardHttpTest.php
+		#-
+		#	message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string\\|null given\\.$#"
+		#	count: 1
+		#	path: Test/BackyardHttpTest.php
 
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: Test/BackyardHttpTest.php
+		#-
+		#	message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
+		#	count: 1
+		#	path: Test/BackyardHttpTest.php
 
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, array\\|string\\|null given\\.$#"
-			count: 2
-			path: Test/BackyardHttpTest.php
+		#-
+		#	message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, array\\|string\\|null given\\.$#"
+		#	count: 2
+		#	path: Test/BackyardHttpTest.php
 
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, mixed given\\.$#"
-			count: 2
-			path: Test/BackyardHttpTest.php
+		#-
+		#	message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, mixed given\\.$#"
+		#	count: 2
+		#	path: Test/BackyardHttpTest.php
 
 		-
 			message: "#^Method WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:getJsonArray\\(\\) should return array but returns mixed\\.$#"
@@ -80,25 +80,25 @@ parameters:
 			count: 1
 			path: classes/BackyardBriefApiClient.php
 
-		-
-			message: "#^Cannot access offset int on mixed\\.$#"
-			count: 1
-			path: classes/BackyardError.php
+		#-
+		#	message: "#^Cannot access offset int on mixed\\.$#"
+		#	count: 1
+		#	path: classes/BackyardError.php
 
-		-
-			message: "#^Parameter \\#2 \\$message_type of function error_log expects int, mixed given\\.$#"
-			count: 2
-			path: classes/BackyardError.php
+		#-
+		#	message: "#^Parameter \\#2 \\$message_type of function error_log expects int, mixed given\\.$#"
+		#	count: 2
+		#	path: classes/BackyardError.php
 
-		-
-			message: "#^Parameter \\#3 \\$destination of function error_log expects string, mixed given\\.$#"
-			count: 1
-			path: classes/BackyardError.php
+		#-
+		#	message: "#^Parameter \\#3 \\$destination of function error_log expects string, mixed given\\.$#"
+		#	count: 1
+		#	path: classes/BackyardError.php
 
-		-
-			message: "#^Part \\$this\\-\\>backyardConf\\['logging_file'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
-			path: classes/BackyardError.php
+		#-
+		#	message: "#^Part \\$this\\-\\>backyardConf\\['logging_file'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+		#	count: 2
+		#	path: classes/BackyardError.php
 
 		-
 			message: "#^Cannot cast mixed to float\\.$#"
