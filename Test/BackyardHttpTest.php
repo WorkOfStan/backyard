@@ -107,16 +107,16 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
         //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
         //also remove X-Forwarded-For header as it also contains source IP
         Assert::string($result['message_body']);
-        $result['message_body'] = $this->preg_replaceString(
+        $result['message_body'] = $this->pregReplaceString(
             '~<b>X-Forwarded-For:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
             '',
-            $this->preg_replaceString('/^.+\n/', '', $this->preg_replaceString('/^.+\n/', '', $result['message_body']))
+            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
         );
         $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE'], 'HTTP_CODE differ');
 
-        $tempExpected = explode('<br/>', $this->preg_replaceString('/\s+/', '', $expected['message_body']));
+        $tempExpected = explode('<br/>', $this->pregReplaceString('/\s+/', '', $expected['message_body']));
         asort($tempExpected);
-        $tempResult = explode('<br/>', $this->preg_replaceString('/\s+/', '', $result['message_body']));
+        $tempResult = explode('<br/>', $this->pregReplaceString('/\s+/', '', $result['message_body']));
         asort($tempResult);
         $this->assertEquals(
             implode('|', $tempExpected),
@@ -203,7 +203,7 @@ class BackyardHttpTest extends \PHPUnit_Framework_TestCase
      * @throws \Exception
      * @throws InvalidArgumentException
      */
-    private function preg_replaceString($pattern, $replacement, $subject, $limit = -1, &$count = null)
+    private function pregReplaceString($pattern, $replacement, $subject, $limit = -1, &$count = null)
     {
         $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
         if (is_null($result)) {
