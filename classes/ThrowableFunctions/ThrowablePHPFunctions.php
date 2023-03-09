@@ -27,11 +27,8 @@ use Webmozart\Assert\InvalidArgumentException;
 function throwOnNull($result)
 {
     if (is_null($result)) {
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            throw new Exception('error (null) ' . debug_backtrace()[1]['function']);
-        } else {
-            throw new Exception('error (null)');
-        }
+        //throw new Exception('error (null) ' . debug_backtrace()[1]['function']); // PHP5.3 throws syntax error
+        throw new Exception('error (null)'); // TODO use debug_backtrace once PHP5.3 backward compatibility not required
     }
     return $result;
 }
@@ -50,11 +47,8 @@ function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = n
 {
     $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
     if (is_null($result)) {
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            throw new Exception('error (null) ' . debug_backtrace()[1]['function']);
-        } else {
-            throw new Exception('error (null)');
-        }
+        //throw new Exception('error (null) ' . debug_backtrace()[1]['function']); // PHP5.3 throws syntax error
+        throw new Exception('error (null)'); // TODO use debug_backtrace once PHP5.3 backward compatibility not required
     }
     return $result;
 }
