@@ -8,13 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added` for new features
 - "webmozart/assert": "^1.9.1" added to dev because of BackyardHttpTest
+- `.github\linters\.htmlhintrc` added to set `"attr-value-double-quotes": false` to ignore how [example/test_coloursave.html](example/test_coloursave.html) is done.
+- `.github\linters\.sqlfluff` added to specify a dialect.
 
 ### `Changed` for changes in existing functionality
 - BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error
 - BackyardError wraps \Seablast\Logger\Logger implementation.
 - class BackyardTime extends \Seablast\Logger\LoggerTime
 - bump .github/workflows to [WorkOfStan/seablast-actions](https://github.com/WorkOfStan/seablast-actions)
-- `.github\linters\.htmlhintrc` added to set `"attr-value-double-quotes": false` to ignore how [example/test_coloursave.html](example/test_coloursave.html) is done.
 
 ### `Deprecated` for soon-to-be removed features
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
 
 ### `Fixed` for any bugfixes
+- .htmlhintrc The id and class attribute values must be in lowercase and split by a dash. (id-class-value)
 
 ### `Security` in case of vulnerabilities
 

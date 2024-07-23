@@ -127,7 +127,7 @@ $(document).ready(function() {
         //console.log(tempArg);
         tempSelectParent = null;
         tempURL = null;
-        if (tempSelector === 'owner_language') {
+        if (tempSelector === 'owner-language') {
             tempURL = curPageURLtrue;
         }
         if ($('[name=' + tempSelector + ']').is('select')) {

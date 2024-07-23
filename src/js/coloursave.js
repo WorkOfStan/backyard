@@ -148,7 +148,7 @@ $(document).ready(function() {
         tempArg=JSON.stringify(tempObject);
         tempSelectParent = null;
         tempURL = null;
-        if(tempSelector == 'owner_language'){
+        if(tempSelector == 'owner-language'){
             tempURL = document.location.href;//refresh to change the locale language by server page generation
         }
         if($('[name=' + tempSelector + ']').is('select')){
