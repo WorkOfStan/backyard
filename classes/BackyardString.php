@@ -6,10 +6,7 @@ use Psr\Log\LoggerInterface;
 
 class BackyardString
 {
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var ?\Psr\Log\LoggerInterface */
     protected $logger = null;
 
     /**

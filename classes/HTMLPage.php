@@ -57,22 +57,16 @@ class HTMLPage
 {
     /** @var string */
     public $contentType = 'text/html';
-
     /** @var string */
     public $header = '';
-
     /** @var string */
     public $footer = '';
-
     /** @var string */
     public $body = '';
-
     /** @var string */
     protected $title;
-
     /** @var bool */
     protected $headerWasOutputed;
-
     /** @var int|string */
     protected $style;
 

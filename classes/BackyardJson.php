@@ -9,17 +9,10 @@ use Psr\Log\LoggerInterface;
  */
 class BackyardJson
 {
-    /**
-     *
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     *
-     * @var BackyardHttp
-     */
+    /** @var BackyardHttp */
     protected $backyardHttp;
+    /** @var LoggerInterface */
+    protected $logger;
 
     /**
      *

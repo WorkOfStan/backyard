@@ -36,10 +36,7 @@ class BackyardHttp
 {
     const LOG_LEVEL = 5;
 
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var ?\Psr\Log\LoggerInterface */
     protected $logger = null;
 
     /**

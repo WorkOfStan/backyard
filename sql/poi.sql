@@ -22,13 +22,13 @@ CREATE TABLE IF NOT EXISTS `poi_list` (
     `long` double NOT NULL COMMENT 'X',
     `lat` double NOT NULL COMMENT 'Y',
     `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP,
+    ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`poi_id`),
     KEY `lat` (`lat`),
     KEY `long` (`long`),
     KEY `category` (`category`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci
-    AUTO_INCREMENT = 88;
+AUTO_INCREMENT = 88;
 
 
 -- Display both by

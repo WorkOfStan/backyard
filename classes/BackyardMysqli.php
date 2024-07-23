@@ -15,10 +15,7 @@ use WorkOfStan\Backyard\BackyardError;
 
 class BackyardMysqli extends \mysqli
 {
-    /**
-     *
-     * @var BackyardError
-     */
+    /** @var ?BackyardError */
     protected $logger = null;
 
     /**

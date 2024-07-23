@@ -14,22 +14,11 @@ use Psr\Log\LoggerInterface;
  */
 class BackyardBriefApiClient
 {
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
-
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $apiUrl;
-
-    /**
-     *
-     * @var string or null
-     */
+    /** @var ?string */
     private $appLogFolder;
 
     /**

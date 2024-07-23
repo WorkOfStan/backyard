@@ -13,16 +13,9 @@ use Seablast\Logger\LoggerTime;
  */
 class BackyardError extends Logger implements LoggerInterface
 {
-    /**
-     *
-     * @var array<mixed> int,string,bool,array
-     */
+    /** @var array<mixed> int,string,bool,array */
     protected $backyardConf = array();
-
-    /**
-     *
-     * @var LoggerTime
-     */
+    /** @var LoggerTime */
     protected $backyardTime;
 
     /**
