@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BackyardError wraps \Seablast\Logger\Logger implementation.
 - class BackyardTime extends \Seablast\Logger\LoggerTime
 - bump .github/workflows to [WorkOfStan/seablast-actions](https://github.com/WorkOfStan/seablast-actions)
+- src/js/all.js and src/js/coloursave.js tempSelector === 'owner_language' to tempSelector === 'owner-language'
+- src/js/all.js #send_me_mm_button to #send-me-mm-button
 
 ### `Deprecated` for soon-to-be removed features
 
@@ -23,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
 
 ### `Fixed` for any bugfixes
-- .htmlhintrc The id and class attribute values must be in lowercase and split by a dash. (id-class-value)
+- .htmlhintrc The ID and class attribute values must be in lowercase and split by a dash. (id-class-value)
 
 ### `Security` in case of vulnerabilities
 

@@ -97,12 +97,12 @@ $(document).ready(function() {
         //není voláno z form//return false;//The return false is blocking the default form submit action.
     });
 
-    $('#send_me_mm_button').bind('vclick', function() {//(e){
+    $('#send-me-mm-button').bind('vclick', function() {//(e){
         //console.log(e.type);//debug
         submitStakanForm(
                 {action: 'send_project_mm_json', eid: 91, project_id: projectId},
         null,
-                '#send_me_mm_button'
+                '#send-me-mm-button'
                 );
         //není voláno z form//return false;//The return false is blocking the default form submit action.
     });
