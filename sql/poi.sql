@@ -5,7 +5,8 @@
 CREATE TABLE IF NOT EXISTS `poi_category` (
     `id` int(11) NOT NULL,
     `name` varchar(100) COLLATE utf8_czech_ci NOT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci COMMENT = 'Naming of poi catgories for table poi_list';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci
+COMMENT = 'Naming of poi catgories for table poi_list';
 
 
 --
@@ -20,12 +21,14 @@ CREATE TABLE IF NOT EXISTS `poi_list` (
     `adresa` varchar(200) COLLATE utf8_czech_ci NOT NULL,
     `long` double NOT NULL COMMENT 'X',
     `lat` double NOT NULL COMMENT 'Y',
-    `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`poi_id`),
     KEY `lat` (`lat`),
     KEY `long` (`long`),
     KEY `category` (`category`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci AUTO_INCREMENT = 88;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci
+    AUTO_INCREMENT = 88;
 
 
 -- Display both by

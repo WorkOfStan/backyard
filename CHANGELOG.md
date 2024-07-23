@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Removed` for now removed features
 - `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
+- VERSION file. As only main branch is used.
 
 ### `Fixed` for any bugfixes
 - .htmlhintrc The ID and class attribute values must be in lowercase and split by a dash. (id-class-value)
