@@ -37,7 +37,7 @@ require_once '/path/to/your-project/vendor/autoload.php';
 If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/WorkOfStan/backyard/releases) page lists all stable versions.
 Download any file with the name `backyard/archive/[TAG].zip` for a package including this library and its dependencies.
 
-Uncompress the zip file you download, and include the autoloader in your project:
+Uncompress the ZIP file you download, and include the autoloader in your project:
 
 ```php
 require_once '/path/to/backyard/vendor/autoload.php';
@@ -143,7 +143,7 @@ $backyardConf['die_graciously_verbose'] = false;    //so that description contai
 $backyardConf['error_hacked']           = false;    //so that *ERROR_HACK* GET parameter is ignored (and 3rd party can't *debug* your application
 ```
 
-src/emulator.php get_data in a defined manner (@TODO - better describe)
+src/emulator.php get_data in a defined manner (@todo - better describe)
 
 src/emulate.php is an envelope for emulator.php
 

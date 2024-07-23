@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BackyardError wraps \Seablast\Logger\Logger implementation.
 - class BackyardTime extends \Seablast\Logger\LoggerTime
 - bump .github/workflows to [WorkOfStan/seablast-actions](https://github.com/WorkOfStan/seablast-actions)
+- `.github\linters\.htmlhintrc` added to set `"attr-value-double-quotes": false` to ignore how [example/test_coloursave.html](example/test_coloursave.html) is done.
 
 ### `Deprecated` for soon-to-be removed features
 
@@ -36,11 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - dependabot.yml
 - array<mixed> iterable type hint to accommodate PHPStan level=6
 - phpstan.sh and phpstan-remove.sh for local testing
-- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (TODO fix these later) to hold new code to a higher standard
+- phpstan-baseline.neon to hide type hint imperfections etc. in PHPStan level=9 (todo fix these later) to hold new code to a higher standard
 - added cache for online PHPStan testing and using pre-built tool PHPStan
 
 ### Changed
-- Limit the GitHub action job running time
+- Limit the GitHub Action job running time
 - Allow psr/log ^3.0 (relevant for PHP/8 version)
 - Bump michaelw90/PHP-Lint to overtrue/phplint@4.1.0
 
@@ -48,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BackyardGeo::getClosestPOI Offset 'distance' does not exist if the object was too far => provide default long distance
 - use super-linter main branch instead of master
 - PHPCS newlines, textlint terminology
-- spaces in /github/workspace/sql/poi.sql found by sqlfluff (TODO sqlfluff Explore sql/poi.sql unparsable fail)
+- spaces in /github/workspace/sql/poi.sql found by sqlfluff (todo sqlfluff Explore sql/poi.sql unparsable fail)
 
 ### Security
 - CHANGELOG.md or .sh unreachable through web server
@@ -104,7 +105,7 @@ Lint all code
 * Markdown lint - use ATX style  
 * VALIDATE_HTML: stop validating </example/test_coloursave.html>
 
-* array type added in function arguments as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php>
+* array type added in function parameters as it is working since PHP 5.1.0 <https://www.php.net/manual/en/functions.arguments.php>
 
 * BackyardGeo::calculateDistanceFromLatLong - throw new \Exception('Unknown unit of measurement');
 * BackyardMysqli::query doesn't @throws DBQueryException as it writes to log instead

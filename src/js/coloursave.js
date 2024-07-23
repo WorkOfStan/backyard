@@ -38,11 +38,11 @@ eid:92             //if not set in data attribute eid, it is equal to zero
 
 var apiUrlErrorLog = 'http://free.t-mobile.cz/check13stage/api/v1/error_log/';
 //var relativePathToBackyardJs = 'lib/backyard/deploy/backyard/js';
-var relativePathToBackyardJs = '../deploy/backyard/js';
+var relativePathToBackyardJs = '../src/js';
 
 var localisationString = new Array();
 localisationString['fill_in_red'] = 'Vyplňte červené pole'; // @TODO - customize někde v config
-localisationString["sent_to_server"] = 'Odesláno na server';// @TODO - customize někde v config
+localisationString['sent_to_server'] = 'Odesláno na server';// @TODO - customize někde v config
 
 if(typeof(apiUrlColoursave) === 'undefined') var apiUrlColoursave = relativePathToBackyardJs + '/' + 'dummy.json';
 

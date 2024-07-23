@@ -1,3 +1,5 @@
+-- dialect: mysql
+-- By including the dialect specification directly in the SQL file, SQLFLUFF will use this information when linting the file, and you won't encounter the "No dialect was specified" error.
 --
 -- Table structure for table `poi_category`
 --
