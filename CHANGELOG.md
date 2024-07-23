@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "webmozart/assert": "^1.9.1" added to dev because of BackyardHttpTest
 - `.github\linters\.htmlhintrc` added to set `"attr-value-double-quotes": false` to ignore how [example/test_coloursave.html](example/test_coloursave.html) is done.
 - `.github\linters\.sqlfluff` added to specify a dialect.
+- \Psr\Log\NullLogger() used if no proper logger used
 
 ### `Changed` for changes in existing functionality
 - BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error

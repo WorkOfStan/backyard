@@ -6,16 +6,16 @@ use Psr\Log\LoggerInterface;
 
 class BackyardCrypt
 {
-    /** @var ?\Psr\Log\LoggerInterface */
-    protected $logger = null;
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
 
     /**
      *
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
+        $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
     }
 
     /**

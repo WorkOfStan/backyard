@@ -50,15 +50,15 @@ parameters:
 			count: 1
 			path: classes/BackyardBriefApiClient.php
 
-		-
-			message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$appLogFolder \\(string\\) does not accept mixed\\.$#"
-			count: 1
-			path: classes/BackyardBriefApiClient.php
+		#-
+		#	message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$appLogFolder \\(string\\) does not accept mixed\\.$#"
+		#	count: 1
+		#	path: classes/BackyardBriefApiClient.php
 
-		-
-			message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$logger \\(Psr\\\\Log\\\\LoggerInterface\\) does not accept Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
-			count: 1
-			path: classes/BackyardBriefApiClient.php
+		#-
+		#	message: "#^Property WorkOfStan\\\\Backyard\\\\BackyardBriefApiClient\\:\\:\\$logger \\(Psr\\\\Log\\\\LoggerInterface\\) does not accept Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
+		#	count: 1
+		#	path: classes/BackyardBriefApiClient.php
 
 		-
 			message: "#^Cannot cast mixed to float\\.$#"

@@ -3,6 +3,7 @@
 namespace WorkOfStan\Backyard;
 
 use WorkOfStan\Backyard\BackyardError;
+use Psr\Log\NullLogger;
 
 /* * ****************************************************************************
  * Database (MySQL) FUNCTIONS
@@ -15,8 +16,8 @@ use WorkOfStan\Backyard\BackyardError;
 
 class BackyardMysqli extends \mysqli
 {
-    /** @var ?BackyardError */
-    protected $logger = null;
+    /** @var BackyardError|NullLogger */
+    protected $logger;
 
     /**
      * \mysqli wrapper with logger
@@ -27,14 +28,14 @@ class BackyardMysqli extends \mysqli
      * @param string $user username
      * @param string $pass password
      * @param string $db database name
-     * @param BackyardError $BackyardError PSR-3 logger
+     * @param BackyardError $logger PSR-3 logger
      *
      * @todo add IPv6 , e.g ::1 as $host_port
      */
-    public function __construct($host_port, $user, $pass, $db, BackyardError $BackyardError)
+    public function __construct($host_port, $user, $pass, $db, BackyardError $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-        $this->logger = $BackyardError;
+        $this->logger = is_null($logger) ? new NullLogger() : $logger;
 
         $temp = explode(":", $host_port);
 
@@ -63,7 +64,7 @@ class BackyardMysqli extends \mysqli
             parent::__construct($host, $user, $pass, $db);
         }
 
-        if ($this->connect_error) {
+        if ($this->connect_error && is_a($this->logger, 'WorkOfStan\Backyard\BackyardError')) {
             $this->logger->dieGraciously(
                 '5013',
                 "Connect Error ({$this->connect_errno}) {$this->connect_error} | {$tempErrorString}"

@@ -36,17 +36,17 @@ class BackyardHttp
 {
     const LOG_LEVEL = 5;
 
-    /** @var ?\Psr\Log\LoggerInterface */
-    protected $logger = null;
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
 
     /**
      *
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-        $this->logger = $logger;
+        $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
         // @todo set $this->post etc from $_POST, $_GET and $_SERVER to make the functions below testable in isolation
     }
 
