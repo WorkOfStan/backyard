@@ -3,7 +3,7 @@
 # initialize the vendor folder, if needed
 composer install -a --prefer-dist --no-progress
 
-composer require --dev phpstan/phpstan-webmozart-assert --prefer-dist --no-progress
+composer require --dev phpstan/phpstan-webmozart-assert --prefer-dist --no-progress --with-all-dependencies
 # when "phpunit/phpunit": "<7.0"
 #composer require --dev phpstan/phpstan-phpunit --prefer-dist --no-progress
 

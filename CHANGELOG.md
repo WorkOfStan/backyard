@@ -11,10 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed` for changes in existing functionality
 - BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error
+- BackyardError wraps \Seablast\Logger\Logger implementation.
+- class BackyardTime extends \Seablast\Logger\LoggerTime
+- bump .github/workflows to [WorkOfStan/seablast-actions](https://github.com/WorkOfStan/seablast-actions)
 
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
+- `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
 
 ### `Fixed` for any bugfixes
 
