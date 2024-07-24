@@ -24,7 +24,7 @@ class BackyardBriefApiClient
     /**
      *
      * @param string $apiUrl
-     * @param ?string $appLogFolder OPTIONAL string without trailing / or if null => the applogs will not be saved at all
+     * @param ?string $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be saved at all
      * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommended
      */
     public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
