@@ -7,12 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### `Added` for new features
+
+### `Changed` for changes in existing functionality
+
+### `Deprecated` for soon-to-be removed features
+
+### `Removed` for now removed features
+
+### `Fixed` for any bugfixes
+
+### `Security` in case of vulnerabilities
+
+## [3.4.0] - 2024-07-29
+BackyardError wraps \Seablast\Logger\Logger implementation
+### Added
 - "webmozart/assert": "^1.9.1" added to dev because of BackyardHttpTest
 - `.github\linters\.htmlhintrc` added to set `"attr-value-double-quotes": false` to ignore how [example/test_coloursave.html](example/test_coloursave.html) is done.
 - `.github\linters\.sqlfluff` added to specify a dialect.
 - \Psr\Log\NullLogger() used if no proper logger used
 
-### `Changed` for changes in existing functionality
+### Changed
 - BackyardHttpTest use stricter handling of preg_replace, i.e. throws Exception on error
 - BackyardError wraps \Seablast\Logger\Logger implementation.
 - class BackyardTime extends \Seablast\Logger\LoggerTime
@@ -20,16 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - src/js/all.js and src/js/coloursave.js tempSelector === 'owner_language' to tempSelector === 'owner-language'
 - src/js/all.js #send_me_mm_button to #send-me-mm-button
 
-### `Deprecated` for soon-to-be removed features
-
-### `Removed` for now removed features
+### Removed
 - `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
 - VERSION file. As only main branch is used.
 
-### `Fixed` for any bugfixes
+### Fixed
 - .htmlhintrc The ID and class attribute values must be in lowercase and split by a dash. (id-class-value)
-
-### `Security` in case of vulnerabilities
 
 ## [3.3.2] - 2022-02-12
 ### Added
@@ -237,7 +247,8 @@ LIBrary in backyard 2.0.0
 - fix for post functionality in backyard_getData
 
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.3.2...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/WorkOfStan/backyard/compare/v3.3.2...v3.4.0
 [3.3.2]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/WorkOfStan/backyard/compare/v3.2.10...v3.3.0
