@@ -7,16 +7,9 @@ use WorkOfStan\Backyard\BackyardMysqli;
 
 class BackyardGeo
 {
-    /**
-     *
-     * @var array<mixed>
-     */
+    /** @var array<mixed> */
     protected $backyardConf = array();
-
-    /**
-     *
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     protected $logger = null;
 
     /**

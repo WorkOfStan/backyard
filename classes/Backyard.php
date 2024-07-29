@@ -4,58 +4,23 @@ namespace WorkOfStan\Backyard;
 
 class Backyard
 {
-    /**
-     *
-     * @var array<mixed> int,string,bool,array
-     */
+    /** @var array<mixed> int,string,bool,array */
     protected $BackyardConf = array();
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardArray BackyardArray object
-     */
+    /** @var \WorkOfStan\Backyard\BackyardArray BackyardArray object */
     public $BackyardArray;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardCrypt BackyardCrypt object
-     */
-    public $Crypt;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardError BackyardError object
-     */
+    /** @var \WorkOfStan\Backyard\BackyardError BackyardError object */
     public $BackyardError;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardGeo BackyardGeo object
-     */
-    public $Geo;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardHttp BackyardHttp object
-     */
-    public $Http;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardJson BackyardJson object
-     */
-    public $Json;
-
-    /**
-     *
-     * @var \WorkOfStan\Backyard\BackyardTime BackyardTime object
-     */
+    /** @var \WorkOfStan\Backyard\BackyardTime BackyardTime object */
     public $BackyardTime;
-
-    /**
-     *
-     * @var float
-     */
+    /** @var \WorkOfStan\Backyard\BackyardCrypt BackyardCrypt object */
+    public $Crypt;
+    /** @var \WorkOfStan\Backyard\BackyardGeo BackyardGeo object */
+    public $Geo;
+    /** @var \WorkOfStan\Backyard\BackyardHttp BackyardHttp object */
+    public $Http;
+    /** @var \WorkOfStan\Backyard\BackyardJson BackyardJson object */
+    public $Json;
+    /** @var float */
     public $PageTimestamp;
 
     /**

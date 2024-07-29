@@ -14,34 +14,23 @@ use Psr\Log\LoggerInterface;
  */
 class BackyardBriefApiClient
 {
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
-
-    /**
-     *
-     * @var string
-     */
+    /** @var string */
     private $apiUrl;
-
-    /**
-     *
-     * @var string or null
-     */
+    /** @var ?string */
     private $appLogFolder;
 
     /**
      *
      * @param string $apiUrl
-     * @param mixed $appLogFolder OPTIONAL string without trailing / or if null => the applogs will not be saved at all
+     * @param ?string $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be saved at all
      * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommended
      */
     public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
-        $this->logger = $logger;
+        $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
         $this->apiUrl = $apiUrl;
         $this->appLogFolder = $appLogFolder;
     }

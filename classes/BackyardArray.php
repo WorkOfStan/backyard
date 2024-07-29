@@ -9,10 +9,7 @@ use Psr\Log\LoggerInterface;
  */
 class BackyardArray
 {
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     /**

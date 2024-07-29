@@ -5,7 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
 [![Latest Stable Version](https://img.shields.io/packagist/v/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
 [![Lint Code Base](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
-[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-phpunit.yml)
+[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-dependencies.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-dependencies.yml)
 
 ## Requirements
 * [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
@@ -37,7 +37,7 @@ require_once '/path/to/your-project/vendor/autoload.php';
 If you abhor using composer, you can download the package in its entirety. The [Releases](https://github.com/WorkOfStan/backyard/releases) page lists all stable versions.
 Download any file with the name `backyard/archive/[TAG].zip` for a package including this library and its dependencies.
 
-Uncompress the zip file you download, and include the autoloader in your project:
+Uncompress the ZIP file you download, and include the autoloader in your project:
 
 ```php
 require_once '/path/to/backyard/vendor/autoload.php';
@@ -65,10 +65,7 @@ $backyard = new \WorkOfStan\Backyard\Backyard(
         'logging_level_page_speed'  => 5,       //úroveň logování, do které má být zapisována rychlost vygenerování stránky
         'die_graciously_verbose'    => true,    //show details by die_graciously() on screen (it is always in the error_log); on production it is recomended to be set to to false due security
         'log_monthly_rotation'      => true,    //true, pokud má být přípona .log.Y-m.log (výhodou je měsíční rotace); false, pokud má být jen .log (výhodou je sekvenční zápis chyb přes my_error_log a jiných PHP chyb)
-        'log_standard_output'       => false,   //true, pokud má zároveň vypisovat na obrazovku; false, pokud má vypisovat jen do logu
         'log_profiling_step'        => false,   //110812, my_error_log neprofiluje rychlost //$PROFILING_STEP = 0.008;//110812, my_error_log profiluje čas mezi dvěma měřenými body vyšší než udaná hodnota sec
-        'error_hacked'              => true,    //ERROR_HACK parameter is reflected
-        'error_hack_from_get'       => 0,       //in this field, the value of $_GET['ERROR_HACK'] shall be set below
 
         //geo relevant
         'geo_rough_distance_limit' => 1, //float //to quickly get rid off too distant POIs; 1 ~ 100km
@@ -77,7 +74,6 @@ $backyard = new \WorkOfStan\Backyard\Backyard(
     )
 );
 ```
-
 
 ## Notes
 
@@ -98,7 +94,6 @@ It just sends JSON and returns what is to be returned with few optional decorato
 * `getJsonArray` - sends JSON and returns array decoded from response JSON
 * `getArrayArray` - encode array to a JSON and returns array decoded from response JSON
 
-
 ## About previous versions
 *Their code is disabled and therefore secured.*
 
@@ -118,7 +113,6 @@ Invoking backyard 1
 ```php
 require_once __DIR__ . '/lib/backyard/deploy/functions.php';
 ```
-
 
 ### backyard 2 usage
 
@@ -149,8 +143,7 @@ $backyardConf['die_graciously_verbose'] = false;    //so that description contai
 $backyardConf['error_hacked']           = false;    //so that *ERROR_HACK* GET parameter is ignored (and 3rd party can't *debug* your application
 ```
 
-
-src/emulator.php get_data in a defined manner (@TODO - better describe)
+src/emulator.php get_data in a defined manner (@todo - better describe)
 
 src/emulate.php is an envelope for emulator.php
 
