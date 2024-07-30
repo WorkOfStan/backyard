@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Removed` for now removed features
 
 ### `Fixed` for any bugfixes
+- BackyardBriefApiClient typehinted and method parameters checked for validity
 
 ### `Security` in case of vulnerabilities
 

@@ -2,6 +2,7 @@
 
 namespace WorkOfStan\Backyard;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,14 +19,14 @@ class BackyardBriefApiClient
     protected $logger;
     /** @var string */
     private $apiUrl;
-    /** @var ?string */
+    /** @var string|null */
     private $appLogFolder;
 
     /**
      *
      * @param string $apiUrl
-     * @param ?string $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be saved at all
-     * @param \Psr\Log\LoggerInterface $logger OPTIONAL but really recommended
+     * @param string|null $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be created
+     * @param \Psr\Log\LoggerInterface|null $logger OPTIONAL but really recommended
      */
     public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
     {
@@ -52,19 +53,22 @@ class BackyardBriefApiClient
      * @param string $json
      * @param string $httpVerb POST default, or PUT/DELETE/GET
      * @return mixed <b>TRUE</b> on success or <b>FALSE</b> on failure. However, if the <b>CURLOPT_RETURNTRANSFER</b>
-     * option is set, it will return
-     * the result on success, <b>FALSE</b> on failure.
-     *
-     * TODO: use BackyardHttp/getData incl. logging instead of another code inside sendJsonLoad method
+     * option is set, it will return the result on success, <b>FALSE</b> on failure.
      */
     public function sendJsonLoad($json, $httpVerb = 'POST')
     {
         $communicationId = $this->getCommunicationId();
         $this->logCommunication($json, $httpVerb, $communicationId);
         $ch = curl_init($this->apiUrl);
+
+        if ($ch === false) {
+            $this->logger->error("Curl initialization failed.");
+            return false;
+        }
+
         curl_setopt_array($ch, array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => $json, //json_encode($postData)
+            CURLOPT_POSTFIELDS => $json,
             CURLOPT_SSL_VERIFYPEER => false,
             //accepts also private SSL certificates
             //@todo try without that option and if it fails, it may try with this option and inform about it
@@ -78,7 +82,6 @@ class BackyardBriefApiClient
             case 'DELETE':
                 curl_setopt_array($ch, array(
                     CURLOPT_HTTPHEADER => array(
-                        //'Authorization: '.$authToken,
                         'Content-Type: application/json'
                     ),
                 ));
@@ -89,9 +92,8 @@ class BackyardBriefApiClient
             case 'PUT':
                 curl_setopt_array($ch, array(
                     CURLOPT_HTTPHEADER => array(
-                        //'Authorization: '.$authToken,
                         'Content-Type: application/json',
-                        'Content-Length: ' . strlen($json)
+                        'Content-Length: ' . (string) strlen($json)
                     ),
                     CURLOPT_CUSTOMREQUEST => 'PUT',
                 ));
@@ -101,11 +103,12 @@ class BackyardBriefApiClient
                 return false;
         }
         $result = curl_exec($ch);
-        if ($result) {
-            $this->logCommunication($result, 'resp', $communicationId);
+        if ($result !== false) {
+            $this->logCommunication((string) $result, 'resp', $communicationId);
         } elseif (!is_null($this->logger)) {
             $this->logger->error("Curl failed with (" . curl_errno($ch) . ") " . curl_error($ch));
         }
+        curl_close($ch);
         return $result;
     }
 
@@ -134,14 +137,22 @@ class BackyardBriefApiClient
      *
      * @param string $json
      * @return array<mixed>
+     * @throws \Exception
      */
     public function getJsonArray($json)
     {
         $response = $this->sendJsonLoad($json);
-        $result = json_decode($response, true);
-        if (!$result && !is_null($this->logger)) {
-            $this->logger->error("json decode failed for " . substr($response, 0, 100)
+        $result = is_string($response) ? json_decode($response, true) : null;
+        if ($result === null && !is_null($this->logger)) {
+            $this->logger->error("json decode failed for "
+                . substr((string) print_r($response, true), 0, 100)
                 . " that resulted from " . substr($json, 0, 100));
+        }
+        if (is_null($result)) {
+            return array();
+        }
+        if (!is_array($result)) {
+            throw new Exception('$result must be of type array');
         }
         return $result;
     }
@@ -151,9 +162,14 @@ class BackyardBriefApiClient
      *
      * @param array<mixed> $arr
      * @return array<mixed>
+     * @throws \Exception
      */
     public function getArrayArray(array $arr)
     {
-        return $this->getJsonArray(json_encode($arr));
+        $json = json_encode($arr);
+        if ($json === false) {
+            throw new Exception('Json_encode of array failed.');
+        }
+        return $this->getJsonArray($json);
     }
 }
