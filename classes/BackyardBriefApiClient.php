@@ -24,7 +24,7 @@ class BackyardBriefApiClient
     /**
      *
      * @param string $apiUrl
-     * @param string|null $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be saved at all
+     * @param string|null $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be created
      * @param \Psr\Log\LoggerInterface|null $logger OPTIONAL but really recommended
      */
     public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
@@ -103,7 +103,7 @@ class BackyardBriefApiClient
         }
         $result = curl_exec($ch);
         if ($result !== false) {
-            $this->logCommunication($result, 'resp', $communicationId);
+            $this->logCommunication((string) $result, 'resp', $communicationId);
         } elseif (!is_null($this->logger)) {
             $this->logger->error("Curl failed with (" . curl_errno($ch) . ") " . curl_error($ch));
         }
@@ -142,7 +142,8 @@ class BackyardBriefApiClient
         $response = $this->sendJsonLoad($json);
         $result = is_string($response) ? json_decode($response, true) : null;
         if ($result === null && !is_null($this->logger)) {
-            $this->logger->error("json decode failed for " . substr((string) $response, 0, 100)
+            $this->logger->error("json decode failed for "
+                . substr((string) print_r($response, true), 0, 100)
                 . " that resulted from " . substr($json, 0, 100));
         }
         return $result !== null ? $result : array();
@@ -153,9 +154,14 @@ class BackyardBriefApiClient
      *
      * @param array<mixed> $arr
      * @return array<mixed>
+     * @throws \Exception
      */
     public function getArrayArray(array $arr)
     {
-        return $this->getJsonArray(json_encode($arr));
+        $json = json_encode($arr);
+        if ($json === false) {
+            throw new \Exception('Json_encode of array failed.');
+        }
+        return $this->getJsonArray($json);
     }
 }
