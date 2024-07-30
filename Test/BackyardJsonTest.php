@@ -23,7 +23,7 @@ class BackyardJsonTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         error_reporting(E_ALL); // incl E_NOTICE
         $backyardError = new BackyardError(array('logging_level' => 4));
@@ -36,7 +36,7 @@ class BackyardJsonTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // no action
     }
