@@ -2,6 +2,7 @@
 
 namespace WorkOfStan\Backyard;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -167,7 +168,7 @@ class BackyardBriefApiClient
     {
         $json = json_encode($arr);
         if ($json === false) {
-            throw new \Exception('Json_encode of array failed.');
+            throw new Exception('Json_encode of array failed.');
         }
         return $this->getJsonArray($json);
     }
