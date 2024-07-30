@@ -136,6 +136,7 @@ class BackyardBriefApiClient
      *
      * @param string $json
      * @return array<mixed>
+     * @throws \Exception
      */
     public function getJsonArray($json)
     {
@@ -146,7 +147,13 @@ class BackyardBriefApiClient
                 . substr((string) print_r($response, true), 0, 100)
                 . " that resulted from " . substr($json, 0, 100));
         }
-        return $result !== null ? $result : array();
+        if (is_null($result)) {
+            return array();
+        }
+        if (!is_array($result)) {
+            throw new Exception('$result must be of type array');
+        }
+        return $result;
     }
 
     /**
