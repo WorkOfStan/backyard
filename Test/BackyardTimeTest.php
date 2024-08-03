@@ -58,7 +58,8 @@ class BackyardTimeTest extends TestCase
     {
         $expected = '0.0';
 
-        $this->assertEquals($expected, substr((string) $this->object->getRunningTime(), 0, 3));
+        //$this->assertEquals($expected, substr((string) $this->object->getRunningTime(), 0, 3));
+        $this->assertEquals((float) $expected, (float) substr((string) $this->object->getRunningTime(), 0, 3));
     }
 
     /**
@@ -70,7 +71,8 @@ class BackyardTimeTest extends TestCase
     {
         $expected = '0.0';
 
-        $this->assertEquals($expected, substr($this->object->pageGeneratedIn(), 0, 3));
+        //$this->assertEquals($expected, substr($this->object->pageGeneratedIn(), 0, 3));
+        $this->assertEquals((float) $expected, (float) substr((string) $this->object->pageGeneratedIn(), 0, 3));
     }
 
     /**

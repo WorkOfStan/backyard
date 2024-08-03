@@ -396,7 +396,7 @@ class BackyardHttp
                     (string) mb_detect_encoding(
                         socket_strerror($socketLastError),
                         mb_detect_order(),
-                        true
+                        false // The mb_detect_order() returns string[], so no need to pass true as the third parameter
                     ),
                     'UTF-8',
                     socket_strerror($socketLastError)
@@ -456,7 +456,7 @@ class BackyardHttp
                 (string) mb_detect_encoding(
                     socket_strerror($socketLastError),
                     mb_detect_order(),
-                    true
+                    false // The mb_detect_order() returns string[], so no need to pass true as the third parameter
                 ),
                 'UTF-8',
                 socket_strerror($socketLastError)
