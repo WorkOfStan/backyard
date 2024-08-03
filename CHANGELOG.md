@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [3.4.2] - 2024-08-03
+### Changed
+- BackyardArray accepts null as logger => `\Psr\Log\NullLogger`
+- BackyardHttp::movePage - extended array with additional HTTP status codes
+
 ## [3.4.1] - 2024-08-03
 ### Fixed
 - BackyardBriefApiClient, BackyardGeo, BackyardJson typehinted and method parameters checked for validity
@@ -252,7 +257,9 @@ LIBrary in backyard 2.0.0
 - fix for post functionality in backyard_getData
 
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...HEAD
+[3.4.2]: https://github.com/WorkOfStan/backyard/compare/v3.4.1...v3.4.2
+[3.4.1]: https://github.com/WorkOfStan/backyard/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/WorkOfStan/backyard/compare/v3.3.2...v3.4.0
 [3.3.2]: https://github.com/WorkOfStan/backyard/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/WorkOfStan/backyard/compare/v3.3.0...v3.3.1

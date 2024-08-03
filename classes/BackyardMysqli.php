@@ -2,8 +2,8 @@
 
 namespace WorkOfStan\Backyard;
 
-use WorkOfStan\Backyard\BackyardError;
 use Psr\Log\NullLogger;
+use WorkOfStan\Backyard\BackyardError;
 
 /* * ****************************************************************************
  * Database (MySQL) FUNCTIONS
