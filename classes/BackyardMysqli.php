@@ -135,9 +135,9 @@ class BackyardMysqli extends \mysqli
         $result = false;
         $mysqlQueryResult = $this->query($sql); //$ERROR_LOG_OUTPUT = true by default
         //transforming the query result into an array
-        if ($mysqlQueryResult == false || $mysqlQueryResult->num_rows == 0) {
+        if ($mysqlQueryResult instanceof \mysqli_result && $mysqlQueryResult->num_rows == 0) {
             $this->logger->log(5, "Query returned no results", array(16));
-        } else {
+        } elseif ($mysqlQueryResult instanceof \mysqli_result) {
             $result = array();
             while ($one_row = $mysqlQueryResult->fetch_assoc()) {
                 if ($justOneRow) {
@@ -146,8 +146,6 @@ class BackyardMysqli extends \mysqli
                 }
                 $result[] = $one_row;
             }
-        }
-        if ($mysqlQueryResult != false) {
             $mysqlQueryResult->close(); // free result set
         }
         return $result; //returns two dimensional array or false
@@ -172,7 +170,7 @@ class BackyardMysqli extends \mysqli
             ? ("WHERE `{$primaryDimension}` =" . (int) $primaryDimensionValue . " ") : (""))
             . " ORDER BY `{$metricDimension}` DESC LIMIT 0 , 1;";
         $mysql_query_array = $this->queryArray($query, true);
-        if ($mysql_query_array) {
+        if ($mysql_query_array && is_scalar($mysql_query_array["$metricDimension"])) {
             $result += (int) $mysql_query_array["$metricDimension"];
         }
         return $result;

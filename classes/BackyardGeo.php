@@ -26,10 +26,10 @@ class BackyardGeo
         $this->backyardConf = array_merge(
             array(//default values
                 //to quickly get rid off too distant POIs; 1 ~ 100km
-                'geo_rough_distance_limit' => 1, //float
+                'geo_rough_distance_limit' => 1.0, //float
                 //distance considered to be overlapping with the device position
                 // 2500 m is considered exact location due to mobile phone GPS caching
-                'geo_maximum_meters_from_poi' => 2500, //float
+                'geo_maximum_meters_from_poi' => 2500.0, //float
                 //name of table with POI coordinates
                 'geo_poi_list_table_name' => 'poi_list', //string
             ),
@@ -106,10 +106,16 @@ class BackyardGeo
      */
     public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat)
     {
-        $result = abs($clientLng - $poiLng) + abs($clientLat - $poiLat);
+        // Ensure that parameters are floats
+        $clientLngFloat = (float) $clientLng;
+        $clientLatFloat = (float) $clientLat;
+        $poiLngFloat = (float) $poiLng;
+        $poiLatFloat = (float) $poiLat;
+
+        $result = abs($clientLngFloat - $poiLngFloat) + abs($clientLatFloat - $poiLatFloat);
         $this->logger->log(
             5,
-            "client({$clientLng}, {$clientLat}) poi({$poiLng}, {$poiLat}) roughDistance = {$result}"
+            "client({$clientLngFloat}, {$clientLatFloat}) poi({$poiLngFloat}, {$poiLatFloat}) roughDistance = {$result}"
         );
         return $result;
     }
@@ -148,6 +154,9 @@ class BackyardGeo
         $roughDistance = array();
 
         foreach ($listOfPOINearby as $key => $row) {
+            if (!is_scalar($row['long']) || !is_scalar($row['lat'])) {
+                throw new UnexpectedValueException('long and lat MUST be scalar to be cast to float');
+            }
             $listOfPOINearbyPreprocessed[$key] = array(
                 'poi_id' => $row['poi_id'],
                 'category' => $row['category'],
@@ -155,10 +164,10 @@ class BackyardGeo
                 'mesto' => $row['mesto'],
                 'PSC' => $row['PSC'],
                 'adresa' => $row['adresa'],
-                'lng' => $row['long'],
-                'lat' => $row['lat'],
+                'lng' => (float) $row['long'],
+                'lat' => (float) $row['lat'],
                 // abs($long - $row['long']) + abs($lat - $row['lat'])
-                'roughDistance' => $this->getRoughDistance($long, $lat, $row['long'], $row['lat'])
+                'roughDistance' => $this->getRoughDistance($long, $lat, (float) $row['long'], (float) $row['lat'])
             );
             $roughDistance[$key] = $listOfPOINearbyPreprocessed[$key]['roughDistance'];
         }
@@ -177,8 +186,8 @@ class BackyardGeo
                 $distance = $this->calculateDistanceFromLatLong(
                     $startPoint,
                     array(
-                        'latitude' => $row['lat'],
-                        'longitude' => $row['lng']
+                        'latitude' => (float) $row['lat'],
+                        'longitude' => (float) $row['lng']
                     ),
                     $uom
                 );
@@ -196,6 +205,9 @@ class BackyardGeo
             'Count of rows listOfPOINearbyProcessed: ' . count($listOfPOINearbyProcessed),
             array(11)
         );
+        if (!is_scalar($this->backyardConf['geo_rough_distance_limit'])) {
+            throw new UnexpectedValueException('geo_rough_distance_limit MUST be scalar to be cast to int');
+        }
         return array(
             'distance_m' => array_key_exists('distance', $listOfPOINearbyProcessed[0]) ?
             (int) floor($listOfPOINearbyProcessed[0]['distance']) :
@@ -219,25 +231,33 @@ class BackyardGeo
      * @param BackyardMysqli $poiConnection
      * @return array<array<mixed>>|false
      *
-     * bacykard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database
+     * backyard_getListOfPOINearby ($poiCategory, $lat , $long) might be created to preselect from the database
      * only those that do not overpass the perpendicular backyardGeo['rough_distance_limit']
      */
     public function getListOfPOI($poiCategory, BackyardMysqli $poiConnection)
     {
+        if (!is_scalar($this->backyardConf['geo_poi_list_table_name'])) {
+            throw new UnexpectedValueException('geo_poi_list_table_name MUST be scalar to be cast to string');
+        }
         $poiCategorySecured = is_int($poiCategory) ? $poiCategory : preg_replace("/[^0-9,]/", '', $poiCategory);
-        $query = "SELECT * FROM `{$this->backyardConf['geo_poi_list_table_name']}`"
-            . " WHERE `category` IN ( " . (string) $poiCategorySecured . " )";
+        $query = "SELECT * FROM `" . (string) $this->backyardConf['geo_poi_list_table_name'] ."` WHERE `category` IN ("
+            . $poiCategorySecured . ")";
         $listOfPOINearby = $poiConnection->queryArray($query);
-        if (!$listOfPOINearby) {
+        if (!$listOfPOINearby || !is_array($listOfPOINearby)) {
             $this->logger->log(2, 'No result for query ' . $query, array(11));
-        } else {
-            $this->logger->log(4, 'Count of rows listOfPOINearby: ' . count($listOfPOINearby), array(11));
+            return false;
+        }
+        $this->logger->log(4, 'Count of rows listOfPOINearby: ' . count($listOfPOINearby), array(11));
+        foreach ($listOfPOINearby as $element) {
+            if (!is_array($element)) {
+                throw new UnexpectedValueException('listOfPOINearby MUST be array of arrays');
+            }
         }
         return $listOfPOINearby;
     }
 
     /**
-     * @desc Calculates distnace between $point1 and $point2 denominated in $uom (unit of measurement)
+     * @desc Calculates distance between $point1 and $point2 denominated in $uom (unit of measurement)
      * http://forums.phpfreaks.com/topic/150365-counting-distance-between-2-gps-points/
      * @param array<float> $point1 ['latitude','longitude']
      * @param array<float> $point2 ['latitude','longitude']
@@ -247,6 +267,12 @@ class BackyardGeo
      */
     public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km')
     {
+        // Ensure the points are arrays of floats
+        $point1['latitude'] = (float) $point1['latitude'];
+        $point1['longitude'] = (float) $point1['longitude'];
+        $point2['latitude'] = (float) $point2['latitude'];
+        $point2['longitude'] = (float) $point2['longitude'];
+
         //  Uses Haversine formula to calculate the great circle distance
         //  between two points identified by longitude and latitude
         switch (strtolower($uom)) {
@@ -270,10 +296,10 @@ class BackyardGeo
             case 'nm':
                 $earthMeanRadius = 3440.069; // miles
                 break;
+            default:
+                throw new UnexpectedValueException('Unknown unit of measurement');
         }
-        if (!isset($earthMeanRadius)) {
-            throw new UnexpectedValueException('Unknown unit of measurement');
-        }
+
         $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
         $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
         $a = sin($deltaLatitude / 2) * sin($deltaLatitude / 2) +
