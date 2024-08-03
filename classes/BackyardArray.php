@@ -16,9 +16,9 @@ class BackyardArray
      *
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
+        $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
     }
     /**
      * Note http://php.net/manual/en/function.array-key-exists.php#107786

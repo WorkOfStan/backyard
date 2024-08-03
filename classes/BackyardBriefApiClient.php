@@ -2,9 +2,9 @@
 
 namespace WorkOfStan\Backyard;
 
-use UnexpectedValueException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use UnexpectedValueException;
 
 /**
  * Very simple JSON RESTful API client
