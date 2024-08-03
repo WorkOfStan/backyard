@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Removed` for now removed features
 
 ### `Fixed` for any bugfixes
-- BackyardBriefApiClient typehinted and method parameters checked for validity
 
 ### `Security` in case of vulnerabilities
+
+## [3.4.1] - 2024-08-03
+### Fixed
+- BackyardBriefApiClient, BackyardGeo, BackyardJson typehinted and method parameters checked for validity
+- BackyardMysqli::queryArray conditions changed to test for `instanceof \mysqli_result`
 
 ## [3.4.0] - 2024-07-29
 BackyardError wraps \Seablast\Logger\Logger implementation

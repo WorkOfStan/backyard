@@ -82,6 +82,9 @@ class BackyardJson
      */
     public function jsonCleanDecode($json2decode, $assoc = false, $depth = 512, $options = 0)
     {
+        // Ensure $depth is a positive integer
+        $depth = max(1, (int) $depth);
+
         // search and remove comments like /* */ and //
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '', $json2decode);
         if (is_null($json)) {
@@ -90,17 +93,20 @@ class BackyardJson
         }
 
         if (version_compare((string) phpversion(), '5.4.0', '>=')) {
-            $json = json_decode($json, $assoc, $depth, $options);
+            $decodedJson = json_decode($json, $assoc, $depth, $options);
         } elseif (version_compare((string) phpversion(), '5.3.0', '>=')) {
-            $json = json_decode($json, $assoc, $depth);
+            $decodedJson = json_decode($json, $assoc, $depth);
         } else {
-            $json = json_decode($json, $assoc);
+            $decodedJson = json_decode($json, $assoc);
         }
-        if (is_null($json)) {
-            $this->logger->log(5, "Invalid JSON: " . $json2decode);
-            return false; // invalid JSON
+
+        // Ensure the returned value is an array or false
+        if (is_array($decodedJson) || $decodedJson === false) {
+            return $decodedJson;
         }
-        return $json;
+
+        $this->logger->log(5, "Invalid JSON: " . $json2decode);
+        return false; // invalid JSON
     }
 
     /**

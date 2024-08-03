@@ -2,8 +2,9 @@
 
 namespace WorkOfStan\Backyard;
 
-use Exception;
+use UnexpectedValueException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Very simple JSON RESTful API client
@@ -152,7 +153,7 @@ class BackyardBriefApiClient
             return array();
         }
         if (!is_array($result)) {
-            throw new Exception('$result must be of type array');
+            throw new UnexpectedValueException('$result must be of type array');
         }
         return $result;
     }
@@ -168,7 +169,7 @@ class BackyardBriefApiClient
     {
         $json = json_encode($arr);
         if ($json === false) {
-            throw new Exception('Json_encode of array failed.');
+            throw new RuntimeException('Json_encode of array failed.');
         }
         return $this->getJsonArray($json);
     }
