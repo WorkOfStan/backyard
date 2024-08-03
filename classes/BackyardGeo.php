@@ -2,7 +2,9 @@
 
 namespace WorkOfStan\Backyard;
 
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use UnexpectedValueException;
 use WorkOfStan\Backyard\BackyardMysqli;
 
 class BackyardGeo
@@ -134,7 +136,9 @@ class BackyardGeo
             'latitude' => $lat,
             'longitude' => $long
         );
-
+        if (!is_string($poiCategory) && !is_int($poiCategory)) {
+            throw new InvalidArgumentException('poiCategory MUST be integer|string with comma separated integers');
+        }
         $listOfPOINearby = $this->getListOfPOI($poiCategory, $poiConnection);
         if (!$listOfPOINearby) {
             return false;
@@ -239,7 +243,7 @@ class BackyardGeo
      * @param array<float> $point2 ['latitude','longitude']
      * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
      * @return float distance
-     * @throws \Exception If unknown unit of measurement is used
+     * @throws \UnexpectedValueException If unknown unit of measurement is used
      */
     public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km')
     {
@@ -268,7 +272,7 @@ class BackyardGeo
                 break;
         }
         if (!isset($earthMeanRadius)) {
-            throw new \Exception('Unknown unit of measurement');
+            throw new UnexpectedValueException('Unknown unit of measurement');
         }
         $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
         $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
