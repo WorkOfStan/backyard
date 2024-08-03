@@ -563,15 +563,15 @@ function gi(inputname, newvalue) {//getInputValueByName
  * @returns {String|window.dump.dumped_text}
  */
 function dump(arr, level) {
-    var dumped_text = "";
+    var dumped_text = '';
     if (!level) {
         level = 0;
     }
 
     //The padding given at the beginning of the line.
-    var level_padding = "";
+    var level_padding = '';
     for (var j = 0; j < level + 1; j++)
-        level_padding += "    ";
+        level_padding += '    ';
 
     if (typeof (arr) === 'object') { //Array/Hashes/Objects
         for (var item in arr) {
@@ -585,7 +585,7 @@ function dump(arr, level) {
             }
         }
     } else { //Stings/Chars/Numbers etc.
-        dumped_text = "===>" + arr + "<===(" + typeof (arr) + ")";
+        dumped_text = '===>' + arr + '<===(' + typeof (arr) + ')';
     }
     return dumped_text;
 }
@@ -605,7 +605,7 @@ function my_error_log(message, level) {
         url: 'index.php',
         type: 'POST',
         data: {my_error_log_message: nameOfThisApp + ' ' + message, my_error_log_level: level},
-        dataType: "json"
+        dataType: 'json'
     }); //@TODO 2 - přidat info o error auth.
     return true;
 }

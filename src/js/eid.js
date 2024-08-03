@@ -1,8 +1,8 @@
+'use strict';
 //backyard 1
 /*!
  * inform about eid v1 (130829)
  */
-'use strict';
 
 //needs projectId
 function informAboutEid(eid) {
