@@ -392,7 +392,7 @@ class BackyardHttp
             // http://stackoverflow.com/questions/7979567/
             // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
             $encodings = mb_detect_order();
-            if(!is_array($encodings)) {
+            if (!is_array($encodings)) {
                 throw new \UnexpectedValueException('mb_detect_order should return array');
             }
             $socketLastErrorString = trim(
