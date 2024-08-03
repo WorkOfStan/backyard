@@ -239,9 +239,9 @@ class BackyardGeo
         if (!is_scalar($this->backyardConf['geo_poi_list_table_name'])) {
             throw new UnexpectedValueException('geo_poi_list_table_name MUST be scalar to be cast to string');
         }
-        $poiCategorySecured = is_int($poiCategory) ? $poiCategory : preg_replace("/[^0-9,]/", '', $poiCategory);
-        $query = "SELECT * FROM `" . (string) $this->backyardConf['geo_poi_list_table_name'] ."` WHERE `category` IN ("
-            . $poiCategorySecured . ")";
+        $query = "SELECT * FROM `" . (string) $this->backyardConf['geo_poi_list_table_name'] . "` WHERE `category` IN ("
+            // POI category secured
+            . (is_int($poiCategory) ? $poiCategory : preg_replace("/[^0-9,]/", '', $poiCategory)) . ")";
         $listOfPOINearby = $poiConnection->queryArray($query);
         if (!$listOfPOINearby || !is_array($listOfPOINearby)) {
             $this->logger->log(2, 'No result for query ' . $query, array(11));

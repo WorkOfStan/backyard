@@ -1,3 +1,5 @@
+'use strict';
+/* global $ */
 //backyard 1
 /*!
  * js for stakan
@@ -6,7 +8,6 @@
  * version 3 (2013-05-26), fix proti na iPhone někdy zdvojovalo přidanou description
  * v.4 (2013-05-28), ajaxsave i pro select, zakomentovány console.log, aby fungovalo na Lumia 800
  */
-'use strict';
 //TBD: Use single quote instead of double quotes.
 //specific
 
@@ -24,14 +25,14 @@ $(document).ready(function() {
      * pro display n.15
      * $(this).find(" a nikoli $(".update-form ... umožňuje aby na jedné stránce (v jiném div) bylo víc formulářů
      */
-    $(".update-form").submit(function() {
+    $('.update-form').submit(function() {
         var isFormValid = true;
-        $(this).find(".required input:text").each(function() { // Note the :text
+        $(this).find('.required input:text').each(function() { // Note the :text
             if ($.trim($(this).val()).length === 0) {
-                $(this).parents('.required').addClass("highlight");
+                $(this).parents('.required').addClass('highlight');
                 isFormValid = false;
             } else {
-                $(this).parents('.required').removeClass("highlight");
+                $(this).parents('.required').removeClass('highlight');
             }
         });
         if (!isFormValid) {
@@ -48,7 +49,7 @@ $(document).ready(function() {
         $(this).find('.required input:text').each(function() { // Note the :text
             if ($.trim($(this).val()).length === 0) {
                 //$(this).parent().addClass('highlight');
-                $(this).parents('.required').addClass("highlight");
+                $(this).parents('.required').addClass('highlight');
                 isFormValid = false;
             } else {
                 //$(this).parent().removeClass('highlight');
@@ -167,7 +168,7 @@ $(document).ready(function() {
     //jako poslední v document.ready:
     $('#tweets').tweets({
         tweets: 2,
-        username: "s_rejthar"
+        username: 's_rejthar'
     });
 });//$(document).ready(function() {
 
@@ -177,7 +178,7 @@ $(document).on(
         {
             //alert($(this).attr('name'));//debug
             $(this).css("color", "red");
-            if ($(this).val() !== "") {
+            if ($(this).val() !== '') {
                 $(this).attr("placeholder", $(this).val());
             }
         });

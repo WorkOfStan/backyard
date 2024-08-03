@@ -1,3 +1,4 @@
+'use strict';
 //backyard 1
 var geocoder;
 
@@ -120,4 +121,3 @@ function dump(arr, level) {
     }
     return dumped_text;
 }
-
