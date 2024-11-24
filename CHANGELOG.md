@@ -146,7 +146,7 @@ Lint all code
 1. Lint all code
 
 - PHP Lint and github/super-lint
-- PHP CS fixer: white-spaces, blank lines and new lines, limit line length to 120 characters
+- PHP CS fixer: white-spaces, empty lines and new lines, limit line length to 120 characters
   - BackyardError: phpcs:disable Generic.Files.LineLength
   - exclude old src/ code
 - PHPSTAN
