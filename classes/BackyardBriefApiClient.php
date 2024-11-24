@@ -24,7 +24,6 @@ class BackyardBriefApiClient
     protected $logger;
 
     /**
-     *
      * @param string $apiUrl
      * @param string|null $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be created
      * @param \Psr\Log\LoggerInterface|null $logger OPTIONAL but really recommended
@@ -49,7 +48,7 @@ class BackyardBriefApiClient
     }
 
     /**
-     * Send a JSON to the API and returns whatever is to return
+     * Send a JSON to the API and returns whatever is to return.
      *
      * @param string $json
      * @param string $httpVerb POST default, or PUT/DELETE/GET
@@ -134,7 +133,7 @@ class BackyardBriefApiClient
     }
 
     /**
-     * Sends JSON and return array decoded from the received JSON response
+     * Sends JSON and return array decoded from the received JSON response.
      *
      * @param string $json
      * @return array<mixed>
@@ -151,15 +150,14 @@ class BackyardBriefApiClient
         }
         if (is_null($result)) {
             return array();
-        }
-        if (!is_array($result)) {
+        } elseif (!is_array($result)) {
             throw new UnexpectedValueException('$result must be of type array');
         }
         return $result;
     }
 
     /**
-     * Translates array to JSON, send it to API and return array decoded from the received JSON response
+     * Translates array to JSON, send it to API and return array decoded from the received JSON response.
      *
      * @param array<mixed> $arr
      * @return array<mixed>
