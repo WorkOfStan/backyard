@@ -92,7 +92,12 @@ class BackyardMysqli extends \mysqli
      *   <p>Returns <b><code>FALSE</code></b> on failure. For successful <i>SELECT, SHOW, DESCRIBE</i> or <i>EXPLAIN</i>
      *   queries <b>mysqli_query()</b> will return a mysqli_result object.
      *   For other successful queries <b>mysqli_query()</b> will return <b><code>TRUE</code></b>.</p>
+     *
+     * Note: Return type mixed of method WorkOfStan\Backyard\BackyardMysqli::query() is not covariant with
+     * tentative return type bool|mysqli_result of method mysqli::query().
+     * Make it covariant, or use the #[\ReturnTypeWillChange] attribute to temporarily suppress the error.
      */
+    #[\ReturnTypeWillChange]
     public function query($sql, $errorLogOutput = 1)
     {
         $ERROR_LOG_OUTPUT = (bool) $errorLogOutput;

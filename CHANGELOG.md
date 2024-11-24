@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed` for changes in existing functionality
 
+- prettier-fix
+
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
@@ -45,7 +47,7 @@ BackyardError wraps \Seablast\Logger\Logger implementation
 - src/js/all.js #send_me_mm_button to #send-me-mm-button
 
 ### Removed
-- `global $ERROR_HACK` is ignored by BackyardError. And so is $_GET['ERROR_HACK'].
+- `global $ERROR_HACK` is ignored by BackyardError. And so is `$_GET['ERROR_HACK']`.
 - VERSION file. As only main branch is used.
 
 ### Fixed
@@ -250,7 +252,7 @@ $this->Backyard = new Backyard($backyardConf); //$backyardConf is array with del
 LIBrary in backyard 2.0.0
 - Most backyard functions are named as backyard_camelCase
 - Usage is require_once DIR . '/lib/backyard/src/backyard_system.php';
-- All src/backyard_*.php files are almost PSR-1 compliant
+- All `src/backyard_*.php` files are almost PSR-1 compliant
 - May be used in composer
 
 ## [1.0] - 2014-09-21
