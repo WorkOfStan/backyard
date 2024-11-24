@@ -95,7 +95,7 @@ class BackyardError extends Logger implements LoggerInterface
      *  1001 Establish correct error_number
      *
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
         global $RUNNING_TIME;
         //try {
