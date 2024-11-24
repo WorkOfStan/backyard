@@ -57,8 +57,7 @@ function codeLatLng(lat, lng) {
         //city data
         //alert(city.short_name + " " + city.long_name);
         var now = new Date();
-        myDate =
-          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        myDate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
         var weekday = new Array(7);
         weekday[0] = "Neděle"; //"Sunday";
         weekday[1] = "Pondělí"; //"Monday";
@@ -70,8 +69,7 @@ function codeLatLng(lat, lng) {
 
         //var x = document.getElementById("demo");
         //x.innerHTML=weekday[d.getDay()]
-        document.getElementById("form_project_name").value =
-          weekday[now.getDay()] + " " + city.short_name; //myDate;
+        document.getElementById("form_project_name").value = weekday[now.getDay()] + " " + city.short_name; //myDate;
       } else {
         //alert("No results found");//@TODO - do logu
       }
@@ -91,17 +89,15 @@ function ge(id) {
 //http://binnyva.blogspot.com/2005/10/dump-function-javascript-equivalent-of.html
 /**
  * Function : dump()
- * Arguments: The data - array,hash(associative array),object
- *    The level - OPTIONAL
- * Returns  : The textual representation of the array.
+ *
  * This function was inspired by the print_r function of PHP.
  * This will accept some data as the argument and return a
  * text that will be a more readable version of the
  * array/hash/object that is given.
  *
- * @param {type} arr
- * @param {type} level
- * @returns {String|window.dump.dumped_text}
+ * @param {Object|Array} arr - The data: array, hash (associative array), or object.
+ * @param {number} [level=0] - The nesting level (optional, defaults to 0).
+ * @returns {string|window.dump.dumped_text} The textual representation of the array/hash/object.
  */
 function dump(arr, level) {
   var dumped_text = "";
@@ -125,7 +121,7 @@ function dump(arr, level) {
       }
     }
   } else {
-    //Stings/Chars/Numbers etc.
+    //Strings/Chars/Numbers etc.
     dumped_text = "===>" + arr + "<===(" + typeof arr + ")";
   }
   return dumped_text;

@@ -21,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [3.4.3] - 2024-11-25
+
+### Changed
+
+- prettier-fix
+- Note: to keep BackyardError::log() backward compatibility, let's limit "seablast/logger": "^1.0"
+
 ## [3.4.2] - 2024-08-03
 
 ### Changed
@@ -318,7 +325,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.3...HEAD
+[3.4.3]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/WorkOfStan/backyard/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/WorkOfStan/backyard/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/WorkOfStan/backyard/compare/v3.3.2...v3.4.0
