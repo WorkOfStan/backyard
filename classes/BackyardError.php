@@ -70,7 +70,7 @@ class BackyardError extends Logger implements LoggerInterface
      * @param array<int> $context OPTIONAL To enable error log filtering 'error_number' field expected
      *  or the first element element expected containing number of error category
      *
-     * @return bool
+     * @return void
      *
      * <b>ERROR NUMBER LIST</b>
      *  0 Unspecified<br/>
@@ -98,13 +98,13 @@ class BackyardError extends Logger implements LoggerInterface
     public function log($level, $message, array $context = array())
     {
         global $RUNNING_TIME;
-        try {
-            parent::log($level, $message, $context);
-            $RUNNING_TIME = $this->getLastRunningTime();
-            return true;
-        } catch (ErrorLogFailureException $ex) { // as Logger::log() returns void
-            return false;
-        }
+        //try {
+        parent::log($level, $message, $context);
+        $RUNNING_TIME = $this->getLastRunningTime();
+        //    return true;
+        //} catch (ErrorLogFailureException $ex) { // as Logger::log() returns void
+        //    return false;
+        //}
     }
     /* Alternative way:
       Logging levels

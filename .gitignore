@@ -12,3 +12,4 @@
 
 # Temporary files
 /.php_cs.cache
+/.phpunit.result.cache

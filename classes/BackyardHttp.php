@@ -391,13 +391,13 @@ class BackyardHttp
             $socketLastError = socket_last_error(); // resource is not available
             // http://stackoverflow.com/questions/7979567/
             // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
+            $encodings = mb_detect_order();
+            if (!is_array($encodings)) {
+                throw new \UnexpectedValueException('mb_detect_order should return array');
+            }
             $socketLastErrorString = trim(
                 (string) iconv(
-                    (string) mb_detect_encoding(
-                        socket_strerror($socketLastError),
-                        mb_detect_order(),
-                        true
-                    ),
+                    (string) mb_detect_encoding(socket_strerror($socketLastError), $encodings, true),
                     'UTF-8',
                     socket_strerror($socketLastError)
                 )
@@ -451,13 +451,13 @@ class BackyardHttp
         $socketLastError = socket_last_error($socket);
         // http://stackoverflow.com/questions/7979567/
         // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
+        $encodings = mb_detect_order();
+        if (!is_array($encodings)) {
+            throw new \UnexpectedValueException('mb_detect_order should return array');
+        }
         $socketLastErrorString = trim(
             (string) iconv(
-                (string) mb_detect_encoding(
-                    socket_strerror($socketLastError),
-                    mb_detect_order(),
-                    true
-                ),
+                (string) mb_detect_encoding(socket_strerror($socketLastError), $encodings, true),
                 'UTF-8',
                 socket_strerror($socketLastError)
             )

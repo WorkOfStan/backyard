@@ -1,8 +1,7 @@
-Initial SQL files
-===================
+# Initial SQL files
+
 (Not to be exposed on web.)
 
+## poi.sql
 
-poi.sql
--------
 Structure of tables expected by backyard_geo.php
