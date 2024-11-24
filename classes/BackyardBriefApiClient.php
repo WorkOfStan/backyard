@@ -16,12 +16,12 @@ use UnexpectedValueException;
  */
 class BackyardBriefApiClient
 {
-    /** @var \Psr\Log\LoggerInterface */
-    protected $logger;
     /** @var string */
     private $apiUrl;
     /** @var string|null */
     private $appLogFolder;
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
 
     /**
      *
