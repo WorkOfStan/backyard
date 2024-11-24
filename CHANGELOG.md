@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - prettier-fix
 - Note: to keep BackyardError::log() backward compatibility, let's limit "seablast/logger": "^1.0"
+- PHPStan/2.x is showing different errors, so let's limit the support in 3.x only for PHP `>=5.3, <7.4`
 
 ## [3.4.2] - 2024-08-03
 

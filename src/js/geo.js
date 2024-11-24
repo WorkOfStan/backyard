@@ -57,7 +57,8 @@ function codeLatLng(lat, lng) {
         //city data
         //alert(city.short_name + " " + city.long_name);
         var now = new Date();
-        myDate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        myDate =
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
         var weekday = new Array(7);
         weekday[0] = "Neděle"; //"Sunday";
         weekday[1] = "Pondělí"; //"Monday";
@@ -69,7 +70,8 @@ function codeLatLng(lat, lng) {
 
         //var x = document.getElementById("demo");
         //x.innerHTML=weekday[d.getDay()]
-        document.getElementById("form_project_name").value = weekday[now.getDay()] + " " + city.short_name; //myDate;
+        document.getElementById("form_project_name").value =
+          weekday[now.getDay()] + " " + city.short_name; //myDate;
       } else {
         //alert("No results found");//@TODO - do logu
       }
