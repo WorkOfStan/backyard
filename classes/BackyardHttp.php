@@ -128,7 +128,7 @@ class BackyardHttp
             510 => "HTTP/1.1 510 Not Extended",
             511 => "HTTP/1.1 511 Network Authentication Required"
         );
-        if(!is_array($http) || !is_string($http[$num])) {
+        if (!is_array($http) || !is_string($http[$num])) {
             throw new \InvalidArgumentException('Header response MUST be a string.');
         }
         header($http[$num]);
@@ -159,7 +159,7 @@ class BackyardHttp
             "Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true),
             array(16)
         );
-        if(!is_string($result) && ($result !== false)) {
+        if (!is_string($result) && ($result !== false)) {
             throw new \RuntimeException('retrieveFromPostThenGet() is confused');
         }
         return $result;
@@ -174,9 +174,9 @@ class BackyardHttp
     public function getCurPageURL($includeTheQueryPart = true)
     {
         $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
-        if(
+        if (
             !is_string($_SERVER["SERVER_NAME"]) || !is_string($_SERVER["REQUEST_URI"])
-            || !is_string($_SERVER["SERVER_PORT"])|| !is_string($_SERVER["SCRIPT_NAME"])
+            || !is_string($_SERVER["SERVER_PORT"]) || !is_string($_SERVER["SCRIPT_NAME"])
         ) {
             throw new \RuntimeException('SERVER_NAME is expected to be a string.');
         }
@@ -215,7 +215,7 @@ class BackyardHttp
         array $postArray = array(),
         $customRequest = null
     ) {
-        if(empty($url)) {
+        if (empty($url)) {
             throw new \RuntimeException('URL MUST be non-empty-string');
         }
         $this->logger->log(
