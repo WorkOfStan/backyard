@@ -11,9 +11,57 @@ parameters:
       -
         message: '#Call to function is_null\(\) with Psr\\Log\\LoggerInterface will always evaluate to false.#'
         path: classes/BackyardBriefApiClient.php
+      #-
+      #  message: '#Else branch is unreachable because ternary operator condition is always true.#'
+      #  path: classes/BackyardGeo.php
       -
-        message: '#Else branch is unreachable because ternary operator condition is always true.#'
-        path: classes/BackyardGeo.php
-      -
-        message: '#Offset 1 on non-empty-array<int, string> in isset\(\) always exists and is not nullable.#'
+        message: '#Offset 1 on non-empty-array<int<0, max>, string> in isset\(\) always exists and is not nullable.#'
         path: classes/BackyardHttp.php
+      -
+      	message: '#^Method WorkOfStan\\Backyard\\Test\\BackyardHttpTest\:\:pregReplaceString\(\) never assigns null to &\$count so it can be removed from the by\-ref type\.$#'
+      	identifier: parameterByRef.unusedType
+      	count: 1
+      	path: Test/BackyardHttpTest.php
+
+      -
+      	message: '#^Call to function is_float\(\) with float will always evaluate to true\.$#'
+      	identifier: function.alreadyNarrowedType
+      	count: 1
+      	path: Test/BackyardTimeTest.php
+
+      -
+      	message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+      	identifier: method.alreadyNarrowedType
+      	count: 1
+      	path: Test/BackyardTimeTest.php
+
+      -
+      	message: '#^Binary operation "\." between mixed and '' '' results in an error\.$#'
+      	identifier: binaryOp.invalid
+      	count: 1
+      	path: classes/BackyardGeo.php
+
+      -
+      	message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+      	identifier: binaryOp.invalid
+      	count: 1
+      	path: classes/BackyardGeo.php
+
+      -
+      	message: '#^Call to function array_key_exists\(\) with ''distance'' and array\{poi_id\: mixed, category\: mixed, mesto\: mixed, PSC\: mixed, adresa\: mixed, lng\: float, lat\: float, roughDistance\: float, \.\.\.\} will always evaluate to true\.$#'
+      	identifier: function.alreadyNarrowedType
+      	count: 1
+      	path: classes/BackyardGeo.php
+
+      -
+      	message: '#^Call to function is_array\(\) with non\-empty\-array\<mixed\> will always evaluate to true\.$#'
+      	identifier: function.alreadyNarrowedType
+      	count: 1
+      	path: classes/BackyardGeo.php
+
+      -
+      	message: '#^Method WorkOfStan\\Backyard\\BackyardGeo\:\:getListOfPOI\(\) should return array\<array\<mixed\>\>\|false but returns non\-empty\-array\<mixed, mixed\>\.$#'
+      	identifier: return.type
+      	count: 1
+      	path: classes/BackyardGeo.php
+

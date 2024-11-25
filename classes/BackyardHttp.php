@@ -23,9 +23,10 @@ if (!function_exists('apache_request_headers')) {
         foreach ($_SERVER as $key => $value) {
             if (substr($key, 0, 5) == "HTTP_") {
                 $key = str_replace(" ", "-", ucwords(strtolower(str_replace("_", " ", substr($key, 5)))));
+            }
+            if (is_string($value) || is_int($value)) {
                 $out[$key] = $value;
-            } else {
-                $out[$key] = $value;
+                // values of other types are ignored
             }
         }
         return $out;
@@ -127,6 +128,9 @@ class BackyardHttp
             510 => "HTTP/1.1 510 Not Extended",
             511 => "HTTP/1.1 511 Network Authentication Required"
         );
+        if (!is_array($http) || !is_string($http[$num])) {
+            throw new \InvalidArgumentException('Header response MUST be a string.');
+        }
         header($http[$num]);
         header("Location: {$url}");
         $this->logger->log(self::LOG_LEVEL, "Redirect to {$url} with {$num} status");
@@ -155,6 +159,9 @@ class BackyardHttp
             "Retrieved parameter {$nameOfTheParameter}: " . print_r($result, true),
             array(16)
         );
+        if (!is_string($result) && ($result !== false)) {
+            throw new \RuntimeException('retrieveFromPostThenGet() is confused');
+        }
         return $result;
     }
 
@@ -167,6 +174,12 @@ class BackyardHttp
     public function getCurPageURL($includeTheQueryPart = true)
     {
         $isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+        if (
+            !is_string($_SERVER["SERVER_NAME"]) || !is_string($_SERVER["REQUEST_URI"])
+            || !is_string($_SERVER["SERVER_PORT"]) || !is_string($_SERVER["SCRIPT_NAME"])
+        ) {
+            throw new \RuntimeException('SERVER_NAME is expected to be a string.');
+        }
         return ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
             . ((isset($_SERVER["SERVER_PORT"]) && //
             ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443"))) //
@@ -202,6 +215,9 @@ class BackyardHttp
         array $postArray = array(),
         $customRequest = null
     ) {
+        if (empty($url)) {
+            throw new \RuntimeException('URL MUST be non-empty-string');
+        }
         $this->logger->log(
             5,
             "backyard getData({$url},{$useragent},{$timeout},{$customHeaders},"
@@ -210,9 +226,11 @@ class BackyardHttp
         );
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        if (!empty($useragent)) {
+            curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        }
         if (
-            !is_null($customRequest) && is_string($customRequest) &&
+            !is_null($customRequest) && //is_string($customRequest) &&
             in_array(
                 $customRequest,
                 array('GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH')
@@ -221,10 +239,10 @@ class BackyardHttp
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
         }
         if ($customHeaders) {
-            if (!is_string($customHeaders)) {
-                $this->logger->log(2, 'customHeaders string expected, got ' . gettype($customHeaders));
-                throw new \Exception('customHeaders string expected, got ' . gettype($customHeaders));
-            }
+            //if (!is_string($customHeaders)) {
+            //    $this->logger->log(2, 'customHeaders string expected, got ' . gettype($customHeaders));
+            //    throw new \Exception('customHeaders string expected, got ' . gettype($customHeaders));
+            //}
             //$customHeaders must be delimited by pipe without trailing spaces (comma is bad for accept header)
             $customArray = explode('|', $customHeaders);
             $tempOptSer = curl_setopt($ch, CURLOPT_HTTPHEADER, $customArray);
@@ -236,7 +254,7 @@ class BackyardHttp
         $data = array();
         if ($postArray) {
             $data['POST'] = http_build_query($postArray);
-            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data['POST']);
         }
 
@@ -244,13 +262,13 @@ class BackyardHttp
           curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
           curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
          */
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         // writes connection info to STDERR, only for debug//curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         //@todo try without that option and if it fails, it may try with this option and inform about it
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // accepts also private SSL certificates
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 0 to not check the names: accepts also private SSL certificates
 
         $response = curl_exec($ch);
         //@TODO - if response is 301 or 302, then dump header into output and make it clickable
@@ -276,7 +294,7 @@ class BackyardHttp
         //redirects may have empty body
         if (
             !$response ||
-            ((!array_key_exists('message_body', $data) || !$data['message_body']) && //
+            ((!array_key_exists('message_body', $data) || !$data['message_body']) && // @phpstan-ignore-line
             !in_array($data['HTTP_CODE'], array(301, 302)))
         ) {
             $this->logger->log(2, "Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}");

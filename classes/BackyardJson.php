@@ -33,10 +33,10 @@ class BackyardJson
      * @param int $logLevel - optional - default is not to be verbose
      * @return string
      */
-    public function minifyJSON($jsonInput, $logLevel = 5)
+    public function minifyJSON(string $jsonInput, int $logLevel = 5)
     {
         $jsonOutput = json_encode(json_decode($jsonInput)); // optimalizace pro výstup
-        if ($jsonOutput == 'null' || $jsonOutput === false || !is_string($jsonOutput)) {
+        if ($jsonOutput == 'null' || $jsonOutput === false) {
             $this->logger->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
             return '{"status": "500", "error": "Internal error"}'; //error output
         }

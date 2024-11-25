@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed` for changes in existing functionality
 
-- prettier-fix
-
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
@@ -20,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed` for any bugfixes
 
 ### `Security` in case of vulnerabilities
+
+## [4.0.0] - 2024-11-25
+
+PHP `>=7.4, <8.4`
 
 ## [3.4.3] - 2024-11-25
 
@@ -326,7 +328,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v3.4.3...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/WorkOfStan/backyard/compare/v3.4.3...v4.0.0
 [3.4.3]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/WorkOfStan/backyard/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/WorkOfStan/backyard/compare/v3.4.0...v3.4.1

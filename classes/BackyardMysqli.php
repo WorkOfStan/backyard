@@ -98,13 +98,13 @@ class BackyardMysqli extends \mysqli
      * Make it covariant, or use the #[\ReturnTypeWillChange] attribute to temporarily suppress the error.
      */
     #[\ReturnTypeWillChange]
-    public function query($sql, $errorLogOutput = 1)
+    public function query($sql, int $errorLogOutput = 1)
     {
         $ERROR_LOG_OUTPUT = (bool) $errorLogOutput;
         if ($ERROR_LOG_OUTPUT) {
             $this->logger->log(5, "Start of query {$sql}", array(11));
         }
-        if (empty($sql) || !is_string($sql)) {
+        if (empty($sql)) {
             if ($ERROR_LOG_OUTPUT) {
                 $this->logger->log(1, "No mysql_query_string set. End of query", array(11)); //debug
             }
