@@ -199,7 +199,7 @@ class BackyardHttpTest extends TestCase
      * @param string|string[] $replacement
      * @param string $subject
      * @param int $limit
-     * @param int $count
+     * @param ?int $count
      * @return string
      * @throws \Exception
      * @throws InvalidArgumentException

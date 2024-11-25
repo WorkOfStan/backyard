@@ -3,7 +3,6 @@
 namespace WorkOfStan\Backyard;
 
 use Psr\Log\LoggerInterface;
-use Seablast\Logger\ErrorLogFailureException;
 use Seablast\Logger\Logger;
 use Seablast\Logger\LoggerTime;
 
@@ -102,7 +101,7 @@ class BackyardError extends Logger implements LoggerInterface
         parent::log($level, $message, $context);
         $RUNNING_TIME = $this->getLastRunningTime();
         //    return true;
-        //} catch (ErrorLogFailureException $ex) { // as Logger::log() returns void
+        //} catch (\Seablast\Logger\ErrorLogFailureException $ex) { // as Logger::log() returns void
         //    return false;
         //}
     }

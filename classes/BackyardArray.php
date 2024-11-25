@@ -67,11 +67,12 @@ class BackyardArray
      */
     public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false)
     {
-        if (!is_array($myArray)) {
-            return array(); // empty array more consistent than false
-        }
+        //if (!is_array($myArray)) {
+        //    return array(); // empty array more consistent than false
+        //}
         $result = array();
         foreach ($myArray as $key => $row) {
+            /** @phpstan-ignore function.alreadyNarrowedType */
             if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
                 $result[$key] = $row[$columnName];
             } elseif ($columnAlwaysExpected) {
@@ -90,9 +91,9 @@ class BackyardArray
      */
     public function removeOneColumnFromArray(array $myArray, $columnName)
     {
-        if (!is_array($myArray)) {
-            return array(); //empty array more consistent than false
-        }
+        //if (!is_array($myArray)) {
+        //    return array(); //empty array more consistent than false
+        //}
         $result = array();
         foreach ($myArray as $key => $row) {
             foreach ($row as $key2 => $row2) {
@@ -150,10 +151,10 @@ class BackyardArray
         $allExactMatches = false,
         $columnAlwaysExpected = true
     ) {
-        if (!is_array($searchedArray)) {
-            $this->logger->error("ArrayVlookup: second parameter is not an array");
-            return false;
-        }
+        //if (!is_array($searchedArray)) {
+        //    $this->logger->error("ArrayVlookup: second parameter is not an array");
+        //    return false;
+        //}
 
         $allMatchingRows = array(); // used only if $allExactMatches === true
 
