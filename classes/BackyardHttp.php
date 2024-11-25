@@ -294,7 +294,7 @@ class BackyardHttp
         //redirects may have empty body
         if (
             !$response ||
-            ((!array_key_exists('message_body', $data) || !$data['message_body']) && //
+            ((!array_key_exists('message_body', $data) || !$data['message_body']) && // @phpstan-ignore-line
             !in_array($data['HTTP_CODE'], array(301, 302)))
         ) {
             $this->logger->log(2, "Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}");

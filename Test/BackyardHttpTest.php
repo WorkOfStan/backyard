@@ -157,7 +157,7 @@ class BackyardHttpTest extends TestCase
             $postArray = array()
         );
         $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE']);
-        Assert::string($expected['message_body']);
+        //Assert::string($expected['message_body']);
         Assert::string($result['message_body']);
         $this->assertEquals(
             preg_replace('/\s+/', '', $expected['message_body']),
@@ -210,7 +210,7 @@ class BackyardHttpTest extends TestCase
         if (is_null($result)) {
             throw new \Exception('error (null) preg_replace');
         }
-        Assert::string($result);
+        //Assert::string($result);
         return $result;
     }
 }

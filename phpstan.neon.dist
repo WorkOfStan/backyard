@@ -65,8 +65,3 @@ parameters:
       	count: 1
       	path: classes/BackyardGeo.php
 
-      -
-      	message: '#^Call to function array_key_exists\(\) with ''message_body'' and array\{POST\?\: string, HTTP_CODE\: int, message_body\: \(string\|false\)\} will always evaluate to true\.$#'
-      	identifier: function.alreadyNarrowedType
-      	count: 1
-      	path: classes/BackyardHttp.php
