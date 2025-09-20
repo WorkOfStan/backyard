@@ -43,7 +43,7 @@ class BackyardTimeTest extends TestCase
 //     * @covers WorkOfStan\Backyard\BackyardTime::getmicrotime
 //     *
 //     * Commented out because:
-//     * Call to method PHPUnit\Framework\Assert::assertTrue() with true will always evaluate to true.  
+//     * Call to method PHPUnit\Framework\Assert::assertTrue() with true will always evaluate to true.
 //     *
 //     * @return void
 //     */

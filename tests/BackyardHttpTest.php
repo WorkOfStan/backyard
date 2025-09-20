@@ -96,7 +96,7 @@ class BackyardHttpTest extends TestCase
         $expected = array(
             'HTTP_CODE' => 200,
             'message_body' => //'=== HTTP headers ===<br/>
-'<b>user-agent:</b> PHP/phpunit-testing <br/>
+        '<b>user-agent:</b> PHP/phpunit-testing <br/>
 <b>accept:</b> */* <br/>
 <b>x-wap-profile:</b> http://no.web.com/ <br/>
 <b>x-other-header:</b> foo <br/>
