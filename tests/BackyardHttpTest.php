@@ -80,63 +80,63 @@ class BackyardHttpTest extends TestCase
 //        );
 //    }
 
-//    /**
-//     * @covers WorkOfStan\Backyard\BackyardHttp::getData
-//     *
-//     * Commented out, as GitHub call ended with 403 HTTP Code response, instead of 200
-//     *
-//     * @return void
-//     */
-//    public function testGetDataContent(): void
-//    {
-//        $url = 'http://dadastrip.cz/test/';
-//        $useragent = 'PHP/phpunit-testing';
-//        $timeout = 5;
-//        $customHeaders = 'x-wap-profile: http://no.web.com/|x-other-header: foo';
-//        $postArray = array();
-//        $expected = array(
-//            'HTTP_CODE' => 200,
-//            'message_body' => //'=== HTTP headers ===<br/>
-//'<b>user-agent:</b> PHP/phpunit-testing <br/>
-//<b>accept:</b> */* <br/>
-//<b>x-wap-profile:</b> http://no.web.com/ <br/>
-//<b>x-other-header:</b> foo <br/>
-//</body></html>',
-//            //<b>host:</b> dadastrip.cz <br/>
-//            'CONTENT_TYPE' => 'text/html'
-//        );
-//
-//        $result = $this->object->getData($url, $useragent, $timeout, $customHeaders, $postArray);
-//        //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
-//        //also remove X-Forwarded-For header as it also contains source IP
-//        Assert::string($result['message_body']);
-//        $result['message_body'] = $this->pregReplaceString(
-//            '~<b>X-Forwarded-For:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
-//            '',
-//            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
-//        );
-//        $result['message_body'] = $this->pregReplaceString(
-//            '~<b>x-forwarded-for:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
-//            '',
-//            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
-//        );
-//        $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE'], 'HTTP_CODE differ');
-//
-//        $tempExpected = explode('<br/>', $this->pregReplaceString('/\s+/', '', $expected['message_body']));
-//        asort($tempExpected);
-//        $tempResult = explode('<br/>', $this->pregReplaceString('/\s+/', '', $result['message_body']));
-//        asort($tempResult);
-//        $this->assertEquals(
-//            implode('|', $tempExpected),
-//            implode('|', $tempResult),
-//            'Header sets differ'
-//        );
-//
-//        //   $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
-//        $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
-//    }
+    /**
+     * @covers WorkOfStan\Backyard\BackyardHttp::getData
+     * @group http
+     *
+     * @return void
+     */
+    public function testGetDataContent(): void
+    {
+        $url = 'http://dadastrip.cz/test/';
+        $useragent = 'PHP/phpunit-testing';
+        $timeout = 5;
+        $customHeaders = 'x-wap-profile: http://no.web.com/|x-other-header: foo';
+        $postArray = array();
+        $expected = array(
+            'HTTP_CODE' => 200,
+            'message_body' => //'=== HTTP headers ===<br/>
+'<b>user-agent:</b> PHP/phpunit-testing <br/>
+<b>accept:</b> */* <br/>
+<b>x-wap-profile:</b> http://no.web.com/ <br/>
+<b>x-other-header:</b> foo <br/>
+</body></html>',
+            //<b>host:</b> dadastrip.cz <br/>
+            'CONTENT_TYPE' => 'text/html'
+        );
+
+        $result = $this->object->getData($url, $useragent, $timeout, $customHeaders, $postArray);
+        //remove first two lines because they contain timestamp and source IP and hence are changing unnecessarily
+        //also remove X-Forwarded-For header as it also contains source IP
+        Assert::string($result['message_body']);
+        $result['message_body'] = $this->pregReplaceString(
+            '~<b>X-Forwarded-For:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
+            '',
+            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
+        );
+        $result['message_body'] = $this->pregReplaceString(
+            '~<b>x-forwarded-for:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
+            '',
+            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
+        );
+        $this->assertEquals($expected['HTTP_CODE'], $result['HTTP_CODE'], 'HTTP_CODE differ');
+
+        $tempExpected = explode('<br/>', $this->pregReplaceString('/\s+/', '', $expected['message_body']));
+        asort($tempExpected);
+        $tempResult = explode('<br/>', $this->pregReplaceString('/\s+/', '', $result['message_body']));
+        asort($tempResult);
+        $this->assertEquals(
+            implode('|', $tempExpected),
+            implode('|', $tempResult),
+            'Header sets differ'
+        );
+
+        //   $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
+        $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
+    }
 
     /**
+     * @group http
      * @return void
      */
     public function testGetDataRedirect(): void

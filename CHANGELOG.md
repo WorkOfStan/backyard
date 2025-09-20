@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Removed` for now removed features
 
-- BackyardHttpTest::testGetDataContent() commented out, as GitHub call ended with 403 HTTP Code response, instead of 200
+- PHPUnit GitHub testing ignores tests in group: `http` (such as testGetDataContent()), because GitHub call ended with 403 HTTP Code response, instead of 200
 
 ### `Fixed` for any bugfixes
 

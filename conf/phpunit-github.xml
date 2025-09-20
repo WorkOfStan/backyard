@@ -11,4 +11,10 @@
             <directory>./../tests/</directory>
         </testsuite>
     </testsuites>
+
+    <groups>
+      <exclude>
+        <group>http</group>
+      </exclude>
+    </groups>
 </phpunit>
