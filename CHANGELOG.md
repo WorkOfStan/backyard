@@ -307,7 +307,7 @@ Subclass lazy loading removed.
 
 PSR-4 compliant Class
 
-Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Subclasses are lazy loaded. PHPunit testing is working for subclasses with no major external needs (BackyardArray, Crypt, Http, Json, BackardTime).
+Backyard rewritten into PSR-4 compliant Class with PSR-3 compliant logger. Subclasses are lazy loaded. PHPunit testing is working for subclasses with no major external needs (BackyardArray, Crypt, Http, `Json`, BackardTime).
 Invoke by:
 use GodsDev\Backyard\Backyard;
 $this->Backyard = new Backyard($backyardConf); //$backyardConf is array with delta to default values

@@ -80,7 +80,7 @@ $backyard = new \WorkOfStan\Backyard\Backyard(
 
 ## Notes
 
-NB: BackyardMysqli creates no Backyard->Mysqli object (as e.g. Backyard->Json does) because it is not used by LIB itself and more importantly user of LIB may create any number of those.
+NB: BackyardMysqli creates no Backyard->Mysqli object (as e.g. `Backyard->Json` does) because it is not used by LIB itself and more importantly user of LIB may create any number of those.
 Example of usage:
 
 ```php
