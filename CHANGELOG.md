@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed` for any bugfixes
 
+- PHP 8.4 deprecated the “implicitly nullable” parameters
+
 ### `Security` in case of vulnerabilities
 
 ## [4.0.0] - 2024-11-25
