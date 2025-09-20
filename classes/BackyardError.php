@@ -22,7 +22,7 @@ class BackyardError extends Logger implements LoggerInterface
      * @param array<mixed> $backyardConfConstruct
      * @param LoggerTime $backyardTime
      */
-    public function __construct(array $backyardConfConstruct = array(), LoggerTime $backyardTime = null)
+    public function __construct(array $backyardConfConstruct = array(), ?LoggerTime $backyardTime = null)
     {
         $this->backyardTime = ($backyardTime === null) ? (new LoggerTime()) : $backyardTime;
         // phpcs:disable Generic.Files.LineLength

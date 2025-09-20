@@ -37,14 +37,14 @@ class BackyardHttp
 {
     const LOG_LEVEL = 5;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /** @var LoggerInterface */
     protected $logger;
 
     /**
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
