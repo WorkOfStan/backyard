@@ -11,27 +11,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed` for changes in existing functionality
 
-- all GitHub Actions combined into polish-the-code.yml
-- all dev and management scripts combined into blast.sh
-- `Test` folder standardized to `tests`
-
 ### `Deprecated` for soon-to-be removed features
 
 ### `Removed` for now removed features
 
-- PHPUnit GitHub testing ignores tests in group: `http` (such as testGetDataContent()), because GitHub call ended with 403 HTTP Code response, instead of 200
-
 ### `Fixed` for any bugfixes
 
-- PHP 8.4 deprecated the “implicitly nullable” parameters
-
 ### `Security` in case of vulnerabilities
+
+## [4.1.0] - 2025-09-20
+
+added: PHP/8.4 support
+
+### Changed
+
+- all GitHub Actions combined into polish-the-code.yml
+- all dev and management scripts combined into blast.sh
+- `Test` folder standardized to `tests`
+
+### Removed
+
+- PHPUnit GitHub testing ignores tests in group: `http` (such as testGetDataContent()), because GitHub call ended with 403 HTTP Code response, instead of 200
+
+### Fixed
+
+- PHP 8.4 deprecated the “implicitly nullable” parameters
 
 ## [4.0.0] - 2024-11-25
 
 PHP `>=7.4, <8.4`
 
 ## [3.4.3] - 2024-11-25
+
+Prettier-fix, PHP `>=5.3, <7.4`
 
 ### Changed
 
@@ -41,12 +53,16 @@ PHP `>=7.4, <8.4`
 
 ## [3.4.2] - 2024-08-03
 
+BackyardArray may use `\Psr\Log\NullLogger`
+
 ### Changed
 
 - BackyardArray accepts null as logger => `\Psr\Log\NullLogger`
 - BackyardHttp::movePage - extended array with additional HTTP status codes
 
 ## [3.4.1] - 2024-08-03
+
+phpstan-baseline.neon removed
 
 ### Fixed
 
@@ -336,7 +352,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/WorkOfStan/backyard/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/WorkOfStan/backyard/compare/v3.4.3...v4.0.0
 [3.4.3]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/WorkOfStan/backyard/compare/v3.4.1...v3.4.2
