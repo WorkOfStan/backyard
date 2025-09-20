@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkOfStan\Backyard\Test;
+namespace WorkOfStan\Backyard\Tests;
 
 use PHPUnit\Framework\TestCase;
 use WorkOfStan\Backyard\BackyardTime;
@@ -46,6 +46,7 @@ class BackyardTimeTest extends TestCase
      */
     public function testGetmicrotime(): void
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         $this->assertTrue(is_float($this->object->getmicrotime()));
     }
 

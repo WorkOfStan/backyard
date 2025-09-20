@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkOfStan\Backyard\Test;
+namespace WorkOfStan\Backyard\Tests;
 
 use PHPUnit\Framework\TestCase;
 use WorkOfStan\Backyard\Backyard;
