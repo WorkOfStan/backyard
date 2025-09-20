@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=7.4, <=8.4",
+    "php": ">=7.4, <=8.5",
     "ext-curl": "*",
     "seablast/logger": "^2.0"
   },
