@@ -28,7 +28,7 @@ class BackyardBriefApiClient
      * @param string|null $appLogFolder OPTIONAL string without trailing / or if null, the applogs will not be created
      * @param \Psr\Log\LoggerInterface|null $logger OPTIONAL but really recommended
      */
-    public function __construct($apiUrl, $appLogFolder = null, LoggerInterface $logger = null)
+    public function __construct($apiUrl, $appLogFolder = null, ?LoggerInterface $logger = null)
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;

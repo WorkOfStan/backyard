@@ -13,7 +13,7 @@ class BackyardCrypt
      *
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null)
     {
         $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
     }
