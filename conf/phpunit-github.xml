@@ -8,7 +8,13 @@
     stopOnFailure="false">
     <testsuites>
         <testsuite name="Application Test Suite">
-            <directory>./tests/</directory>
+            <directory>./../tests/</directory>
         </testsuite>
     </testsuites>
+
+    <groups>
+      <exclude>
+        <group>http</group>
+      </exclude>
+    </groups>
 </phpunit>

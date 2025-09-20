@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkOfStan\Backyard\Test;
+namespace WorkOfStan\Backyard\Tests;
 
 use PHPUnit\Framework\TestCase;
 use WorkOfStan\Backyard\BackyardTime;
@@ -39,15 +39,18 @@ class BackyardTimeTest extends TestCase
         // no action
     }
 
-    /**
-     * @covers WorkOfStan\Backyard\BackyardTime::getmicrotime
-     *
-     * @return void
-     */
-    public function testGetmicrotime(): void
-    {
-        $this->assertTrue(is_float($this->object->getmicrotime()));
-    }
+//    /**
+//     * @covers WorkOfStan\Backyard\BackyardTime::getmicrotime
+//     *
+//     * Commented out because:
+//     * Call to method PHPUnit\Framework\Assert::assertTrue() with true will always evaluate to true.
+//     *
+//     * @return void
+//     */
+//    public function testGetmicrotime(): void
+//    {
+//        $this->assertTrue(is_float($this->object->getmicrotime()));
+//    }
 
     /**
      * @covers WorkOfStan\Backyard\BackyardTime::getRunningTime

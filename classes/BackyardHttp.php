@@ -181,6 +181,7 @@ class BackyardHttp
             throw new \RuntimeException('SERVER_NAME is expected to be a string.');
         }
         return ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
+            // @phpstan-ignore isset.offset
             . ((isset($_SERVER["SERVER_PORT"]) && //
             ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443"))) //
             ? ':' . $_SERVER["SERVER_PORT"] : '') // port
@@ -410,6 +411,7 @@ class BackyardHttp
             // http://stackoverflow.com/questions/7979567/
             // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
             $encodings = mb_detect_order();
+            // @phpstan-ignore function.alreadyNarrowedType
             if (!is_array($encodings)) {
                 throw new \UnexpectedValueException('mb_detect_order should return array');
             }
@@ -461,6 +463,7 @@ class BackyardHttp
             socket_close($socket);
             $this->logger->log(
                 5,
+                // @phpstan-ignore isset.offset
                 "result=" . $result = (isset($response[1]) ? ($response[1]) : ('socketLastErrorString')), // set & log
                 array(16)
             );
@@ -470,6 +473,7 @@ class BackyardHttp
         // http://stackoverflow.com/questions/7979567/
         // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
         $encodings = mb_detect_order();
+        // @phpstan-ignore function.alreadyNarrowedType
         if (!is_array($encodings)) {
             throw new \UnexpectedValueException('mb_detect_order should return array');
         }

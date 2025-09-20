@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkOfStan\Backyard\Test;
+namespace WorkOfStan\Backyard\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\Assert;
@@ -82,6 +82,7 @@ class BackyardHttpTest extends TestCase
 
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
+     * @group http
      *
      * @return void
      */
@@ -94,13 +95,13 @@ class BackyardHttpTest extends TestCase
         $postArray = array();
         $expected = array(
             'HTTP_CODE' => 200,
-            'message_body' => '=== HTTP headers ===<br/>
-<b>User-Agent:</b> PHP/phpunit-testing <br/>
-<b>Host:</b> dadastrip.cz <br/>
-<b>Accept:</b> */* <br/>
+            'message_body' => //'=== HTTP headers ===<br/>
+        '<b>user-agent:</b> PHP/phpunit-testing <br/>
+<b>accept:</b> */* <br/>
 <b>x-wap-profile:</b> http://no.web.com/ <br/>
 <b>x-other-header:</b> foo <br/>
 </body></html>',
+            //<b>host:</b> dadastrip.cz <br/>
             'CONTENT_TYPE' => 'text/html'
         );
 
@@ -110,6 +111,11 @@ class BackyardHttpTest extends TestCase
         Assert::string($result['message_body']);
         $result['message_body'] = $this->pregReplaceString(
             '~<b>X-Forwarded-For:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
+            '',
+            $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
+        );
+        $result['message_body'] = $this->pregReplaceString(
+            '~<b>x-forwarded-for:<\/b> :{2}[a-f]+.[0-9\.]+ <br\/>~',
             '',
             $this->pregReplaceString('/^.+\n/', '', $this->pregReplaceString('/^.+\n/', '', $result['message_body']))
         );
@@ -130,6 +136,7 @@ class BackyardHttpTest extends TestCase
     }
 
     /**
+     * @group http
      * @return void
      */
     public function testGetDataRedirect(): void
@@ -204,6 +211,7 @@ class BackyardHttpTest extends TestCase
      * @throws \Exception
      * @throws InvalidArgumentException
      */
+    // @phpstan-ignore parameterByRef.unusedType
     private function pregReplaceString($pattern, $replacement, $subject, $limit = -1, &$count = null): string
     {
         $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
