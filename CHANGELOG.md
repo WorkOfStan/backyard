@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [4.1.1] - 2025-09-23
+
+chore: dead code from backyard 1 and backyard 2 removed
+
+### Removed
+
+- dead code from backyard 1 and backyard 2 removed
+
 ## [4.1.0] - 2025-09-20
 
 added: PHP/8.4 support
@@ -352,7 +360,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.1...HEAD
+[4.1.1]: https://github.com/WorkOfStan/backyard/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/WorkOfStan/backyard/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/WorkOfStan/backyard/compare/v3.4.3...v4.0.0
 [3.4.3]: https://github.com/WorkOfStan/backyard/compare/v3.4.2...v3.4.3
