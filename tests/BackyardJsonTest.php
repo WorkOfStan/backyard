@@ -108,7 +108,7 @@ class BackyardJsonTest extends TestCase
      */
     public function testGetJsonAsArray()
     {
-        $url = 'https://raw.githubusercontent.com/WorkOfStan/backyard/master/src/js/dummy.json';
+        $url = 'https://raw.githubusercontent.com/WorkOfStan/backyard/refs/heads/main/tests/dummy.json';
         $expected = array('alfa' => 'beta');
 
         $this->assertEquals($expected, $this->object->getJsonAsArray($url));
