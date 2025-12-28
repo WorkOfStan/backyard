@@ -16,13 +16,13 @@
     }
   ],
   "require": {
-    "php": ">=7.4, <=8.5",
+    "php": ">=7.4 <8.6",
     "ext-curl": "*",
     "seablast/logger": "^2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6 || ^7 || ^8 || ^9 || ^10 || ^11",
-    "webmozart/assert": "^1.9.1"
+    "phpunit/phpunit": "^8.4 || ^9 || ^10 || ^11 || ^12",
+    "webmozart/assert": "^1.10.1"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
