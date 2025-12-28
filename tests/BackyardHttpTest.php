@@ -83,6 +83,7 @@ class BackyardHttpTest extends TestCase
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
+     * #[Group('http')]
      *
      * @return void
      */
@@ -136,7 +137,9 @@ class BackyardHttpTest extends TestCase
     }
 
     /**
+     * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
+     * #[Group('http')]
      * @return void
      */
     public function testGetDataRedirect(): void

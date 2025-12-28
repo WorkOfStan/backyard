@@ -26,6 +26,7 @@ feat: add PHP/8.5 support
 ### Fixed
 
 - fix CURLOPT_SSL_VERIFYHOST accepted values
+- ci(phpunit): update group exclusion tag `@group http` to `#[Group('http')]` as it got changed in PHPUnit/12
 
 ## [4.1.1] - 2025-09-23
 
