@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 feat: add PHP/8.5 support
 
+### Fixed
+
+- fix CURLOPT_SSL_VERIFYHOST accepted values
+
 ## [4.1.1] - 2025-09-23
 
 chore: dead code from backyard 1 and backyard 2 removed

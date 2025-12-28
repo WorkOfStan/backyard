@@ -72,7 +72,7 @@ class BackyardBriefApiClient
             CURLOPT_SSL_VERIFYPEER => false,
             //accepts also private SSL certificates
             //@todo try without that option and if it fails, it may try with this option and inform about it
-            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYHOST => 0, // 81: MUST be 0 (instead of false) or 2 (instead of true)
         ));
         switch ($httpVerb) {
             case 'POST':
