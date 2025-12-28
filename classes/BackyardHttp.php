@@ -323,10 +323,10 @@ class BackyardHttp
                 $match[1] = preg_replace_callback('/(?<=^|[\x09\x20\x2D])./', function ($matches) {
                     return strtoupper($matches[0]);
                 }, strtolower(trim($match[1])));
-                if (isset($retVal[$match[1]])) {
-                    $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+                if (isset($retVal[(string) $match[1]])) {
+                    $retVal[(string) $match[1]] = array($retVal[(string) $match[1]], $match[2]);
                 } else {
-                    $retVal[$match[1]] = trim((string) $match[2]);
+                    $retVal[(string) $match[1]] = trim((string) $match[2]);
                 }
             }
         }

@@ -24,7 +24,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require workofstan/backyard:^3.3.1
+composer require workofstan/backyard:^4.1.2
 ```
 
 Finally, be sure to include the autoloader:
