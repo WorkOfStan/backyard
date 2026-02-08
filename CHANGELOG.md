@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 fix: remove parameter typing in `BackyardMysqli::query()` in order to be backward compatible
 
+### Fixed
+
+- fix: remove parameter typing in `BackyardMysqli::query()` in order to be backward compatible
+- ci(PHPUnit): fix preventing running HTTP tests on GitHub
+
 ## [4.1.2] - 2025-12-28
 
 feat: add PHP/8.5 support
