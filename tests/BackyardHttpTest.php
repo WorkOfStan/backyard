@@ -2,7 +2,7 @@
 
 namespace WorkOfStan\Backyard\Tests;
 
-use PHPUnit\Framework\Attributes\Group;
+// use PHPUnit\Framework\Attributes\Group; // available for PHPUnit/10+
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
