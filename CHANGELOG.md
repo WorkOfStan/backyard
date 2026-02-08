@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [4.1.2.1] - 2026-02-08
+
+fix: remove parameter typing in `BackyardMysqli::query()` in order to be backward compatible
+
 ## [4.1.2] - 2025-12-28
 
 feat: add PHP/8.5 support

@@ -10,6 +10,8 @@
 ## Requirements
 
 - [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
+  - workofstan/backyard:^4.1.2 `php: >=7.4 <8.6`
+  - workofstan/backyard:3.4.3: `php: >=5.3, <7.4`
 
 ## Installation
 
@@ -24,7 +26,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require workofstan/backyard:^4.1.2
+composer require workofstan/backyard:^4.1.2.1
 ```
 
 Finally, be sure to include the autoloader:
