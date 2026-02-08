@@ -2,6 +2,7 @@
 
 namespace WorkOfStan\Backyard\Tests;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -83,10 +84,10 @@ class BackyardHttpTest extends TestCase
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
-     * #[Group('http')]
      *
      * @return void
      */
+    #[Group('http')]
     public function testGetDataContent(): void
     {
         $url = 'http://dadastrip.cz/test/';
@@ -139,9 +140,9 @@ class BackyardHttpTest extends TestCase
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
-     * #[Group('http')]
      * @return void
      */
+    #[Group('http')]
     public function testGetDataRedirect(): void
     {
         //@todo incl. recursion (if there is)

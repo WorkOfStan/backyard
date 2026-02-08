@@ -2,9 +2,6 @@
 <phpunit
     colors="true"
     stderr="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
     stopOnFailure="false">
     <testsuites>
         <testsuite name="Application Test Suite">
@@ -15,7 +12,6 @@
     <groups>
       <exclude>
         <group>http</group>
-        <file>tests/BackyardHttpTest.php</file>
       </exclude>
     </groups>
 </phpunit>
