@@ -87,9 +87,12 @@ class BackyardHttpTest extends TestCase
      *
      * @return void
      */
-    #[Group('http')]
+    //#[Group('http')] // available for PHPUnit/10+
     public function testGetDataContent(): void
     {
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $this->markTestSkipped('This test does not run on GitHub Actions.');
+        }
         $url = 'http://dadastrip.cz/test/';
         $useragent = 'PHP/phpunit-testing';
         $timeout = 5;
@@ -142,9 +145,12 @@ class BackyardHttpTest extends TestCase
      * @group http
      * @return void
      */
-    #[Group('http')]
+    //#[Group('http')] // available for PHPUnit/10+
     public function testGetDataRedirect(): void
     {
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $this->markTestSkipped('This test does not run on GitHub Actions.');
+        }
         //@todo incl. recursion (if there is)
         $url = 'http://dadastrip.cz/test';
         $expected = array(

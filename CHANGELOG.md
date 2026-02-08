@@ -26,7 +26,7 @@ fix: remove parameter typing in `BackyardMysqli::query()` in order to be backwar
 ### Fixed
 
 - fix: remove parameter typing in `BackyardMysqli::query()` in order to be backward compatible
-- ci(PHPUnit): fix preventing running HTTP tests on GitHub
+- ci(PHPUnit): add a workaround to prevent running HTTP tests on GitHub which works for PHP/7.4-8.5 (i.e. PHPUnit/8-12)
 
 ## [4.1.2] - 2025-12-28
 
