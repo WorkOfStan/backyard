@@ -134,7 +134,7 @@ class BackyardArray
     }
 
     /**
-     * Returns first row with exact match //@TODO 4 - přidat parametr na vrácení všech rows s exact match
+     * Returns first row with exact match //@TODO 4 - add a parameter to return all rows with an exact match
      * Useful for at least 2-dimensional arrays
      *
      * @param mixed $searchedValue

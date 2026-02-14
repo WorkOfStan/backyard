@@ -33,7 +33,7 @@ class BackyardError extends Logger implements LoggerInterface
                 'logging_file' => '', //soubor, do kterého má my_error_log() zapisovat
                 'logging_level_page_speed' => 5, //úroveň logování, do které má být zapisována rychlost vygenerování stránky
                 'error_log_message_type' => 0, //parameter message_type http://cz2.php.net/manual/en/function.error-log.php for my_error_log; default is 0, i.e. to send message to PHP's system logger; recommended is however 3, i.e. append to the file destination set either in field $this->BackyardConf['logging_file or in table system
-                'die_graciously_verbose' => true, //show details by die_graciously() on screen (it is always in the error_log); on production it is recomended to be set to to false due security
+                'die_graciously_verbose' => true, //show details by die_graciously() on screen (it is always in the error_log); on production it is recommended to be set to to false due security
                 'mail_for_admin_enabled' => false, //fatal error may just be written in log //$backyardMailForAdminEnabled = "rejthar@gods.cz";//on production, it is however recommended to set an e-mail, where to announce fatal errors
                 'log_monthly_rotation' => true, //true, pokud má být přípona .log.Y-m.log (výhodou je měsíční rotace); false, pokud má být jen .log (výhodou je sekvenční zápis chyb přes my_error_log a jiných PHP chyb)
                 'log_standard_output' => false, //true, pokud má zároveň vypisovat na obrazovku; false, pokud má vypisovat jen do logu

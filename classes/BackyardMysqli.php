@@ -10,7 +10,7 @@ use WorkOfStan\Backyard\BackyardError;
  *
  * TODO create TestBackyardMysqli.php
  * TODO compare admins vs user for throw new \Exception vs dieGraciously and if migrated to Exception:
- * use Psr\Log\LoggerInterface instad of WorkOfStan\Backyard\BackyardError
+ * use Psr\Log\LoggerInterface instead of WorkOfStan\Backyard\BackyardError
  *
  */
 
