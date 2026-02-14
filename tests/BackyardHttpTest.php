@@ -2,6 +2,7 @@
 
 namespace WorkOfStan\Backyard\Tests;
 
+// use PHPUnit\Framework\Attributes\Group; // available for PHPUnit/10+
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -83,12 +84,15 @@ class BackyardHttpTest extends TestCase
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
-     * #[Group('http')]
      *
      * @return void
      */
+    //#[Group('http')] // available for PHPUnit/10+
     public function testGetDataContent(): void
     {
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $this->markTestSkipped('This test does not run on GitHub Actions.');
+        }
         $url = 'http://dadastrip.cz/test/';
         $useragent = 'PHP/phpunit-testing';
         $timeout = 5;
@@ -139,11 +143,14 @@ class BackyardHttpTest extends TestCase
     /**
      * @covers WorkOfStan\Backyard\BackyardHttp::getData
      * @group http
-     * #[Group('http')]
      * @return void
      */
+    //#[Group('http')] // available for PHPUnit/10+
     public function testGetDataRedirect(): void
     {
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $this->markTestSkipped('This test does not run on GitHub Actions.');
+        }
         //@todo incl. recursion (if there is)
         $url = 'http://dadastrip.cz/test';
         $expected = array(

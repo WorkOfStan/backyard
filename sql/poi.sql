@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `poi_category` (
     `id` int(11) NOT NULL,
     `name` varchar(100) COLLATE utf8_czech_ci NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_czech_ci
-COMMENT = 'Naming of poi catgories for table poi_list';
+COMMENT = 'Naming of poi categories for table poi_list';
 
 
 --

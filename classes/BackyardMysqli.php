@@ -10,7 +10,7 @@ use WorkOfStan\Backyard\BackyardError;
  *
  * TODO create TestBackyardMysqli.php
  * TODO compare admins vs user for throw new \Exception vs dieGraciously and if migrated to Exception:
- * use Psr\Log\LoggerInterface instad of WorkOfStan\Backyard\BackyardError
+ * use Psr\Log\LoggerInterface instead of WorkOfStan\Backyard\BackyardError
  *
  */
 
@@ -88,6 +88,9 @@ class BackyardMysqli extends \mysqli
      * @param int $errorLogOutput optional default=1 turn-off=0
      *   It is int in order to be compatible with
      *   parameter $resultmode (int) of method mysqli::query()
+     *   Note: don't use type int next to parameter, otherwise triggered PHP Warning:
+     *   Declaration of WorkOfStan\Backyard\BackyardMysqli::query($sql, int $errorLogOutput = 1) should be compatible
+     *   with mysqli::query($query, $resultmode = NULL)
      * @return bool|\mysqli_result<object>
      *   <p>Returns <b><code>FALSE</code></b> on failure. For successful <i>SELECT, SHOW, DESCRIBE</i> or <i>EXPLAIN</i>
      *   queries <b>mysqli_query()</b> will return a mysqli_result object.
@@ -98,7 +101,7 @@ class BackyardMysqli extends \mysqli
      * Make it covariant, or use the #[\ReturnTypeWillChange] attribute to temporarily suppress the error.
      */
     #[\ReturnTypeWillChange]
-    public function query($sql, int $errorLogOutput = 1)
+    public function query($sql, $errorLogOutput = 1)
     {
         $ERROR_LOG_OUTPUT = (bool) $errorLogOutput;
         if ($ERROR_LOG_OUTPUT) {

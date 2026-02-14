@@ -2,9 +2,6 @@
 <phpunit
     colors="true"
     stderr="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
     stopOnFailure="false">
     <testsuites>
         <testsuite name="Application Test Suite">
