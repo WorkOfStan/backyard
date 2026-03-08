@@ -4,13 +4,12 @@
 
 [![Total Downloads](https://img.shields.io/packagist/dt/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
 [![Latest Stable Version](https://img.shields.io/packagist/v/workofstan/backyard.svg)](https://packagist.org/packages/workofstan/backyard)
-[![Lint Code Base](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/linter.yml)
-[![PHP Composer + PHPUnit + PHPStan](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-dependencies.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/php-composer-dependencies.yml)
+[![Polish the code](https://github.com/WorkOfStan/backyard/actions/workflows/polish-the-code.yml/badge.svg)](https://github.com/WorkOfStan/backyard/actions/workflows/polish-the-code.yml)
 
 ## Requirements
 
 - [PHP 5.3.0 or higher](http://www.php.net/) (i.e. not used [] instead of array() as this short syntax can be used only since PHP 5.4)
-  - workofstan/backyard:^4.1.2 `php: >=7.4 <8.6`
+  - workofstan/backyard:^4.1.2.2 `php: >=7.4 <8.6`
   - workofstan/backyard:3.4.3: `php: >=5.3, <7.4`
 
 ## Installation
@@ -26,7 +25,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require workofstan/backyard:^4.1.2.1
+composer require workofstan/backyard:^4.1.2.2
 ```
 
 Finally, be sure to include the autoloader:
@@ -88,7 +87,7 @@ Example of usage:
 ```php
 $backyard = new WorkOfStan\Backyard\Backyard(array('logging_level' => 3));
 $logger = $backyard->BackyardError;
-$dbLink = new WorkOfStan\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
+$dbConnection = new WorkOfStan\Backyard\BackyardMysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, $logger);
 ```
 
 ## class BackyardBriefApiClient
