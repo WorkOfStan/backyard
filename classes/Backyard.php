@@ -49,10 +49,11 @@ class Backyard
      * @param string $user
      * @param string $pass
      * @param string $db
+     * @param string $charset
      * @return \WorkOfStan\Backyard\BackyardMysqli
      */
-    public function newMysqli($host_port, $user, $pass, $db)
+    public function newMysqli($host_port, $user, $pass, $db, $charset = 'utf8')
     {
-        return new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError);
+        return new BackyardMysqli($host_port, $user, $pass, $db, $this->BackyardError, $charset);
     }
 }
