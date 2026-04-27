@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WorkOfStan\Backyard;
 
 use Psr\Log\LoggerInterface;

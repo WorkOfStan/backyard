@@ -51,6 +51,8 @@
  *
  ***********************************************/
 
+declare(strict_types=1);
+
 namespace WorkOfStan\Backyard;
 
 class HTMLPage

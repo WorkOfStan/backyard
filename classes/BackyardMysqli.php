@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WorkOfStan\Backyard;
 
 use Psr\Log\NullLogger;
@@ -21,7 +23,7 @@ class BackyardMysqli extends \mysqli
 
     /**
      * \mysqli wrapper with logger
-     * Sets the connection charset to utf-8 and collation to utf8_general_ci
+     * Sets the connection charset to utf8 by default
      *
      * @param string $host_port accepts either hostname (or IPv4) or hostname:port
      * To open as persistent use: $connection = new backyard_mysqli('p:' . $dbhost, $dbuser, $dbpass, $dbname);
@@ -29,10 +31,11 @@ class BackyardMysqli extends \mysqli
      * @param string $pass password
      * @param string $db database name
      * @param BackyardError|null $logger PSR-3 logger
+     * @param string $charset MySQL connection charset
      *
      * @todo add IPv6 , e.g ::1 as $host_port
      */
-    public function __construct($host_port, $user, $pass, $db, ?BackyardError $logger = null)
+    public function __construct($host_port, $user, $pass, $db, ?BackyardError $logger = null, $charset = 'utf8')
     {
         //error_log("debug: " . __CLASS__ . ' ' . __METHOD__);
         $this->logger = is_null($logger) ? new NullLogger() : $logger;
@@ -71,9 +74,10 @@ class BackyardMysqli extends \mysqli
             );
         }
 
-        //change character set to utf8
-        if (!$this->set_charset("utf8")) {
-            $this->logger->log(2, sprintf("Error loading character set utf8: %s\n", $this->error));
+        //change character set
+        $this->logger->log(5, sprintf("BackyardMysqli set charset %s", $charset));
+        if (!$this->set_charset($charset)) {
+            $this->logger->log(2, sprintf("Error loading character set %s: %s\n", $charset, $this->error));
         }
     }
 
