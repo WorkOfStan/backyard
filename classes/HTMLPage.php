@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Project: LIB/Part of Library In Backyard
  * Purpose:

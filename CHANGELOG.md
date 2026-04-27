@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added` for new features
 
+- Added AI maintenance documentation and root `AGENTS.md` guidance for future coding agents.
+
 ### `Changed` for changes in existing functionality
 
 ### `Deprecated` for soon-to-be removed features
