@@ -45,7 +45,7 @@ Conservative rule for future agents: every class in `classes/` is Composer-autol
   - `getJsonArray($json): array`
   - `getArrayArray(array $arr): array`
 - Input/output expectations: sends JSON to a configured URL; may write request/response JSON files under `$appLogFolder`; returns raw cURL result, `false`, arrays, or throws.
-- Breaking-change risk: high for HTTP behavior, supported verbs, logging file names, and empty-array-on-decode-failure behavior.
+- Breaking-change risk: high for HTTP behavior, supported verbs, logging filenames, and empty-array-on-decode-failure behavior.
 
 ### `WorkOfStan\Backyard\BackyardCrypt`
 
@@ -239,7 +239,7 @@ Underdocumented areas:
 - Composer PHP constraint: `>=7.4 <8.6`.
 - CI matrix in `.github/workflows/polish-the-code.yml`: PHP 7.4 through 8.5.
 - Runtime dependencies: `ext-curl`, `seablast/logger`.
-- Lock-file runtime packages observed: `psr/log`, `seablast/logger`, `tracy/tracy`.
+- Lockfile runtime packages observed: `psr/log`, `seablast/logger`, `tracy/tracy`.
 - Dev dependencies: PHPUnit and Webmozart Assert.
 - Additional extensions used by optional classes/methods but not declared in `composer.json`: `mysqli`, `sockets`, `mbstring`, and likely `iconv`.
 - No `declare(strict_types=1)` is used.
@@ -340,7 +340,7 @@ Safe changes:
 - Documentation improvements.
 - Adding focused tests for existing behavior.
 - Local refactors with no public API or behavior changes.
-- Bug fixes with regression tests.
+- Bugfixes with regression tests.
 - Translating comments to English when meaning is preserved.
 - Adding Composer scripts only when they invoke already-existing tools and do not change dependencies or runtime behavior.
 

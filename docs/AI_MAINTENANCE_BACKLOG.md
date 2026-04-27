@@ -70,10 +70,10 @@
 
 ## Medium value
 
-### Clarify README requirements for current major versions
+### Clarify readme requirements for current major versions
 
 - Affected files: `README.md`
-- Why it matters: the README still opens with an old PHP 5.3 requirement before listing current 4.x constraints, which can confuse users and agents.
+- Why it matters: the readme still opens with an old PHP 5.3 requirement before listing current 4.x constraints, which can confuse users and agents.
 - Suggested safe approach: reword the requirements section to make current 4.x support (`>=7.4 <8.6`) primary and keep legacy 3.x notes separately.
 - Breaking or non-breaking: non-breaking.
 - Tests should be added: no.

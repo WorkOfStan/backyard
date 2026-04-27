@@ -59,7 +59,7 @@ Missing local aliases/tools:
 - Namespace tests as `WorkOfStan\Backyard\Tests` and place them in `tests/`.
 - Follow the existing PSR-12-ish formatting and the local preference for `array()` syntax.
 - Many public methods are intentionally loosely typed for compatibility. Add native parameter or return types only when the compatibility impact is clear.
-- Preserve existing comments. Remove a TODO only when you actually solve it; translating comments to English is acceptable when meaning is preserved.
+- Preserve existing comments. Remove a `TODO` only when you actually solve it; translating comments to English is acceptable when meaning is preserved.
 - Error handling is mixed: some methods throw built-in exceptions, some return `false` or `0`, and some log, echo, send headers, `exit`, or `die`. Preserve current behavior unless the task explicitly asks to change it.
 - Avoid new runtime dependencies unless clearly justified. Prefer standard PHP and existing Composer dependencies.
 
