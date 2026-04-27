@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Project: LIB/Part of Library In Backyard
  * Purpose:
@@ -52,6 +50,8 @@ declare(strict_types=1);
  * - consider adding Tracy\Debugger and Tracy\ILogger (PHP>=5.3) instead of error_log
  *
  ***********************************************/
+
+declare(strict_types=1);
 
 namespace WorkOfStan\Backyard;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WorkOfStan\Backyard;
 
 use Psr\Log\NullLogger;
@@ -72,6 +74,9 @@ class BackyardMysqli extends \mysqli
         }
 
         //change character set to utf8
+        // todo this condition should enforce at least some utf8, but it also enforces utf8 over utf8mb4. 
+        // Is there a way to see what utf8 is the table already counting on and then enforce the proper utf8 
+        // communication? Or would it be safer for backward compatibility to add it as another argument to constructor?
         if (!$this->set_charset("utf8")) {
             $this->logger->log(2, sprintf("Error loading character set utf8: %s\n", $this->error));
         }
