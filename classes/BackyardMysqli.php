@@ -75,6 +75,7 @@ class BackyardMysqli extends \mysqli
         }
 
         //change character set
+        $this->logger->log(5, sprintf("BackyardMysqli set charset %s", $charset));
         if (!$this->set_charset($charset)) {
             $this->logger->log(2, sprintf("Error loading character set %s: %s\n", $charset, $this->error));
         }

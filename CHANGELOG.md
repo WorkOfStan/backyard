@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added` for new features
 
-- Added AI maintenance documentation and root `AGENTS.md` guidance for future coding agents.
-
 ### `Changed` for changes in existing functionality
-
-- `BackyardMysqli` now accepts an optional connection charset argument, and `Backyard::newMysqli()` forwards it.
 
 ### `Deprecated` for soon-to-be removed features
 
@@ -22,6 +18,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed` for any bugfixes
 
 ### `Security` in case of vulnerabilities
+
+## [4.1.3] - 2026-04-27
+
+feat: add charset option to `BackyardMysqli`
+
+### Added
+
+- Added AI maintenance documentation and root `AGENTS.md` guidance for future coding agents.
+
+### Changed
+
+- `BackyardMysqli` now accepts an optional connection charset argument, and `Backyard::newMysqli()` forwards it.
 
 ## [4.1.2.2] - 2026-03-08
 
@@ -395,7 +403,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.2.2...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.3...HEAD
+[4.1.3]: https://github.com/WorkOfStan/backyard/compare/v4.1.2.2...v4.1.3
 [4.1.2.2]: https://github.com/WorkOfStan/backyard/compare/v4.1.2.1...v4.1.2.2
 [4.1.2.1]: https://github.com/WorkOfStan/backyard/compare/v4.1.2...v4.1.2.1
 [4.1.2]: https://github.com/WorkOfStan/backyard/compare/v4.1.1...v4.1.2
