@@ -18,14 +18,6 @@
 - Breaking or non-breaking: potentially breaking if existing callers pass unusual identifiers.
 - Tests should be added: yes.
 
-### Required PHP extensions are underdeclared
-- Implemented: add Composer `suggest` entries for `ext-iconv`, `ext-mbstring`, `ext-mysqli`, and `ext-sockets`, with class-specific requirements documented in `README.md`.
-- Affected files: `composer.json`, `classes/BackyardMysqli.php`, `classes/BackyardHttp.php`
-- Why it matters: Composer declares `ext-curl`, but optional public APIs also use `mysqli`, `sockets`, `mbstring`, and `iconv`. Consumers can install successfully and then hit fatal errors when using those classes or methods.
-- Suggested safe approach: document class-specific extension requirements first. Consider `suggest` entries for optional helpers, or add hard `ext-*` requirements only in a major/compatibility-reviewed release.
-- Breaking or non-breaking: documentation or `suggest` is non-breaking; hard requirements can be breaking for installs.
-- Tests should be added: no direct tests required, but CI should cover extension availability if constraints change.
-
 ## High value
 
 ### Replace remote HTTP tests with deterministic tests
@@ -38,16 +30,16 @@
 
 ### Add missing tests for geo behavior
 
-- Affected files: `classes/BackyardGeo.php`, new or existing tests under `tests/`
-- Why it matters: distance calculations and POI result shapes are public behavior, but there are no tests.
-- Suggested safe approach: start with pure tests for `getRoughDistance()` and `calculateDistanceFromLatLong()`. Then test `getClosestPOI()` with a safe fake or test double around database access.
+- Affected files: `classes/BackyardGeo.php`, `tests/BackyardGeoTest.php`
+- Why it matters: existing tests cover nearest-POI selection, result shapes, empty/distant results, and invalid row values, but `getRoughDistance()` and `calculateDistanceFromLatLong()` lack direct tests.
+- Suggested safe approach: add direct tests for `getRoughDistance()` and `calculateDistanceFromLatLong()`, including zero distance and known coordinate pairs.
 - Breaking or non-breaking: non-breaking.
 - Tests should be added: yes.
 
 ### Add missing tests for API client behavior
 
-- Affected files: `classes/BackyardBriefApiClient.php`, new or existing tests under `tests/`
-- Why it matters: this class performs network calls, logs files, decodes JSON, and throws/returns sentinels, but none of that is covered.
+- Affected files: `classes/BackyardBriefApiClient.php`, `tests/BackyardBriefApiClientTest.php`
+- Why it matters: existing tests cover invalid JSON with default and supplied loggers, but transport, file logging, successful JSON responses, and other failure paths remain untested.
 - Suggested safe approach: add tests with a local fake HTTP endpoint or refactor minimally to isolate the transport after behavior is pinned.
 - Breaking or non-breaking: non-breaking if tests only document existing behavior.
 - Tests should be added: yes.
@@ -85,14 +77,6 @@
 - Suggested safe approach: add docblocks/tests first. Change behavior only when explicitly requested.
 - Breaking or non-breaking: docs/tests are non-breaking; behavior changes may be breaking.
 - Tests should be added: yes for each clarified behavior.
-
-### Reduce PHPStan ignores by adding precise types/docblocks
-
-- Affected files: `phpstan.neon.dist`, `classes/*.php`
-- Why it matters: PHPStan runs at max level with several ignores. Better local types can reduce future false positives and make agent changes safer.
-- Suggested safe approach: handle one class at a time, prefer docblocks over native signatures where compatibility is uncertain, and run PHPStan after each slice.
-- Breaking or non-breaking: usually non-breaking with docblocks; native signatures may be breaking.
-- Tests should be added: only where behavior is touched.
 
 ### Translate or repair legacy comments carefully
 
