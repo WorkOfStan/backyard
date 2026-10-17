@@ -31,6 +31,7 @@ chore: Sort PHP imports, properties, and methods alphabetically
 ### Fixed
 
 - Specify string keys for `BackyardError` logger configuration arrays.
+- Fix suppressed PHPStan errors in `BackyardBriefApiClient` and `BackyardGeo` with POI value validation and redundant-check removal.
 
 ## [4.1.3] - 2026-04-27
 
