@@ -22,117 +22,37 @@ class BackyardArray
     {
         $this->logger = is_null($logger) ? new \Psr\Log\NullLogger() : $logger;
     }
-    /**
-     * Note http://php.net/manual/en/function.array-key-exists.php#107786
-     * If you want to take the performance advantage of isset() while keeping the null element correctly detected, use:
-
-      if (isset(..) || array_key_exists(...))
-      {
-      ...
-      }
-     *
-     */
 
     /**
-     * A version of in_array() that supports wildcards in the haystack.
+     * http://www.codeproject.com/Questions/780780/PHP-Finding-differences-in-two-multidimensional-ar
+      [NOTE BY danbrown AT php DOT net: The array_diff_assoc_recursive function is a
+      combination of efforts from previous notes deleted.
+      Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com),
+      (sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
      *
-     * http://www.php.net/manual/en/function.in-array.php#67159
-     * //Unfortunately, fnmatch() is not available on Windows or other non-POSIX compliant systems.
-     *
-     * Example:
-     * $haystack = array('*krapplack.de');
-     * $needle = 'www.krapplack.de';
-     * echo backyard_inArrayWildcards($needle, $haystack); # outputs "true" *
-     *
-     * @param string $needle
-     * @param array<string> $haystack
-     * @return bool
+     * @param array<mixed> $array1
+     * @param array<mixed> $array2
+     * @return array<mixed>|int (array|0)
      */
-    public function inArrayWildcards($needle, array $haystack)
+    public function arrayDiffAssocRecursive(array $array1, array $array2)
     {
-        foreach ($haystack as $value) {
-            if (true === fnmatch($value, $needle)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns array named $columnName from $myArray
-     * Ignores rows where the field $columnName is not set
-     *
-     * @param array<array<mixed>> $myArray at least two-dimensional
-     * @param string $columnName
-     * @param bool $columnAlwaysExpected default false; true => function logs the missing column in a row as an error
-     * @return array<mixed>
-     */
-    public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false)
-    {
-        //if (!is_array($myArray)) {
-        //    return array(); // empty array more consistent than false
-        //}
-        $result = array();
-        foreach ($myArray as $key => $row) {
-            /** @phpstan-ignore function.alreadyNarrowedType */
-            if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
-                $result[$key] = $row[$columnName];
-            } elseif ($columnAlwaysExpected) {
-                $this->logger->warning("getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Returns array $myArray without column named in $columnName
-     *
-     * @param array<array<mixed>> $myArray
-     * @param string $columnName
-     * @return array<array<mixed>>
-     */
-    public function removeOneColumnFromArray(array $myArray, $columnName)
-    {
-        //if (!is_array($myArray)) {
-        //    return array(); //empty array more consistent than false
-        //}
-        $result = array();
-        foreach ($myArray as $key => $row) {
-            foreach ($row as $key2 => $row2) {
-                if ($key2 != $columnName) {
-                    $result[$key][$key2] = $row[$key2];
+        foreach ($array1 as $key => $value) {
+            if (is_array($value)) {
+                if (!(isset($array2[$key]) || array_key_exists($key, $array2))) {
+                    $difference[$key] = $value;
+                } elseif (!is_array($array2[$key])) {
+                    $difference[$key] = $value;
+                } else {
+                    $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
+                    if ($new_diff != false) {
+                        $difference[$key] = $new_diff;
+                    }
                 }
+            } elseif (!(isset($array2[$key]) || array_key_exists($key, $array2)) || $array2[$key] != $value) {
+                $difference[$key] = $value;
             }
         }
-        return $result;
-
-        //@todo measure if the following pattern wouldn't be faster while having exactly the same results
-//        foreach($myArray as $k => $v) {
-//            unset($myArray[$k][$columnName]);
-//        }
-    }
-
-    /**
-     * Return $myArray as a one-line string
-     *
-     * @param array<mixed> $myArray
-     * @return string
-     */
-    public function dumpArrayAsOneLine(array $myArray)
-    {
-        return (string) preg_replace(
-            '/\n/',
-            ' ',
-            (string) preg_replace(
-                '/\r/',
-                ' ',
-                (string) preg_replace(
-                    '/\s\s+/',
-                    ' ',
-                    print_r($myArray, true)
-                )
-            )
-        );
+        return isset($difference) ? $difference : 0;
     }
 
     /**
@@ -177,34 +97,114 @@ class BackyardArray
     }
 
     /**
-     * http://www.codeproject.com/Questions/780780/PHP-Finding-differences-in-two-multidimensional-ar
-      [NOTE BY danbrown AT php DOT net: The array_diff_assoc_recursive function is a
-      combination of efforts from previous notes deleted.
-      Contributors included (Michael Johnson), (jochem AT iamjochem DAWT com),
-      (sc1n AT yahoo DOT com), and (anders DOT carlsson AT mds DOT mdh DOT se).]
+     * Return $myArray as a one-line string
      *
-     * @param array<mixed> $array1
-     * @param array<mixed> $array2
-     * @return array<mixed>|int (array|0)
+     * @param array<mixed> $myArray
+     * @return string
      */
-    public function arrayDiffAssocRecursive(array $array1, array $array2)
+    public function dumpArrayAsOneLine(array $myArray)
     {
-        foreach ($array1 as $key => $value) {
-            if (is_array($value)) {
-                if (!(isset($array2[$key]) || array_key_exists($key, $array2))) {
-                    $difference[$key] = $value;
-                } elseif (!is_array($array2[$key])) {
-                    $difference[$key] = $value;
-                } else {
-                    $new_diff = $this->arrayDiffAssocRecursive($value, $array2[$key]);
-                    if ($new_diff != false) {
-                        $difference[$key] = $new_diff;
-                    }
-                }
-            } elseif (!(isset($array2[$key]) || array_key_exists($key, $array2)) || $array2[$key] != $value) {
-                $difference[$key] = $value;
+        return (string) preg_replace(
+            '/\n/',
+            ' ',
+            (string) preg_replace(
+                '/\r/',
+                ' ',
+                (string) preg_replace(
+                    '/\s\s+/',
+                    ' ',
+                    print_r($myArray, true)
+                )
+            )
+        );
+    }
+
+    /**
+     * Returns array named $columnName from $myArray
+     * Ignores rows where the field $columnName is not set
+     *
+     * @param array<array<mixed>> $myArray at least two-dimensional
+     * @param string $columnName
+     * @param bool $columnAlwaysExpected default false; true => function logs the missing column in a row as an error
+     * @return array<mixed>
+     */
+    public function getOneColumnFromArray(array $myArray, $columnName, $columnAlwaysExpected = false)
+    {
+        //if (!is_array($myArray)) {
+        //    return array(); // empty array more consistent than false
+        //}
+        $result = array();
+        foreach ($myArray as $key => $row) {
+            /** @phpstan-ignore function.alreadyNarrowedType */
+            if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
+                $result[$key] = $row[$columnName];
+            } elseif ($columnAlwaysExpected) {
+                $this->logger->warning("getOneColumnFromArray: {$columnName} not in " . print_r($row, true));
             }
         }
-        return isset($difference) ? $difference : 0;
+        return $result;
+    }
+    /**
+     * Note http://php.net/manual/en/function.array-key-exists.php#107786
+     * If you want to take the performance advantage of isset() while keeping the null element correctly detected, use:
+
+      if (isset(..) || array_key_exists(...))
+      {
+      ...
+      }
+     *
+     */
+
+    /**
+     * A version of in_array() that supports wildcards in the haystack.
+     *
+     * http://www.php.net/manual/en/function.in-array.php#67159
+     * //Unfortunately, fnmatch() is not available on Windows or other non-POSIX compliant systems.
+     *
+     * Example:
+     * $haystack = array('*krapplack.de');
+     * $needle = 'www.krapplack.de';
+     * echo backyard_inArrayWildcards($needle, $haystack); # outputs "true" *
+     *
+     * @param string $needle
+     * @param array<string> $haystack
+     * @return bool
+     */
+    public function inArrayWildcards($needle, array $haystack)
+    {
+        foreach ($haystack as $value) {
+            if (true === fnmatch($value, $needle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns array $myArray without column named in $columnName
+     *
+     * @param array<array<mixed>> $myArray
+     * @param string $columnName
+     * @return array<array<mixed>>
+     */
+    public function removeOneColumnFromArray(array $myArray, $columnName)
+    {
+        //if (!is_array($myArray)) {
+        //    return array(); //empty array more consistent than false
+        //}
+        $result = array();
+        foreach ($myArray as $key => $row) {
+            foreach ($row as $key2 => $row2) {
+                if ($key2 != $columnName) {
+                    $result[$key][$key2] = $row[$key2];
+                }
+            }
+        }
+        return $result;
+
+        //@todo measure if the following pattern wouldn't be faster while having exactly the same results
+//        foreach($myArray as $k => $v) {
+//            unset($myArray[$k][$columnName]);
+//        }
     }
 }

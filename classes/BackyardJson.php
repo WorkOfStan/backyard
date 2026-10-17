@@ -28,46 +28,34 @@ class BackyardJson
     }
 
     /**
-     * @desc Minify JSON and if JSON is not valid it reports it
-     * in the my_error_log and outputs a preformatted error500 json string
+     * @desc Retrieves JSON from $url and puts it into associative array
      *
-     * @param string $jsonInput
-     * @param int $logLevel - optional - default is not to be verbose
-     * @return string
+     * @param string $url
+     * @param string $useragent OPTIONAL
+     * @param int $timeout OPTIONAL
+     * @param string|false $customHeaders OPTIONAL
+     * @param array<mixed> $postArray OPTIONAL
+     * @return array<mixed>|false array if cURL($url) returns JSON else false
      */
-    public function minifyJSON(string $jsonInput, int $logLevel = 5)
-    {
-        $jsonOutput = json_encode(json_decode($jsonInput)); // optimalizace pro výstup
-        if ($jsonOutput == 'null' || $jsonOutput === false) {
-            $this->logger->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
-            return '{"status": "500", "error": "Internal error"}'; //error output
+    public function getJsonAsArray(
+        $url,
+        $useragent = 'PHP/cURL',
+        $timeout = 5,
+        $customHeaders = false,
+        array $postArray = array()
+    ) {
+        $result = $this->backyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
+        $json = $result['message_body'];
+        if (!$json || !is_string($json)) {
+            $this->logger->log(2, "No valid content on {$url}");
+            return false;
         }
-        $this->logger->log($logLevel, "JSON input: {$jsonInput}", array(16));
-        $this->logger->log($logLevel, "JSON output: {$jsonOutput}", array(16));
-        return $jsonOutput;
-    }
-
-    /**
-     * @desc Output JSON
-     * @param string $jsonString to be minified
-     * @param bool $exitAfterOutput  - optional - default is to let the script continue
-     * @param int $logLevel - optional - default is not to be verbose
-     * @return string minified JSON (works only if $exitAfterOuput === false)
-     *
-     * @todo - add possibility to return HTTP status codes other than 200
-     */
-    public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5)
-    {
-        header("Content-type: application/json");
-        $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
-        if ($minifiedJson === '{"status": "500", "error": "Internal error"}') { //error output from minifyJSON
-            header("HTTP/1.1 500 Internal Server Error", true, 500);
+        $jsonArray = $this->jsonCleanDecode($json, true);
+        if (!$jsonArray) {
+            $this->logger->log(2, "Trouble with decoding JSON from {$url}");
+            return false;
         }
-        echo($minifiedJson);
-        if ($exitAfterOutput) {
-            exit;
-        }
-        return $minifiedJson;
+        return $jsonArray;
     }
 
     /**
@@ -112,33 +100,45 @@ class BackyardJson
     }
 
     /**
-     * @desc Retrieves JSON from $url and puts it into associative array
+     * @desc Minify JSON and if JSON is not valid it reports it
+     * in the my_error_log and outputs a preformatted error500 json string
      *
-     * @param string $url
-     * @param string $useragent OPTIONAL
-     * @param int $timeout OPTIONAL
-     * @param string|false $customHeaders OPTIONAL
-     * @param array<mixed> $postArray OPTIONAL
-     * @return array<mixed>|false array if cURL($url) returns JSON else false
+     * @param string $jsonInput
+     * @param int $logLevel - optional - default is not to be verbose
+     * @return string
      */
-    public function getJsonAsArray(
-        $url,
-        $useragent = 'PHP/cURL',
-        $timeout = 5,
-        $customHeaders = false,
-        array $postArray = array()
-    ) {
-        $result = $this->backyardHttp->getData($url, $useragent, $timeout, $customHeaders, $postArray);
-        $json = $result['message_body'];
-        if (!$json || !is_string($json)) {
-            $this->logger->log(2, "No valid content on {$url}");
-            return false;
+    public function minifyJSON(string $jsonInput, int $logLevel = 5)
+    {
+        $jsonOutput = json_encode(json_decode($jsonInput)); // optimalizace pro výstup
+        if ($jsonOutput == 'null' || $jsonOutput === false) {
+            $this->logger->log(1, "ERROR IN JSON: {$jsonInput}", array(16));
+            return '{"status": "500", "error": "Internal error"}'; //error output
         }
-        $jsonArray = $this->jsonCleanDecode($json, true);
-        if (!$jsonArray) {
-            $this->logger->log(2, "Trouble with decoding JSON from {$url}");
-            return false;
+        $this->logger->log($logLevel, "JSON input: {$jsonInput}", array(16));
+        $this->logger->log($logLevel, "JSON output: {$jsonOutput}", array(16));
+        return $jsonOutput;
+    }
+
+    /**
+     * @desc Output JSON
+     * @param string $jsonString to be minified
+     * @param bool $exitAfterOutput  - optional - default is to let the script continue
+     * @param int $logLevel - optional - default is not to be verbose
+     * @return string minified JSON (works only if $exitAfterOuput === false)
+     *
+     * @todo - add possibility to return HTTP status codes other than 200
+     */
+    public function outputJSON($jsonString, $exitAfterOutput = false, $logLevel = 5)
+    {
+        header("Content-type: application/json");
+        $minifiedJson = $this->minifyJSON($jsonString, $logLevel);
+        if ($minifiedJson === '{"status": "500", "error": "Internal error"}') { //error output from minifyJSON
+            header("HTTP/1.1 500 Internal Server Error", true, 500);
         }
-        return $jsonArray;
+        echo($minifiedJson);
+        if ($exitAfterOutput) {
+            exit;
+        }
+        return $minifiedJson;
     }
 }

@@ -8,8 +8,8 @@ namespace WorkOfStan\Backyard\Tests;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
-use WorkOfStan\Backyard\BackyardHttp;
 use WorkOfStan\Backyard\BackyardError;
+use WorkOfStan\Backyard\BackyardHttp;
 
 //@todo - put into separate group as it needs access to internet
 
@@ -24,6 +24,29 @@ class BackyardHttpTest extends TestCase
      * @var BackyardHttp
      */
     protected $object;
+
+    /**
+     * $subject is expected to be string, so the function returns string
+     *
+     * @param string|string[] $pattern
+     * @param string|string[] $replacement
+     * @param string $subject
+     * @param int $limit
+     * @param ?int $count
+     * @return string
+     * @throws \Exception
+     * @throws InvalidArgumentException
+     */
+    // @phpstan-ignore parameterByRef.unusedType
+    private function pregReplaceString($pattern, $replacement, $subject, $limit = -1, &$count = null): string
+    {
+        $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
+        if (is_null($result)) {
+            throw new \Exception('error (null) preg_replace');
+        }
+        //Assert::string($result);
+        return $result;
+    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -185,6 +208,7 @@ class BackyardHttpTest extends TestCase
         $this->assertEquals($expected['REDIRECT_URL'], $result['REDIRECT_URL']);
         $this->assertEquals($expected['CONTENT_TYPE'], $result['CONTENT_TYPE']);
     }
+
     //@todo - make test if the method remains in Backyard
 //    /**
 //     * @covers WorkOfStan\Backyard\BackyardHttp::getHTTPstatusCode
@@ -210,27 +234,4 @@ class BackyardHttpTest extends TestCase
 //
 //        $this->assertEquals($expected, $this->object->getHTTPstatusCodeByUA($url, $userAgent));
 //    }
-
-    /**
-     * $subject is expected to be string, so the function returns string
-     *
-     * @param string|string[] $pattern
-     * @param string|string[] $replacement
-     * @param string $subject
-     * @param int $limit
-     * @param ?int $count
-     * @return string
-     * @throws \Exception
-     * @throws InvalidArgumentException
-     */
-    // @phpstan-ignore parameterByRef.unusedType
-    private function pregReplaceString($pattern, $replacement, $subject, $limit = -1, &$count = null): string
-    {
-        $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
-        if (is_null($result)) {
-            throw new \Exception('error (null) preg_replace');
-        }
-        //Assert::string($result);
-        return $result;
-    }
 }

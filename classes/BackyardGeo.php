@@ -16,30 +16,6 @@ class BackyardGeo
     /** @var LoggerInterface */
     protected $logger = null;
 
-    /**
-     *
-     * @param LoggerInterface $logger
-     * @param array<mixed> $backyardConfConstruct
-     */
-    public function __construct(LoggerInterface $logger, array $backyardConfConstruct = array())
-    {
-        //@todo do not use $this->BackyardConf but set the class properties right here accordingly;
-        //@todo also provide means to set the values otherwise later
-        $this->backyardConf = array_merge(
-            array(//default values
-                //to quickly get rid off too distant POIs; 1 ~ 100km
-                'geo_rough_distance_limit' => 1.0, //float
-                //distance considered to be overlapping with the device position
-                // 2500 m is considered exact location due to mobile phone GPS caching
-                'geo_maximum_meters_from_poi' => 2500.0, //float
-                //name of table with POI coordinates
-                'geo_poi_list_table_name' => 'poi_list', //string
-            ),
-            $backyardConfConstruct
-        );
-
-        $this->logger = $logger;
-    }
     /**     * ***************************************************************************
      * GEOLOCATION FUNCTIONS
      *
@@ -99,27 +75,81 @@ class BackyardGeo
      */
 
     /**
-     * 1 ~ 100km
-     * @param float $clientLng
-     * @param float $clientLat
-     * @param float $poiLng
-     * @param float $poiLat
-     * @return float
+     *
+     * @param LoggerInterface $logger
+     * @param array<mixed> $backyardConfConstruct
      */
-    public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat)
+    public function __construct(LoggerInterface $logger, array $backyardConfConstruct = array())
     {
-        // Ensure that parameters are floats
-        $clientLngFloat = (float) $clientLng;
-        $clientLatFloat = (float) $clientLat;
-        $poiLngFloat = (float) $poiLng;
-        $poiLatFloat = (float) $poiLat;
-
-        $result = abs($clientLngFloat - $poiLngFloat) + abs($clientLatFloat - $poiLatFloat);
-        $this->logger->log(
-            5,
-            "client({$clientLngFloat}, {$clientLatFloat}) poi({$poiLngFloat}, {$poiLatFloat}) roughDistance = {$result}"
+        //@todo do not use $this->BackyardConf but set the class properties right here accordingly;
+        //@todo also provide means to set the values otherwise later
+        $this->backyardConf = array_merge(
+            array(//default values
+                //to quickly get rid off too distant POIs; 1 ~ 100km
+                'geo_rough_distance_limit' => 1.0, //float
+                //distance considered to be overlapping with the device position
+                // 2500 m is considered exact location due to mobile phone GPS caching
+                'geo_maximum_meters_from_poi' => 2500.0, //float
+                //name of table with POI coordinates
+                'geo_poi_list_table_name' => 'poi_list', //string
+            ),
+            $backyardConfConstruct
         );
-        return $result;
+
+        $this->logger = $logger;
+    }
+
+    /**
+     * @desc Calculates distance between $point1 and $point2 denominated in $uom (unit of measurement)
+     * http://forums.phpfreaks.com/topic/150365-counting-distance-between-2-gps-points/
+     * @param array<float> $point1 ['latitude','longitude']
+     * @param array<float> $point2 ['latitude','longitude']
+     * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
+     * @return float distance
+     * @throws \UnexpectedValueException If unknown unit of measurement is used
+     */
+    public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km')
+    {
+        // Ensure the points are arrays of floats
+        $point1['latitude'] = (float) $point1['latitude'];
+        $point1['longitude'] = (float) $point1['longitude'];
+        $point2['latitude'] = (float) $point2['latitude'];
+        $point2['longitude'] = (float) $point2['longitude'];
+
+        //  Uses Haversine formula to calculate the great circle distance
+        //  between two points identified by longitude and latitude
+        switch (strtolower($uom)) {
+            case 'km':
+                $earthMeanRadius = 6371.009; // km
+                break;
+            case 'm':
+                $earthMeanRadius = 6371.009 * 1000; // km
+                break;
+            case 'miles':
+                $earthMeanRadius = 3958.761; // miles
+                break;
+            case 'yards':
+            case 'yds':
+                $earthMeanRadius = 3958.761 * 1760; // miles
+                break;
+            case 'feet':
+            case 'ft':
+                $earthMeanRadius = 3958.761 * 1760 * 3; // miles
+                break;
+            case 'nm':
+                $earthMeanRadius = 3440.069; // miles
+                break;
+            default:
+                throw new UnexpectedValueException('Unknown unit of measurement');
+        }
+
+        $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
+        $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
+        $a = sin($deltaLatitude / 2) * sin($deltaLatitude / 2) +
+            cos(deg2rad($point1['latitude'])) * cos(deg2rad($point2['latitude'])) *
+            sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earthMeanRadius * $c;
     }
 
     /**
@@ -259,55 +289,26 @@ class BackyardGeo
     }
 
     /**
-     * @desc Calculates distance between $point1 and $point2 denominated in $uom (unit of measurement)
-     * http://forums.phpfreaks.com/topic/150365-counting-distance-between-2-gps-points/
-     * @param array<float> $point1 ['latitude','longitude']
-     * @param array<float> $point2 ['latitude','longitude']
-     * @param string $uom 'km','m','miles','yards','yds','feet','ft','nm' - default is km
-     * @return float distance
-     * @throws \UnexpectedValueException If unknown unit of measurement is used
+     * 1 ~ 100km
+     * @param float $clientLng
+     * @param float $clientLat
+     * @param float $poiLng
+     * @param float $poiLat
+     * @return float
      */
-    public function calculateDistanceFromLatLong($point1, $point2, $uom = 'km')
+    public function getRoughDistance($clientLng, $clientLat, $poiLng, $poiLat)
     {
-        // Ensure the points are arrays of floats
-        $point1['latitude'] = (float) $point1['latitude'];
-        $point1['longitude'] = (float) $point1['longitude'];
-        $point2['latitude'] = (float) $point2['latitude'];
-        $point2['longitude'] = (float) $point2['longitude'];
+        // Ensure that parameters are floats
+        $clientLngFloat = (float) $clientLng;
+        $clientLatFloat = (float) $clientLat;
+        $poiLngFloat = (float) $poiLng;
+        $poiLatFloat = (float) $poiLat;
 
-        //  Uses Haversine formula to calculate the great circle distance
-        //  between two points identified by longitude and latitude
-        switch (strtolower($uom)) {
-            case 'km':
-                $earthMeanRadius = 6371.009; // km
-                break;
-            case 'm':
-                $earthMeanRadius = 6371.009 * 1000; // km
-                break;
-            case 'miles':
-                $earthMeanRadius = 3958.761; // miles
-                break;
-            case 'yards':
-            case 'yds':
-                $earthMeanRadius = 3958.761 * 1760; // miles
-                break;
-            case 'feet':
-            case 'ft':
-                $earthMeanRadius = 3958.761 * 1760 * 3; // miles
-                break;
-            case 'nm':
-                $earthMeanRadius = 3440.069; // miles
-                break;
-            default:
-                throw new UnexpectedValueException('Unknown unit of measurement');
-        }
-
-        $deltaLatitude = deg2rad($point2['latitude'] - $point1['latitude']);
-        $deltaLongitude = deg2rad($point2['longitude'] - $point1['longitude']);
-        $a = sin($deltaLatitude / 2) * sin($deltaLatitude / 2) +
-            cos(deg2rad($point1['latitude'])) * cos(deg2rad($point2['latitude'])) *
-            sin($deltaLongitude / 2) * sin($deltaLongitude / 2);
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        return $earthMeanRadius * $c;
+        $result = abs($clientLngFloat - $poiLngFloat) + abs($clientLatFloat - $poiLatFloat);
+        $this->logger->log(
+            5,
+            "client({$clientLngFloat}, {$clientLatFloat}) poi({$poiLngFloat}, {$poiLatFloat}) roughDistance = {$result}"
+        );
+        return $result;
     }
 }

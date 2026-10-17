@@ -35,8 +35,8 @@ parameters:
       	count: 1
       	path: classes/BackyardGeo.php
 
-      -
-      	message: '#^Method WorkOfStan\\Backyard\\BackyardGeo\:\:getListOfPOI\(\) should return array\<array\<mixed\>\>\|false but returns non\-empty\-array\<mixed, mixed\>\.$#'
-      	identifier: return.type
-      	count: 1
-      	path: classes/BackyardGeo.php
+      #-
+      #	message: '#^Method WorkOfStan\\Backyard\\BackyardGeo\:\:getListOfPOI\(\) should return array\<array\<mixed\>\>\|false but returns non\-empty\-array\<mixed, mixed\>\.$#'
+      #	identifier: return.type
+      #	count: 1
+      #	path: classes/BackyardGeo.php

@@ -42,15 +42,177 @@ class BackyardArrayTest extends TestCase
     }
 
     /**
-     * @covers WorkOfStan\Backyard\BackyardArray::inArrayWildcards
+     * @covers WorkOfStan\Backyard\BackyardArray::arrayDiffAssocRecursive
      *
      * @return void
      */
-    public function testInArrayWildcards(): void
+    public function testArrayDiffAssocRecursiveDifferent(): void
     {
-        $orig = array('*krapplack.de');
-        $this->assertTrue($this->object->inArrayWildcards('www.krapplack.de', $orig));
-        $this->assertFalse($this->object->inArrayWildcards('www.qrapplack.de', $orig));
+        $array1 = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",
+                "x" => array(
+                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
+                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+                    "br" => array("a" => "100", "c" => "300",),
+                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+                )
+            ),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $array2 = array(
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $expected = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "br" => array("a" => "100", "c" => "300",
+                "x" => array(
+                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
+                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+                    "br" => array("a" => "100", "c" => "300",),
+                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+                )
+            ),
+        );
+
+        $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array2));
+    }
+
+    /**
+     * @return void
+     */
+    public function testArrayDiffAssocRecursiveSame(): void
+    {
+        $array1 = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",
+                "x" => array(
+                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
+                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+                    "br" => array("a" => "100", "c" => "300",),
+                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+                )
+            ),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $expected = 0;
+
+        $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testArrayVlookupAllMatches(): void
+    {
+        $searchedArray = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $searchedValue = "20";
+        $columnName = "b";
+        $allExactMatches = true;
+        $columnAlwaysExpected = false;
+        $expected = array(
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testArrayVlookupFirstMatch(): void
+    {
+        $searchedArray = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $searchedValue = "20";
+        $columnName = "b";
+        $allExactMatches = false;
+        $columnAlwaysExpected = false;
+        $expected = array("a" => "10", "b" => "20", "c" => "30",);
+
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
+    }
+
+    /**
+     * @covers WorkOfStan\Backyard\BackyardArray::arrayVlookup
+     *
+     * @return void
+     */
+    public function testArrayVlookupNoMatch(): void
+    {
+        $searchedArray = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",),
+            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
+        );
+        $searchedValue = "2000";
+        $columnName = "b";
+        $allExactMatches = false;
+        $columnAlwaysExpected = false;
+        $expected = false;
+
+        $this->assertEquals(
+            $expected,
+            $this->object->arrayVlookup(
+                $searchedValue,
+                $searchedArray,
+                $columnName,
+                $allExactMatches,
+                $columnAlwaysExpected
+            )
+        );
+    }
+
+    /**
+     * @covers WorkOfStan\Backyard\BackyardArray::dumpArrayAsOneLine
+     *
+     * @return void
+     */
+    public function testDumpArrayAsOneLine(): void
+    {
+        $myArray = array(
+            "al" => array("a" => "1", "b" => "2", "c" => "3",),
+            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
+            "br" => array("a" => "100", "c" => "300",),
+            "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
+        );
+        $expected = 'Array ( [al] => Array ( [a] => 1 [b] => 2 [c] => 3 ) '
+            . '[ham] => Array ( [a] => 10 [b] => 20 [c] => 30 ) [br] => Array ( [a] => 100 [c] => 300 ) '
+            . '[a] => Array ( [a] => 1000 [b] => 2000 [c] => 3000 ) ) ';
+
+        $this->assertEquals($expected, $this->object->dumpArrayAsOneLine($myArray));
     }
 
     /**
@@ -124,6 +286,18 @@ class BackyardArrayTest extends TestCase
     }
 
     /**
+     * @covers WorkOfStan\Backyard\BackyardArray::inArrayWildcards
+     *
+     * @return void
+     */
+    public function testInArrayWildcards(): void
+    {
+        $orig = array('*krapplack.de');
+        $this->assertTrue($this->object->inArrayWildcards('www.krapplack.de', $orig));
+        $this->assertFalse($this->object->inArrayWildcards('www.qrapplack.de', $orig));
+    }
+
+    /**
      * @covers WorkOfStan\Backyard\BackyardArray::removeOneColumnFromArray
      *
      * testRemoveOneColumnFromArrayNoArray() not needed as the Argument 1 MUST be of the type array
@@ -155,179 +329,5 @@ class BackyardArrayTest extends TestCase
         );
 
         $this->assertEquals($expected, $this->object->removeOneColumnFromArray($myArray, $columnName));
-    }
-
-    /**
-     * @covers WorkOfStan\Backyard\BackyardArray::dumpArrayAsOneLine
-     *
-     * @return void
-     */
-    public function testDumpArrayAsOneLine(): void
-    {
-        $myArray = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",),
-            "a" => array("a" => "1000", "b" => "2000", "c" => "3000",),
-        );
-        $expected = 'Array ( [al] => Array ( [a] => 1 [b] => 2 [c] => 3 ) '
-            . '[ham] => Array ( [a] => 10 [b] => 20 [c] => 30 ) [br] => Array ( [a] => 100 [c] => 300 ) '
-            . '[a] => Array ( [a] => 1000 [b] => 2000 [c] => 3000 ) ) ';
-
-        $this->assertEquals($expected, $this->object->dumpArrayAsOneLine($myArray));
-    }
-
-    /**
-     * @covers WorkOfStan\Backyard\BackyardArray::arrayVlookup
-     *
-     * @return void
-     */
-    public function testArrayVlookupNoMatch(): void
-    {
-        $searchedArray = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $searchedValue = "2000";
-        $columnName = "b";
-        $allExactMatches = false;
-        $columnAlwaysExpected = false;
-        $expected = false;
-
-        $this->assertEquals(
-            $expected,
-            $this->object->arrayVlookup(
-                $searchedValue,
-                $searchedArray,
-                $columnName,
-                $allExactMatches,
-                $columnAlwaysExpected
-            )
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testArrayVlookupFirstMatch(): void
-    {
-        $searchedArray = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $searchedValue = "20";
-        $columnName = "b";
-        $allExactMatches = false;
-        $columnAlwaysExpected = false;
-        $expected = array("a" => "10", "b" => "20", "c" => "30",);
-
-        $this->assertEquals(
-            $expected,
-            $this->object->arrayVlookup(
-                $searchedValue,
-                $searchedArray,
-                $columnName,
-                $allExactMatches,
-                $columnAlwaysExpected
-            )
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testArrayVlookupAllMatches(): void
-    {
-        $searchedArray = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $searchedValue = "20";
-        $columnName = "b";
-        $allExactMatches = true;
-        $columnAlwaysExpected = false;
-        $expected = array(
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-
-        $this->assertEquals(
-            $expected,
-            $this->object->arrayVlookup(
-                $searchedValue,
-                $searchedArray,
-                $columnName,
-                $allExactMatches,
-                $columnAlwaysExpected
-            )
-        );
-    }
-
-    /**
-     * @covers WorkOfStan\Backyard\BackyardArray::arrayDiffAssocRecursive
-     *
-     * @return void
-     */
-    public function testArrayDiffAssocRecursiveDifferent(): void
-    {
-        $array1 = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",
-                "x" => array(
-                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
-                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-                    "br" => array("a" => "100", "c" => "300",),
-                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-                )
-            ),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $array2 = array(
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $expected = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "br" => array("a" => "100", "c" => "300",
-                "x" => array(
-                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
-                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-                    "br" => array("a" => "100", "c" => "300",),
-                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-                )
-            ),
-        );
-
-        $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array2));
-    }
-
-    /**
-     * @return void
-     */
-    public function testArrayDiffAssocRecursiveSame(): void
-    {
-        $array1 = array(
-            "al" => array("a" => "1", "b" => "2", "c" => "3",),
-            "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-            "br" => array("a" => "100", "c" => "300",
-                "x" => array(
-                    "al" => array("a" => "1", "b" => "2", "c" => "3",),
-                    "ham" => array("a" => "10", "b" => "20", "c" => "30",),
-                    "br" => array("a" => "100", "c" => "300",),
-                    "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-                )
-            ),
-            "a" => array("a" => "1000", "b" => "20", "c" => "3000",),
-        );
-        $expected = 0;
-
-        $this->assertEquals($expected, $this->object->arrayDiffAssocRecursive($array1, $array1));
     }
 }
