@@ -33,11 +33,11 @@ class BackyardHttpTest extends TestCase
      * @param string $subject
      * @param int $limit
      * @param ?int $count
+     * @param-out int $count
      * @return string
      * @throws \Exception
      * @throws InvalidArgumentException
      */
-    // @phpstan-ignore parameterByRef.unusedType
     private function pregReplaceString($pattern, $replacement, $subject, $limit = -1, &$count = null): string
     {
         $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);

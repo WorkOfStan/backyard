@@ -240,13 +240,18 @@ class BackyardGeo
         if (!is_scalar($this->backyardConf['geo_rough_distance_limit'])) {
             throw new UnexpectedValueException('geo_rough_distance_limit MUST be scalar to be cast to int');
         }
+        if (
+            !is_scalar($listOfPOINearbyProcessed[0]['category']) ||
+            !is_scalar($listOfPOINearbyProcessed[0]['adresa'])
+        ) {
+            throw new UnexpectedValueException('category and adresa MUST be scalar to be cast to string');
+        }
         return array(
-            'distance_m' => array_key_exists('distance', $listOfPOINearbyProcessed[0]) ?
-            (int) floor($listOfPOINearbyProcessed[0]['distance']) :
-            (int) $this->backyardConf['geo_rough_distance_limit'],
+            'distance_m' => (int) floor($listOfPOINearbyProcessed[0]['distance']),
             'poi_id' => $listOfPOINearbyProcessed[0]['poi_id'],
             //@todo category name instead of category id
-            'type_address' => $listOfPOINearbyProcessed[0]['category'] . ' ' . $listOfPOINearbyProcessed[0]['adresa'],
+            'type_address' => (string) $listOfPOINearbyProcessed[0]['category'] . ' '
+                . (string) $listOfPOINearbyProcessed[0]['adresa'],
             'address' => $listOfPOINearbyProcessed[0]['adresa'],
             'city' => $listOfPOINearbyProcessed[0]['mesto'],
             'type' => $listOfPOINearbyProcessed[0]['category'], //@todo category name instead of category id
@@ -275,7 +280,7 @@ class BackyardGeo
             // POI category secured
             . (is_int($poiCategory) ? $poiCategory : preg_replace("/[^0-9,]/", '', $poiCategory)) . ")";
         $listOfPOINearby = $poiConnection->queryArray($query);
-        if (!$listOfPOINearby || !is_array($listOfPOINearby)) {
+        if (!$listOfPOINearby) {
             $this->logger->log(2, 'No result for query ' . $query, array(11));
             return false;
         }

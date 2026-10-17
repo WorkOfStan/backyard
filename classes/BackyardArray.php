@@ -123,7 +123,7 @@ class BackyardArray
      * Returns array named $columnName from $myArray
      * Ignores rows where the field $columnName is not set
      *
-     * @param array<array<mixed>> $myArray at least two-dimensional
+     * @param array<mixed> $myArray Rows that are not arrays are ignored.
      * @param string $columnName
      * @param bool $columnAlwaysExpected default false; true => function logs the missing column in a row as an error
      * @return array<mixed>
@@ -135,7 +135,6 @@ class BackyardArray
         //}
         $result = array();
         foreach ($myArray as $key => $row) {
-            /** @phpstan-ignore function.alreadyNarrowedType */
             if (is_array($row) && (isset($row[$columnName]) || array_key_exists($columnName, $row))) {
                 $result[$key] = $row[$columnName];
             } elseif ($columnAlwaysExpected) {
