@@ -19,13 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
-## [4.1.4] - TBD
+## [4.1.4] - 2026-10-17
 
 chore: Sort PHP imports, properties, and methods alphabetically
 
 ### Changed
 
 - Sort PHP imports, properties, and methods alphabetically using case-insensitive ordering.
+- fix(SQLfluff): simplify SQL reference quoting
 
 ### Fixed
 
@@ -84,7 +85,7 @@ chore: dead code from backyard 1 and backyard 2 removed
 
 ## [4.1.0] - 2025-09-20
 
-added: PHP/8.4 support
+feat: add PHP/8.4 support
 
 ### Changed
 
@@ -102,11 +103,11 @@ added: PHP/8.4 support
 
 ## [4.0.0] - 2024-11-25
 
-PHP `>=7.4, <8.4`
+chore: add PHP `>=7.4, <8.4`
 
 ## [3.4.3] - 2024-11-25
 
-Prettier-fix, PHP `>=5.3, <7.4`
+chore: Prettier-fix, PHP `>=5.3, <7.4`
 
 ### Changed
 
@@ -116,7 +117,7 @@ Prettier-fix, PHP `>=5.3, <7.4`
 
 ## [3.4.2] - 2024-08-03
 
-BackyardArray may use `\Psr\Log\NullLogger`
+feat: BackyardArray may use `\Psr\Log\NullLogger`
 
 ### Changed
 
@@ -125,16 +126,20 @@ BackyardArray may use `\Psr\Log\NullLogger`
 
 ## [3.4.1] - 2024-08-03
 
-phpstan-baseline.neon removed
+fix: fix typehinting and method parameters checked for validity
 
 ### Fixed
 
 - BackyardBriefApiClient, BackyardGeo, BackyardJson typehinted and method parameters checked for validity
 - BackyardMysqli::queryArray conditions changed to test for `instanceof \mysqli_result`
 
+### Removed
+
+- phpstan-baseline.neon removed
+
 ## [3.4.0] - 2024-07-29
 
-BackyardError wraps \Seablast\Logger\Logger implementation
+chore: BackyardError wraps \Seablast\Logger\Logger implementation
 
 ### Added
 
@@ -163,13 +168,15 @@ BackyardError wraps \Seablast\Logger\Logger implementation
 
 ## [3.3.2] - 2022-02-12
 
+feat: add PSR-4 compliant class HTMLPage
+
 ### Added
 
 - PSR-4 compliant class HTMLPage instead of legacy LIB2 class_HTMLPage.php
 
 ## [3.3.1] - 2022-02-10
 
-- PHPStan level=9
+chore: PHPStan level=9
 
 ### Added
 
@@ -198,7 +205,7 @@ BackyardError wraps \Seablast\Logger\Logger implementation
 
 ## [3.3.0] - 2021-03-09
 
-Change of namespace + automatic testing of various PHP versions
+chore: Change of namespace + automatic testing of various PHP versions
 
 - Change of namespace to the new GitHub account maintaining the repository
 - GitHub online error-free static analysis workflows with composer dependencies, PHPUnit tests and PHPStan analysis run for various PHP versions ['5.3', '5.6', '7.3', '7.4']
@@ -415,7 +422,8 @@ LIBrary in backyard 2.0.0
 
 - fix for post functionality in backyard_getData
 
-[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.3...HEAD
+[Unreleased]: https://github.com/WorkOfStan/backyard/compare/v4.1.4...HEAD
+[4.1.4]: https://github.com/WorkOfStan/backyard/compare/v4.1.3...v4.1.4
 [4.1.3]: https://github.com/WorkOfStan/backyard/compare/v4.1.2.2...v4.1.3
 [4.1.2.2]: https://github.com/WorkOfStan/backyard/compare/v4.1.2.1...v4.1.2.2
 [4.1.2.1]: https://github.com/WorkOfStan/backyard/compare/v4.1.2...v4.1.2.1
