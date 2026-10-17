@@ -19,7 +19,7 @@
 - Tests should be added: yes.
 
 ### Required PHP extensions are underdeclared
-
+- Implemented: add Composer `suggest` entries for `ext-iconv`, `ext-mbstring`, `ext-mysqli`, and `ext-sockets`, with class-specific requirements documented in `README.md`.
 - Affected files: `composer.json`, `classes/BackyardMysqli.php`, `classes/BackyardHttp.php`
 - Why it matters: Composer declares `ext-curl`, but optional public APIs also use `mysqli`, `sockets`, `mbstring`, and `iconv`. Consumers can install successfully and then hit fatal errors when using those classes or methods.
 - Suggested safe approach: document class-specific extension requirements first. Consider `suggest` entries for optional helpers, or add hard `ext-*` requirements only in a major/compatibility-reviewed release.
