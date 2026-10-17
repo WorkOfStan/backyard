@@ -14,14 +14,14 @@ use Seablast\Logger\LoggerTime;
  */
 class BackyardError extends Logger implements LoggerInterface
 {
-    /** @var array<mixed> int,string,bool,array */
+    /** @var array<string,mixed> int,string,bool,array */
     protected $backyardConf = array();
     /** @var LoggerTime */
     protected $backyardTime;
 
     /**
      *
-     * @param array<mixed> $backyardConfConstruct
+     * @param array<string,mixed> $backyardConfConstruct
      * @param LoggerTime $backyardTime
      */
     public function __construct(array $backyardConfConstruct = array(), ?LoggerTime $backyardTime = null)
@@ -52,6 +52,49 @@ class BackyardError extends Logger implements LoggerInterface
             }
         }
         parent::__construct($this->backyardConf, $this->backyardTime);
+    }
+    /* Alternative way:
+      Logging levels
+      Log level   Description                                                                       Set bit
+      Warning     Identifies critical errors.                                                       None required
+      Debug       Provides additional information for programmers and Technical Product Support.    0 (zero)
+      Information Provides information on the health of the system.                                 1
+      Trace       Provides detailed information on the execution of the code.                       2
+
+      Log Mask values and logging levels
+      LogMask   Bit value Messages included
+      0         00000000  Warnings
+      1         00000001  Warnings and Debug
+      2         00000010  Warnings and Information
+      3         00000011  Warnings, Debug and Information
+      4         00000100  Warnings and Trace
+      7         00000111  Warnings, Debug, Information and Trace
+     */
+
+    /**
+     *
+     * @param string $errorNumber
+     * @param string $errorString
+     * @param string $feedbackButtonMarkup
+     * @return void (die)
+     */
+    public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = '')
+    {
+        $this->log(1, "Die with error {$errorNumber} - {$errorString}");
+        if ((bool) $feedbackButtonMarkup) {
+            echo(
+            "<html><body>"
+            . str_replace(
+                urlencode("%CUSTOM_VALUE%"),
+                urlencode(
+                    "Error {$errorNumber} - "
+                    . (($this->backyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")
+                ),
+                $feedbackButtonMarkup
+            )
+            ); //<html><body> na začátku pomůže, pokud ještě výstup nezačal
+        }
+        die("Error {$errorNumber}" . (($this->backyardConf['die_graciously_verbose']) ? " - {$errorString}" : ""));
     }
 
     /**
@@ -106,48 +149,5 @@ class BackyardError extends Logger implements LoggerInterface
         //} catch (\Seablast\Logger\ErrorLogFailureException $ex) { // as Logger::log() returns void
         //    return false;
         //}
-    }
-    /* Alternative way:
-      Logging levels
-      Log level   Description                                                                       Set bit
-      Warning     Identifies critical errors.                                                       None required
-      Debug       Provides additional information for programmers and Technical Product Support.    0 (zero)
-      Information Provides information on the health of the system.                                 1
-      Trace       Provides detailed information on the execution of the code.                       2
-
-      Log Mask values and logging levels
-      LogMask   Bit value Messages included
-      0         00000000  Warnings
-      1         00000001  Warnings and Debug
-      2         00000010  Warnings and Information
-      3         00000011  Warnings, Debug and Information
-      4         00000100  Warnings and Trace
-      7         00000111  Warnings, Debug, Information and Trace
-     */
-
-    /**
-     *
-     * @param string $errorNumber
-     * @param string $errorString
-     * @param string $feedbackButtonMarkup
-     * @return void (die)
-     */
-    public function dieGraciously($errorNumber, $errorString, $feedbackButtonMarkup = '')
-    {
-        $this->log(1, "Die with error {$errorNumber} - {$errorString}");
-        if ((bool) $feedbackButtonMarkup) {
-            echo(
-            "<html><body>"
-            . str_replace(
-                urlencode("%CUSTOM_VALUE%"),
-                urlencode(
-                    "Error {$errorNumber} - "
-                    . (($this->backyardConf['die_graciously_verbose']) ? " - {$errorString}" : "")
-                ),
-                $feedbackButtonMarkup
-            )
-            ); //<html><body> na začátku pomůže, pokud ještě výstup nezačal
-        }
-        die("Error {$errorNumber}" . (($this->backyardConf['die_graciously_verbose']) ? " - {$errorString}" : ""));
     }
 }

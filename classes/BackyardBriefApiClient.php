@@ -39,6 +39,22 @@ class BackyardBriefApiClient
     }
 
     /**
+     * Translates array to JSON, send it to API and return array decoded from the received JSON response.
+     *
+     * @param array<mixed> $arr
+     * @return array<mixed>
+     * @throws \Exception
+     */
+    public function getArrayArray(array $arr)
+    {
+        $json = json_encode($arr);
+        if ($json === false) {
+            throw new RuntimeException('Json_encode of array failed.');
+        }
+        return $this->getJsonArray($json);
+    }
+
+    /**
      * Each call returns string starting with timestamp
      * and ending with unique identifier based on the current time in microseconds.
      *
@@ -47,6 +63,50 @@ class BackyardBriefApiClient
     private function getCommunicationId()
     {
         return uniqid(date("Y-m-d-His_"));
+    }
+
+    /**
+     * Sends JSON and return array decoded from the received JSON response.
+     *
+     * @param string $json
+     * @return array<mixed>
+     * @throws \Exception
+     */
+    public function getJsonArray($json)
+    {
+        $response = $this->sendJsonLoad($json);
+        $result = is_string($response) ? json_decode($response, true) : null;
+        if ($result === null && !is_null($this->logger)) {
+            $this->logger->error("json decode failed for "
+                . substr((string) print_r($response, true), 0, 100)
+                . " that resulted from " . substr($json, 0, 100));
+        }
+        if (is_null($result)) {
+            return array();
+        } elseif (!is_array($result)) {
+            throw new UnexpectedValueException('$result must be of type array');
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @param string $message
+     * @param string $filePrefix
+     * @param string $communicationId
+     * @return bool Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.
+     */
+    private function logCommunication($message, $filePrefix, $communicationId)
+    {
+        if (!$this->appLogFolder) {
+            return false;
+        }
+        return error_log(
+            $message,
+            3,
+            "{$this->appLogFolder}/{$filePrefix}-"
+            . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json"
+        );
     }
 
     /**
@@ -112,65 +172,5 @@ class BackyardBriefApiClient
         }
         curl_close($ch);
         return $result;
-    }
-
-    /**
-     *
-     * @param string $message
-     * @param string $filePrefix
-     * @param string $communicationId
-     * @return bool Returns <b><code>TRUE</code></b> on logging or <b><code>FALSE</code></b> on not logging.
-     */
-    private function logCommunication($message, $filePrefix, $communicationId)
-    {
-        if (!$this->appLogFolder) {
-            return false;
-        }
-        return error_log(
-            $message,
-            3,
-            "{$this->appLogFolder}/{$filePrefix}-"
-            . ($communicationId ? $communicationId : $this->getCommunicationId()) . ".json"
-        );
-    }
-
-    /**
-     * Sends JSON and return array decoded from the received JSON response.
-     *
-     * @param string $json
-     * @return array<mixed>
-     * @throws \Exception
-     */
-    public function getJsonArray($json)
-    {
-        $response = $this->sendJsonLoad($json);
-        $result = is_string($response) ? json_decode($response, true) : null;
-        if ($result === null && !is_null($this->logger)) {
-            $this->logger->error("json decode failed for "
-                . substr((string) print_r($response, true), 0, 100)
-                . " that resulted from " . substr($json, 0, 100));
-        }
-        if (is_null($result)) {
-            return array();
-        } elseif (!is_array($result)) {
-            throw new UnexpectedValueException('$result must be of type array');
-        }
-        return $result;
-    }
-
-    /**
-     * Translates array to JSON, send it to API and return array decoded from the received JSON response.
-     *
-     * @param array<mixed> $arr
-     * @return array<mixed>
-     * @throws \Exception
-     */
-    public function getArrayArray(array $arr)
-    {
-        $json = json_encode($arr);
-        if ($json === false) {
-            throw new RuntimeException('Json_encode of array failed.');
-        }
-        return $this->getJsonArray($json);
     }
 }

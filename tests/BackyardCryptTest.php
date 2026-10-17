@@ -72,11 +72,11 @@ class BackyardCryptTest extends TestCase
      *
      * @return void
      */
-    public function testRandomIdLength32(): void
+    public function testRandomIdLength1024(): void
     {
-        $orig = $this->object->randomId(32);
-        $expected = 32;
-
+        $orig = $this->object->randomId(1024);
+        $expected = 1024;
+        //error_log($orig);
         $this->assertEquals($expected, strlen($orig));
     }
 
@@ -85,11 +85,11 @@ class BackyardCryptTest extends TestCase
      *
      * @return void
      */
-    public function testRandomIdLength1024(): void
+    public function testRandomIdLength32(): void
     {
-        $orig = $this->object->randomId(1024);
-        $expected = 1024;
-        //error_log($orig);
+        $orig = $this->object->randomId(32);
+        $expected = 32;
+
         $this->assertEquals($expected, strlen($orig));
     }
 }

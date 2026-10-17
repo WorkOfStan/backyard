@@ -1,16 +1,15 @@
-# Environment specific configuration
-*.local.php
+# Ignore environment specific configuration
+*.local.*
 /src/conf/conf_private.php
 
-# Composer infrastructure
+# Ignore composer infrastructure
 /vendor/
 /composer.lock
 
-# IDE
+# Ignore IDE files
 /nbproject
 /.idea
 
-# Temporary files
-/.php_cs.cache
-/.phpunit.result.cache
+# Ignore temporary files
+.*.cache
 /.composer-cache

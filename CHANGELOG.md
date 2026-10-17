@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Security` in case of vulnerabilities
 
+## [4.1.4] - TBD
+
+chore: Sort PHP imports, properties, and methods alphabetically
+
+### Changed
+
+- Sort PHP imports, properties, and methods alphabetically using case-insensitive ordering.
+
+### Fixed
+
+- Specify string keys for `BackyardError` logger configuration arrays.
+
 ## [4.1.3] - 2026-04-27
 
 feat: add charset option to `BackyardMysqli`

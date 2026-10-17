@@ -6,10 +6,10 @@ namespace WorkOfStan\Backyard;
 
 class Backyard
 {
-    /** @var array<mixed> int,string,bool,array */
-    protected $BackyardConf = array();
     /** @var \WorkOfStan\Backyard\BackyardArray BackyardArray object */
     public $BackyardArray;
+    /** @var array<string,mixed> int,string,bool,array */
+    protected $BackyardConf = array();
     /** @var \WorkOfStan\Backyard\BackyardError BackyardError object */
     public $BackyardError;
     /** @var \WorkOfStan\Backyard\BackyardTime BackyardTime object */
@@ -27,7 +27,7 @@ class Backyard
 
     /**
      *
-     * @param array<mixed> $backyardConfConstruct contains int,string,bool,array
+     * @param array<string,mixed> $backyardConfConstruct contains int,string,bool,array
      */
     public function __construct(array $backyardConfConstruct = array())
     {

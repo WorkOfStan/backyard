@@ -58,19 +58,19 @@ namespace WorkOfStan\Backyard;
 class HTMLPage
 {
     /** @var string */
-    public $contentType = 'text/html';
+    public $body = '';
     /** @var string */
-    public $header = '';
+    public $contentType = 'text/html';
     /** @var string */
     public $footer = '';
     /** @var string */
-    public $body = '';
-    /** @var string */
-    protected $title;
+    public $header = '';
     /** @var bool */
     protected $headerWasOutputed;
     /** @var int|string */
     protected $style;
+    /** @var string */
+    protected $title;
 
     /**
      * Creates HTML/WML page
@@ -179,6 +179,75 @@ class HTMLPage
     }
 
     /**
+     * append k $this->body
+     *
+     * @param string $add
+     * @return void
+     */
+    public function addToBody($add)
+    {
+        $this->body .= ($this->contentType === 'text/vnd.wap.wml') ? $this->treatForWml($add) : $add;
+    }
+
+    /**
+     * append k $this->header
+     *
+     * @param string $add
+     * @return void
+     */
+    public function addToHeader($add)
+    {
+        if ($this->headerWasOutputed) {
+            error_log("Header was already out. Following cannot be added: {$add}");
+        } else {
+            $this->header .= $add;
+        }
+    }
+
+    /**
+     * Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
+     *
+     * @return void
+     */
+    public function endPage()
+    {
+        echo ($this->body . $this->footer);
+        // '@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
+        @ob_flush();
+        flush(); // http://php.vrana.cz/vysypani-vystupu.php
+    }
+
+    /**
+     * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
+     * Pre-process texts to be displayed in a WML browser
+     *
+     * @param string $text
+     * @return string
+     */
+    public function fixXml($text)
+    {
+        return str_replace(
+            "\"",
+            "&quot;",
+            str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace("&", "&amp;", $text)))
+        );
+    }
+
+    /**
+     * Outputs (and resets) the current contents of $this->body
+     *
+     * @return void
+     */
+    public function outputCurrentBody()
+    {
+        echo($this->body);
+        // '@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
+        @ob_flush();
+        flush(); // http://php.vrana.cz/vysypani-vystupu.php
+        $this->body = '';
+    }
+
+    /**
      * Vypise Content-type HTTP header a header HTML stránky
      *
      * @return void
@@ -219,49 +288,6 @@ class HTMLPage
     }
 
     /**
-     * Outputs (and resets) the current contents of $this->body
-     *
-     * @return void
-     */
-    public function outputCurrentBody()
-    {
-        echo($this->body);
-        // '@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
-        @ob_flush();
-        flush(); // http://php.vrana.cz/vysypani-vystupu.php
-        $this->body = '';
-    }
-
-    /**
-     * Vypise tělo a patičku HTML stránky, čímž ukončí HTML výstup
-     *
-     * @return void
-     */
-    public function endPage()
-    {
-        echo ($this->body . $this->footer);
-        // '@' sign to avoid the following message: Notice: ob_flush(): failed to flush buffer. No buffer to flush.
-        @ob_flush();
-        flush(); // http://php.vrana.cz/vysypani-vystupu.php
-    }
-
-    /**
-     * basic functions to use in phpportal (MPS/stefanidesj, May 2006)
-     * Pre-process texts to be displayed in a WML browser
-     *
-     * @param string $text
-     * @return string
-     */
-    public function fixXml($text)
-    {
-        return str_replace(
-            "\"",
-            "&quot;",
-            str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace("&", "&amp;", $text)))
-        );
-    }
-
-    /**
      * Wrapper to make sure that the output doesn't break in a WML browser
      * Strip diacritics as a simple way
      *
@@ -279,31 +305,5 @@ class HTMLPage
             "Ú" => "U", "Ů" => "U", "Ü" => "U", "Ý" => "Y", "&#376;" => "Y", "Ž" => "Z"
         );
         return strtr($string, $trans);
-    }
-
-    /**
-     * append k $this->body
-     *
-     * @param string $add
-     * @return void
-     */
-    public function addToBody($add)
-    {
-        $this->body .= ($this->contentType === 'text/vnd.wap.wml') ? $this->treatForWml($add) : $add;
-    }
-
-    /**
-     * append k $this->header
-     *
-     * @param string $add
-     * @return void
-     */
-    public function addToHeader($add)
-    {
-        if ($this->headerWasOutputed) {
-            error_log("Header was already out. Following cannot be added: {$add}");
-        } else {
-            $this->header .= $add;
-        }
     }
 }
