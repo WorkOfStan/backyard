@@ -18,3 +18,6 @@
 #dialect = ansi
 dialect = mysql
 
+[sqlfluff:rules:capitalisation.identifiers]
+# Preserve the field name expected by BackyardGeo.
+ignore_words = PSC
