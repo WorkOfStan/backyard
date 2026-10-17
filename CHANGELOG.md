@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 chore: Sort PHP imports, properties, and methods alphabetically
 
+### Added
+
+- Suggest optional PHP extensions in Composer and document the helpers that require them.
+
 ### Changed
 
 - Sort PHP imports, properties, and methods alphabetically using case-insensitive ordering.
@@ -31,6 +35,14 @@ chore: Sort PHP imports, properties, and methods alphabetically
 ### Fixed
 
 - Specify string keys for `BackyardError` logger configuration arrays.
+- Fix suppressed PHPStan errors in `BackyardBriefApiClient` and `BackyardGeo` with POI value validation and redundant-check removal.
+- Preserve quotes around the POI category `name` column to satisfy SQLFluff keyword and quoting rules.
+- Replace PHPStan suppressions in array and HTTP helpers and HTTP tests with accurate types and redundant-check removal.
+
+### Removed
+
+- Remove the resolved optional-extension backlog entry and narrow geo, API client, and PHPStan tasks to remaining work.
+- Remove the completed PHPStan type and docblock task from the maintenance backlog.
 
 ## [4.1.3] - 2026-04-27
 

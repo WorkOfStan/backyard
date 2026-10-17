@@ -24,6 +24,12 @@
     "phpunit/phpunit": "^9.6.33 || ^10 || ^11 || ^12 || ^13",
     "webmozart/assert": "^1.10 || ^2.1.6"
   },
+  "suggest": {
+    "ext-iconv": "Required for socket error message conversion in BackyardHttp::getHTTPstatusCode().",
+    "ext-mbstring": "Required for socket error encoding detection in BackyardHttp::getHTTPstatusCode().",
+    "ext-mysqli": "Required for BackyardMysqli and database-backed BackyardGeo helpers.",
+    "ext-sockets": "Required for BackyardHttp::getHTTPstatusCode() and getHTTPstatusCodeByUA()."
+  },
   "minimum-stability": "stable",
   "prefer-stable": true,
   "config": {

@@ -12,6 +12,16 @@
   - workofstan/backyard:^4.1.2.2 `php: >=7.4 <8.6`
   - workofstan/backyard:3.4.3: `php: >=5.3, <7.4`
 
+### Optional PHP extensions
+
+Composer suggests these extensions for specific helpers; install or enable them before using those APIs:
+
+- `ext-mysqli`: `BackyardMysqli` and database-backed `BackyardGeo` helpers.
+- `ext-sockets`: `BackyardHttp::getHTTPstatusCode()` and `getHTTPstatusCodeByUA()`.
+- `ext-mbstring` and `ext-iconv`: socket error message handling in `BackyardHttp::getHTTPstatusCode()`.
+
+`ext-curl` remains a required dependency declared in `composer.json`.
+
 ## Installation
 
 You can use **Composer** or simply **Download the Release**

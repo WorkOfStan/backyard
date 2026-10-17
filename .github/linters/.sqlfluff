@@ -21,3 +21,7 @@ dialect = mysql
 [sqlfluff:rules:capitalisation.identifiers]
 # Preserve the field name expected by BackyardGeo.
 ignore_words = PSC
+
+[sqlfluff:rules:references.quoting]
+# Keep keyword identifiers quoted to satisfy RF04.
+prefer_quoted_keywords = True

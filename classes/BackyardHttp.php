@@ -69,9 +69,7 @@ class BackyardHttp
             throw new \RuntimeException('SERVER_NAME is expected to be a string.');
         }
         return ($isHTTPS ? 'https://' : 'http://') . $_SERVER["SERVER_NAME"]
-            // @phpstan-ignore isset.offset
-            . ((isset($_SERVER["SERVER_PORT"]) && //
-            ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443"))) //
+            . (((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")) //
             ? ':' . $_SERVER["SERVER_PORT"] : '') // port
             . (
             $includeTheQueryPart ? $_SERVER["REQUEST_URI"] // including RewriteRule result
@@ -90,7 +88,7 @@ class BackyardHttp
      *     string of HTTP headers delimited by pipe without trailing spaces
      * @param array<mixed> $postArray OPTIONAL parameters to be POST-ed as the normal
      *     application/x-www-form-urlencoded string
-     * @param string $customRequest OPTIONAL fills in CURLOPT_CUSTOMREQUEST
+     * @param string|null $customRequest OPTIONAL fills in CURLOPT_CUSTOMREQUEST
      * @return array<string, mixed> ['message_body', 'HTTP_CODE', 'CONTENT_TYPE', 'HEADER_FIELDS', ['REDIRECT_URL',]]
      * @throws \Exception if $customHeaders are neither false nor string
      *
@@ -183,7 +181,7 @@ class BackyardHttp
         //redirects may have empty body
         if (
             !$response ||
-            ((!array_key_exists('message_body', $data) || !$data['message_body']) && // @phpstan-ignore-line
+            (empty($data['message_body']) &&
             !in_array($data['HTTP_CODE'], array(301, 302)))
         ) {
             $this->logger->log(2, "Curl error: " . curl_error($ch) . " on {$url} with HTTP_CODE={$data['HTTP_CODE']}");
@@ -274,11 +272,9 @@ class BackyardHttp
         $host = $url['host'];
         $port = (isset($url['port']) ? $url['port'] : 80);
         /**
-         * @phpstan-ignore-next-line
-         * Offset 'path' on array{scheme: 'http', host: string, path: string, port?: int, user?: string, pass?: string,
-         *   query?: string, fragment?: string} in isset() always exists and is not nullable.
+         * The required path has already been validated above.
          */
-        $path = (isset($url['path']) ? $url['path'] : '/');
+        $path = $url['path'];
         $this->logger->log(self::LOG_LEVEL, "url: " . print_r($url, true), array(16));
 
         $request = "HEAD $path HTTP/1.1\r\n"
@@ -299,10 +295,6 @@ class BackyardHttp
             // http://stackoverflow.com/questions/7979567/
             // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
             $encodings = mb_detect_order();
-            // @phpstan-ignore function.alreadyNarrowedType
-            if (!is_array($encodings)) {
-                throw new \UnexpectedValueException('mb_detect_order should return array');
-            }
             $socketLastErrorString = trim(
                 (string) iconv(
                     (string) mb_detect_encoding(socket_strerror($socketLastError), $encodings, true),
@@ -351,8 +343,7 @@ class BackyardHttp
             socket_close($socket);
             $this->logger->log(
                 5,
-                // @phpstan-ignore isset.offset
-                "result=" . $result = (isset($response[1]) ? ($response[1]) : ('socketLastErrorString')), // set & log
+                "result=" . $result = $response[1], // set & log
                 array(16)
             );
             return $result;
@@ -361,10 +352,6 @@ class BackyardHttp
         // http://stackoverflow.com/questions/7979567/
         // php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
         $encodings = mb_detect_order();
-        // @phpstan-ignore function.alreadyNarrowedType
-        if (!is_array($encodings)) {
-            throw new \UnexpectedValueException('mb_detect_order should return array');
-        }
         $socketLastErrorString = trim(
             (string) iconv(
                 (string) mb_detect_encoding(socket_strerror($socketLastError), $encodings, true),
